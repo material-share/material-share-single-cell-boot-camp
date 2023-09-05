@@ -1,9 +1,3 @@
----
-editor: 
-  markdown: 
-    wrap: 72
----
-
 # Disclaimer
 
 Recommendations given by representatives of BD in the context of the
