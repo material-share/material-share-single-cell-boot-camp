@@ -119,7 +119,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./about.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">About</span></a>
+ <span class="menu-text">Introduction</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -408,45 +408,11 @@ Note
 <p>Because the annotation information is based on the reference set, the reference ideally are similar to the query. They may come from the same tissue, same organism, similar experimental procedure, etc.</p>
 </div>
 </div>
-<div class="cell" data-hash="06_marker_identification_cache/html/unnamed-chunk-9_67c6096ceb4735a6178edf96ae3d0f2c">
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">integrate.filtered.rna</span> <span class="op">&lt;-</span> <span class="fu">Azimuth</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/Azimuth/man/RunAzimuth.html">RunAzimuth</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, reference <span class="op">=</span> <span class="st">"pbmcref"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="06_marker_identification_cache/html/unnamed-chunk-9_6c55e00ec0d488fdbf68fdabae10602e">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">integrate.filtered.rna</span> <span class="op">&lt;-</span> <span class="fu">Azimuth</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/Azimuth/man/RunAzimuth.html">RunAzimuth</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, reference <span class="op">=</span> <span class="st">"pbmcref"</span>, verbose <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>An AzimuthData object - reference version: 1.0.0 
-Contains 3 meta.data field(s) to transfer.
-  |                                                                            
-  |                                                                      |   0%
-  |                                                                            
-  |====                                                                  |   6%
-  |                                                                            
-  |=========                                                             |  12%
-  |                                                                            
-  |=============                                                         |  19%
-  |                                                                            
-  |==================                                                    |  25%
-  |                                                                            
-  |======================                                                |  31%
-  |                                                                            
-  |==========================                                            |  38%
-  |                                                                            
-  |===============================                                       |  44%
-  |                                                                            
-  |===================================                                   |  50%
-  |                                                                            
-  |=======================================                               |  56%
-  |                                                                            
-  |============================================                          |  62%
-  |                                                                            
-  |================================================                      |  69%
-  |                                                                            
-  |====================================================                  |  75%
-  |                                                                            
-  |=========================================================             |  81%
-  |                                                                            
-  |=============================================================         |  88%
-  |                                                                            
-  |==================================================================    |  94%
-  |                                                                            
-  |======================================================================| 100%</code></pre>
+Contains 3 meta.data field(s) to transfer.</code></pre>
 </div>
 </div>
 <p>We can look at the prediction on UMAP.</p>

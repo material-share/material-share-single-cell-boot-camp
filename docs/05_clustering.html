@@ -119,7 +119,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./about.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">About</span></a>
+ <span class="menu-text">Introduction</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -185,13 +185,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./08_enrichment_analysis.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Chapter08 Enrichment Analysis</span></a>
+ <span class="menu-text">Chapter 8 Enrichment Analysis</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./09_combining.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Chapter09 Combine scRNAseq and AbSeq</span></a>
+ <span class="menu-text">Chapter 9 Combine scRNAseq and AbSeq</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -262,82 +262,17 @@ Note
 </div>
 </div>
 <p>The <code>FindClusters</code> function allows us to enter a series of resolutions and will calculate the “granularity” of the clustering. This is very helpful for testing which resolution works for moving forward without having to run the function for each resolution.</p>
-<div class="cell" data-hash="05_clustering_cache/html/unnamed-chunk-3_45c3fe9c0490e5ab41b6d8e4e8113fdf">
+<div class="cell" data-hash="05_clustering_cache/html/unnamed-chunk-3_c6c8362d9b9308972ec1ff46b84725ca">
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Determine the K-nearest neighbor graph</span></span>
 <span><span class="va">integrate.filtered.rna</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindNeighbors.html">FindNeighbors</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">integrate.filtered.rna</span>, dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span>
 <span>                                </span>
 <span><span class="co"># Determine the clusters for various resolutions                                </span></span>
 <span><span class="va">integrate.filtered.rna</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindClusters.html">FindClusters</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">integrate.filtered.rna</span>,</span>
-<span>                               resolution <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">0.4</span>, <span class="fl">0.6</span>,  <span class="fl">0.8</span>, <span class="fl">1</span>, <span class="fl">1.2</span>, <span class="fl">1.4</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
-
-Number of nodes: 4160
-Number of edges: 140485
-
-Running Louvain algorithm...
-Maximum modularity in 10 random starts: 0.9462
-Number of communities: 9
-Elapsed time: 0 seconds
-Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
-
-Number of nodes: 4160
-Number of edges: 140485
-
-Running Louvain algorithm...
-Maximum modularity in 10 random starts: 0.9198
-Number of communities: 11
-Elapsed time: 0 seconds
-Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
-
-Number of nodes: 4160
-Number of edges: 140485
-
-Running Louvain algorithm...
-Maximum modularity in 10 random starts: 0.8962
-Number of communities: 13
-Elapsed time: 0 seconds
-Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
-
-Number of nodes: 4160
-Number of edges: 140485
-
-Running Louvain algorithm...
-Maximum modularity in 10 random starts: 0.8749
-Number of communities: 15
-Elapsed time: 0 seconds
-Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
-
-Number of nodes: 4160
-Number of edges: 140485
-
-Running Louvain algorithm...
-Maximum modularity in 10 random starts: 0.8577
-Number of communities: 16
-Elapsed time: 0 seconds
-Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
-
-Number of nodes: 4160
-Number of edges: 140485
-
-Running Louvain algorithm...
-Maximum modularity in 10 random starts: 0.8420
-Number of communities: 17
-Elapsed time: 0 seconds
-Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
-
-Number of nodes: 4160
-Number of edges: 140485
-
-Running Louvain algorithm...
-Maximum modularity in 10 random starts: 0.8293
-Number of communities: 19
-Elapsed time: 0 seconds</code></pre>
-</div>
+<span>                               resolution <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">0.4</span>, <span class="fl">0.6</span>,  <span class="fl">0.8</span>, <span class="fl">1</span>, <span class="fl">1.2</span>, <span class="fl">1.4</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The <code>meta.data</code> has a separate column for each of the different resolution calculated. We can look at how many clusters in each resolution.</p>
 <div class="cell" data-hash="05_clustering_cache/html/unnamed-chunk-4_bb0778af81f45d8998fe46aa8b585a44">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">integrate.filtered.rna</span><span class="op">@</span><span class="va">meta.data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">integrate.filtered.rna</span><span class="op">@</span><span class="va">meta.data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">contains</a></span><span class="op">(</span><span class="st">"integrat"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map_int</a></span><span class="op">(</span><span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/unique.html">unique</a></span><span class="op">(</span><span class="va">.x</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="va">length</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -351,7 +286,7 @@ integrated_snn_res.1.4
 </div>
 <p>We start with the resolution of 0.6. We will assign the identity of the clusters using the <code>Idents</code> function.</p>
 <div class="cell" data-hash="05_clustering_cache/html/unnamed-chunk-5_dcfe8219f9de4568e7b67766fffc2409">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/Idents.html">Idents</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">integrate.filtered.rna</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"integrated_snn_res.0.6"</span></span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/Idents.html">Idents</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">integrate.filtered.rna</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"integrated_snn_res.0.6"</span></span>
 <span></span>
 <span><span class="co"># UMAP visualization</span></span>
 <span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html">DimPlot</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>,</span>
@@ -378,7 +313,7 @@ Exercise
 </section><section id="distribution-of-cells-per-cluster" class="level1"><h1>2. Distribution of cells per cluster</h1>
 <p>The number of clusters are sensitive to the resolution. We have PBMC from both samples, and we expect each cluster contains cells from both samples.</p>
 <div class="cell" data-hash="05_clustering_cache/html/unnamed-chunk-6_e689e1abdec66fbf74f1094db15cc2d1">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/FetchData.html">FetchData</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, </span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/FetchData.html">FetchData</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, </span>
 <span>                     vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ident"</span>, <span class="st">"Sample_Name"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">ident</span>, <span class="va">Sample_Name</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/spread.html">spread</a></span><span class="op">(</span><span class="va">ident</span>, <span class="va">n</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -389,7 +324,7 @@ Exercise
 </div>
 </div>
 <div class="cell" data-hash="05_clustering_cache/html/unnamed-chunk-7_c9209d82e84ccda27c219f7dea9702a1">
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># UMAP of cells in each cluster by sample</span></span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># UMAP of cells in each cluster by sample</span></span>
 <span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html">DimPlot</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, </span>
 <span>        label <span class="op">=</span> <span class="cn">TRUE</span>, </span>
 <span>        split.by <span class="op">=</span> <span class="st">"Sample_Name"</span><span class="op">)</span>  <span class="op">+</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/SeuratTheme.html">NoLegend</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -410,11 +345,11 @@ Exercise
 <p>Macrophages: MARCO, ITGAM, ADGRE1</p>
 <p>The <code>FeaturePlot</code> makes it easy to visualize a handful of genes using the gene IDs stored in the Seurat object. We can easily explore the expression of known gene markers on top of our UMAP visualizations. Let’s go through and determine the identities of the clusters. To access the normalized expression levels of all genes, we can use the normalized count stored in the <code>RNA</code> assay slot.</p>
 <div class="cell" data-hash="05_clustering_cache/html/unnamed-chunk-8_588083a9855a205f9e47cec911b61fb7">
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/DefaultAssay.html">DefaultAssay</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"RNA"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/DefaultAssay.html">DefaultAssay</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"RNA"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>CD14+ monocytes: CD14, LYZ</p>
 <div class="cell" data-hash="05_clustering_cache/html/unnamed-chunk-9_1b3c30fb185aba2e45f62f8553d53574">
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html">FeaturePlot</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, </span>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html">FeaturePlot</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, </span>
 <span>            reduction <span class="op">=</span> <span class="st">"umap"</span>, </span>
 <span>            features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CD14"</span>, <span class="st">"LYZ"</span><span class="op">)</span>, </span>
 <span>            order <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -426,7 +361,7 @@ Exercise
 </div>
 <p>B cells: CD79A, MS4A1</p>
 <div class="cell" data-hash="05_clustering_cache/html/unnamed-chunk-10_8759750003ffc03094d3a099865f45e9">
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html">FeaturePlot</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, </span>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html">FeaturePlot</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, </span>
 <span>            reduction <span class="op">=</span> <span class="st">"umap"</span>, </span>
 <span>            features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CD79A"</span>, <span class="st">"MS4A1"</span><span class="op">)</span>, </span>
 <span>            order <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -438,7 +373,7 @@ Exercise
 </div>
 <p>NK cells: GNLY, NKG7</p>
 <div class="cell" data-hash="05_clustering_cache/html/unnamed-chunk-11_b93336db7204087bc5200f82899d99cd">
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html">FeaturePlot</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, </span>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html">FeaturePlot</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, </span>
 <span>            reduction <span class="op">=</span> <span class="st">"umap"</span>, </span>
 <span>            features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"GNLY"</span>, <span class="st">"NKG7"</span><span class="op">)</span>, </span>
 <span>            order <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -450,7 +385,7 @@ Exercise
 </div>
 <p>T cells: CD3D</p>
 <div class="cell" data-hash="05_clustering_cache/html/unnamed-chunk-12_c2481c98ca3dcb8138fe898d45875b52">
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html">FeaturePlot</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, </span>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html">FeaturePlot</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, </span>
 <span>            reduction <span class="op">=</span> <span class="st">"umap"</span>, </span>
 <span>            features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CD3D"</span><span class="op">)</span>, </span>
 <span>            order <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -462,7 +397,7 @@ Exercise
 </div>
 <p>CD4+ T cells: CD3D, IL7R, CCR7</p>
 <div class="cell" data-hash="05_clustering_cache/html/unnamed-chunk-13_9dfc07d0abbfadcad162aff07c49b32b">
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html">FeaturePlot</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, </span>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html">FeaturePlot</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, </span>
 <span>            reduction <span class="op">=</span> <span class="st">"umap"</span>, </span>
 <span>            features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CD3D"</span>, <span class="st">"IL7R"</span>, <span class="st">"CCR7"</span><span class="op">)</span>, </span>
 <span>            order <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -474,7 +409,7 @@ Exercise
 </div>
 <p>CD8+ T cells: CD3D, CD8A</p>
 <div class="cell" data-hash="05_clustering_cache/html/unnamed-chunk-14_840ef05b021e52f09509cc05f685596d">
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html">FeaturePlot</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, </span>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html">FeaturePlot</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, </span>
 <span>            reduction <span class="op">=</span> <span class="st">"umap"</span>, </span>
 <span>            features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CD3D"</span>, <span class="st">"CD8A"</span><span class="op">)</span>, </span>
 <span>            order <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -487,7 +422,7 @@ Exercise
 </section><section id="save" class="level1"><h1>4. Save</h1>
 <p>Save the files into RData for documentation.</p>
 <div class="cell" data-hash="05_clustering_cache/html/unnamed-chunk-15_12629ba464c60247445ee800df6eed6d">
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># save(integrate.filtered.rna, expMat, file = "data/intermediate_data/chapter5.RData")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># save(integrate.filtered.rna, expMat, file = "data/intermediate_data/chapter5.RData")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 
