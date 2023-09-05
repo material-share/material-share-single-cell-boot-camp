@@ -56,4 +56,4 @@ BD therefore accepts no liability whatsoever in connection with any such recomme
 
 # License
 
-See the [LICENSE](LICENSE.md) file for license rights and limitations (MIT).
+See the [LICENSE](LICENSE.html) file for license rights and limitations (MIT).
