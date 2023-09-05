@@ -1,0 +1,5 @@
+"0","filtered.rna@meta.data %>% "
+"0","  ggplot(aes(color=Sample_Name, x=percent.mt, fill=Sample_Name)) + "
+"0","  geom_density(alpha = 0.2) + "
+"0","  theme_classic() +"
+"0","  ggtitle(""percent.mt"")"

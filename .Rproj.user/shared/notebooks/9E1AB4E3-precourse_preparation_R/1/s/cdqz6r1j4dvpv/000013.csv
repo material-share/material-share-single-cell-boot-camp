@@ -1,0 +1,2 @@
+"0","mrna_data %>% mutate(counts = mRNA_count_sum) -> mrna_data"
+"0","mrna_data %>% dplyr::select(counts) %>% head"

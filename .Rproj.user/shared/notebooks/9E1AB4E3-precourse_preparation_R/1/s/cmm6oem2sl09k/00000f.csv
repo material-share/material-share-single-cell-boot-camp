@@ -1,0 +1,1 @@
+"0","if_else(mrna_data$counts > 2000, ""high_transcriptome"", ""low_transcriptome"") -> cell_status"

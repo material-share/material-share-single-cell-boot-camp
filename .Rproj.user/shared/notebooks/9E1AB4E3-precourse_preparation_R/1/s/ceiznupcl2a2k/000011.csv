@@ -1,0 +1,4 @@
+"0","mrna_data %>% filter(cell_status == ""high_transcriptome"") -> signal_cells"
+"0",""
+"0","#display last column"
+"0","signal_cells %>% dplyr::select(last_col())"

@@ -1,0 +1,7 @@
+"0","#add meta data"
+"0","seuratObj <- AddMetaData(seuratObj, #indicate object"
+"0","            ""experiment_1"", #metadata to be added"
+"0","            ""batch"") #column name for metadata"
+"0",""
+"0","#display results"
+"0","seuratObj@meta.data %>% head"

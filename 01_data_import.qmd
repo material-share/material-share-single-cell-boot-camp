@@ -1,0 +1,187 @@
+---
+title: "Chapter 1 Data Import"
+execute:
+  warning: false
+  message: false
+---
+
+```{r}
+# libraries for this chapter
+library(tidyverse)
+library(Seurat)
+library(data.table)
+library(celldex)
+library(SingleR)
+library(ExperimentHub)
+```
+
+# Demo data
+
+The demo data is generated from freshly isolated human PBMCs. The PBMCs were grown for 24 hours in the presence of CD3/CD28 stimulation ("treated") and compared to PBMCs grown for 24 hours in regular media ("naive"). Cells were then labeled with a 20plex AbSeq panel consisting of lineage markers and T-cell activation markers, as well as unique Sample Tags from the BD Rhapsody^™^ Human Single Cell Multiplexing Kit (resting PBMC: ST1; treated PBMC: ST2). The cells were mixed at a 1:1 ratio and processed using the BD Rhapsody^™^ Single-Cell Analysis System. Sequencing libraries for RNA and AbSeq antibodies were generated using the BD Rhapsody WTA Amplification kit.
+
+::: callout-note
+Please review the **setup** chapter to ensure that R packages are installed and data is downloaded.
+:::
+
+# 1. Data import
+
+The expression matrix stores the UMI counts of a feature (gene or protein). Depending on the single cell platform, common format of expression matrix include CSV, MEX (Market Exchange) or H5AD.
+
+Rhapsody single cell platform outputs expression matrix in two formats: MEX and H5AD.
+
+We import MEX using the function from Seurat, `Read10x`. We assign a name to the created object, `expMat` (**exp**ression **Mat**rix).
+
+::: callout-note
+The expression matrix in Rhapsody v1 pipeline is in CSV format. If you run Rhapsody v2 pipeline, the expression matrix is available in MEX format.
+:::
+
+```{r}
+expMat <- Read10X("data/raw_data/WTA-AB-SMK-v2-0_DBEC_MolsPerCell_MEX/",
+                  gene.column = 2,
+                  cell.column = 1,
+                  unique.features = TRUE)
+```
+
+Click on the `expMat` on the right.
+
+![](pics/1-1-expMat.png)
+
+A window will pop up and you should be able to see the structure of `expMat`.
+
+![](pics/1-2-expMat.png)
+
+`expMat` contains two matrices: **Gene Expression** and **Antibody Capture**. You may recall that the demo dataset has two assays: WTA, whole transcriptome analysis, to capture **Gene Expression**; and AbSeq for **Antibody Capture**.
+
+We will first focus on **Gene Expression, the scRNA-seq**.
+
+Take a look on the first 5 row x first 5 column of **Gene Expression** matrix. It is organized as feature x cell.
+
+```{r}
+expMat$`Gene Expression`[1:5, 1:5]
+```
+
+::: callout-important
+## Question
+
+What are the dots "." in the matrix?
+:::
+
+::: {.callout-tip collapse="true"}
+## Answer
+
+The "." corresponds to 0.
+
+scRNA-seq usually contains many zeros. The zeros can come from
+
+-   Stochastic gene expression
+
+-   Limitation of single cell technology: On average, 5-8% of mRNA transcripts can be captured by the machine.
+:::
+
+# 2. Create a Seurat object to store Gene Expression
+
+Let's create a Seurat object to store Gene Expression.
+
+```{r}
+rna <- CreateSeuratObject(counts = expMat$`Gene Expression`, 
+                                min.cells = 1, 
+                                min.features = 100, 
+                                assay = "RNA")
+```
+
+`min.cells` Specify the minimum number of cells that need to be detected per feature. Setting this argument will filter out zero or lowly expressed features.
+
+`min.features` Specify the minimum number of features that need to be detected per cell. Setting this argument will filter out cell indexes with random counts but without any cell present.
+
+`assay` Specify the name of the created assay. By default, it is "RNA".
+
+::: callout-note
+## Question
+
+`CreateSeuratObject` has many arguments in the function. These arguments allow users to control the behavior of the function. One can look at the Help tab to see the arguments and their default settings.
+
+![](pics/1-3-helpDesk.png)
+:::
+
+When creating a Seurat object, Seurat automatically creates some metadata for each cell. This information is stored in the `meta.data` slot.
+
+```{r}
+rna@meta.data %>% head
+```
+
+`meta.data` stores information related to each cell. We will add more information into the `meta.data` later. For now, it contains three columns:
+
+`orig.ident` Sample identity or sample name. By default, it is `SeuratProject`.
+
+`nCount_RNA` UMI counts per gene per cell.
+
+`nFeature_RNA` Genes counts per cell.
+
+# 3. Add cell assignment into `meta.data`
+
+The demo dataset has **Sample Multiplexing Kit (SMK)** to pool two samples in one cartridge.
+
+To demultiplex the samples, we need to use Demo-WTA-AbSeq-SMK_Sample_Tag_Calls.csv.
+
+```{r}
+smk <- fread(file = "data/raw_data/WTA-AB-SMK-v2-0_Sample_Tag_Calls.csv", 
+                     sep = ",", 
+                     header=TRUE) %>% 
+  data.frame(row.names = 1)
+
+```
+
+```{r}
+smk[1:5, ]
+```
+
+`smk` is a matrix with two columns. The row names are the cell labels.
+
+`Sample_Tag`: Which tag the cell belongs to.
+
+`Sample_Name`: Which sample the cell belongs to.
+
+We can add the cell assignment into the `meta.data` of Seurat object by `AddMetaData`.
+
+```{r}
+rna <- AddMetaData(object = rna, metadata = smk)
+```
+
+```{r}
+rna@meta.data %>% head()
+```
+
+Now we know which cell belongs to which sample.
+
+# 4. Remove Multiplet and Undetermined
+
+The **Multiplet** are cell labels with more than one SMK tags. They could be Multiplets from one microwell containing two cells, or single cells with high ambient SMK noise.
+
+The **Undetermined** are cell labels without sufficient SMK tag reads. They could be noisy cell labels, or single cells without SMK tag reads.
+
+```{r fig.height=15, fig.width=20}
+rna@meta.data %>% 
+  group_by(Sample_Name) %>% 
+  tally() %>% 
+  mutate(pct = n/sum(n)) %>% 
+  ggplot(aes(x=Sample_Name, y=n, fill= Sample_Name)) + 
+  geom_bar(stat = "identity") +
+  geom_text(aes(y = n,
+                label = paste0(n, "\n", scales::percent(pct)),
+                vjust= -0.5, size = 2.5), show.legend = FALSE) + 
+  theme_classic()
+```
+
+Multiplet and Undetermined are removed from the downstream analysis by `subset`.
+
+```{r}
+rna <- subset(rna, subset = Sample_Name %in% c("Multiplet", "Undetermined"), invert = T)
+```
+
+# 5. Save
+
+Save the files into RData for documentation.
+
+```{r}
+# save.image("data/intermediate_data/chapter1.RData")
+```

@@ -1,0 +1,2 @@
+"0","modified_df_example <- df_example[, -c(1,2,5)]    # Drop columns 1,2,5 and include all columns"
+"0","modified_df_example %>% head # data frame with excluded columns "

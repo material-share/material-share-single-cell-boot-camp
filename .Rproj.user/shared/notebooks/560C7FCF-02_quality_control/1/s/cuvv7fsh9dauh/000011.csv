@@ -1,0 +1,3 @@
+"0","rna@meta.data %>% "
+"0","  group_by(Sample_Name) %>% "
+"0","  dplyr::summarise(cell_number = length(Sample_Name))"

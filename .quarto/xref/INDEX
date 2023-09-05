@@ -1,0 +1,56 @@
+{
+  "index.qmd": {
+    "index.html": "de28a9b2"
+  },
+  "01_data_import.qmd": {
+    "01_data_import.html": "cc25a563"
+  },
+  "about.qmd": {
+    "about.html": "57a5b0dc"
+  },
+  "09_combining.qmd": {
+    "09_combining.html": "3220784d"
+  },
+  "precourse_preparation_theory.qmd": {
+    "precourse_preparation_theory.html": "987d0ef2"
+  },
+  "04_integration.qmd": {
+    "04_integration.html": "9b60df5d"
+  },
+  "02_quality_control.qmd": {
+    "02_quality_control.html": "519463c5"
+  },
+  "sessioninfo.qmd": {
+    "sessioninfo.html": "abd1f064"
+  },
+  "05_clustering.qmd": {
+    "05_clustering.html": "9d558889"
+  },
+  "06_marker_identification.qmd": {
+    "06_marker_identification.html": "087014c9"
+  },
+  "07_differential_expression_analysis.qmd": {
+    "07_differential_expression_analysis.html": "45846fac"
+  },
+  "course_schedule.qmd": {
+    "course_schedule.html": "a85f637a"
+  },
+  "glossary.qmd": {
+    "glossary.html": "515d3c9a"
+  },
+  "08_enrichment_analysis.qmd": {
+    "08_enrichment_analysis.html": "345c55a1"
+  },
+  "precourse_preparation_R.qmd": {
+    "precourse_preparation_R.html": "11cee8f6"
+  },
+  "LICENSE.md": {
+    "LICENSE.html": "eb3d7702"
+  },
+  "03_normalization.qmd": {
+    "03_normalization.html": "9440d1d3"
+  },
+  "setup.qmd": {
+    "setup.html": "6876d3a1"
+  }
+}

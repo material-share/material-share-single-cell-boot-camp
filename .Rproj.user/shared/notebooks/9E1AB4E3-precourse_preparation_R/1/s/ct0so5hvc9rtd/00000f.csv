@@ -1,0 +1,2 @@
+"0","# choosing all columns that does not contain AbSeq counts (mRNA only)"
+"0","expMat %>% dplyr::select(!contains(""pAbO"")) -> mrna_data"

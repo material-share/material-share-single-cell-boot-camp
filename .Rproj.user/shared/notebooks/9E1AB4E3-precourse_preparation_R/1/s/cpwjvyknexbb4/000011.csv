@@ -1,0 +1,2 @@
+"0","df_example$technology_type <- df_example$platform # add new column named ""technology_type"" with values from ""platform"" existing column"
+"0","df_example[,ncol(df_example)] %>% head #show all rows and last column"

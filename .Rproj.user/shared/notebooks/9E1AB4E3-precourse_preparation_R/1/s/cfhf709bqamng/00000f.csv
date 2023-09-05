@@ -1,0 +1,2 @@
+"0","#use first column as row names"
+"0","expMat <- data.frame(expMat, row.names = 1)"

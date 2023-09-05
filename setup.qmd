@@ -1,0 +1,98 @@
+---
+title: "Setting up"
+execute:
+  warning: false
+  message: false
+  eval: false
+---
+
+::: callout-note
+**Note** The course will run on virtual machine. We have materials and RStuio setting up on the virtual machine, so you do not need to set up anything on the desktop for the course.
+
+However, if you are going to run through the prerequisites and the course chapters, please follow the instructions and set up RStudio on the desktop.
+
+**The learning outcome is much better if you go through the materials before attending the course from feedback of our previous students.**
+:::
+
+# 1. R and RStudio
+
+Please follow the instruction to set up R and RStudio on desktop: <https://posit.co/download/rstudio-desktop/>
+
+# 2. Install R packages
+
+::: callout-note
+Install the packages in the order listed below.
+
+The package names are case sensitive.
+
+At any point (especially if you've used R/Bioconductor in the past), in the console **R may ask you if you want to update any old packages by asking Update all/some/none? \[a/s/n\]:**. If you see this, **type "a" at the prompt and hit Enter** to update any old packages. *Updating packages can sometimes take quite a bit of time to run, so please account for that before you start with these installations.*
+:::
+
+1.  Install the packages listed below **one by one** from CRAN using the `install.packages()` function.
+
+`install.packages("tidyverse")`
+
+`install.packages("Seurat")`
+
+`install.packages("BiocManager")`
+
+`install.packages("Matrix")`
+
+`install.packages("RCurl")`
+
+`install.packages("scales")`
+
+`install.packages("data.table")`
+
+`install.packages("readxl")`
+
+2.  Install the packages listed below **one by one** from bioconductor using the `BiocManager::install()` function.
+
+`BiocManager::install("AnnotationHub")`
+
+`BiocManager::install("ensembldb")`
+
+`BiocManager::install("SingleR")`
+
+`BiocManager::install("celldex")`
+
+`BiocManager::install("org.Hs.eg.db")`
+
+`BiocManager::install("clusterProfiler")`
+
+`BiocManager::install("AnnotationDbi")`
+
+`BiocManager::install("biomaRt")`
+
+`BiocManager::install("enrichplot")`
+
+`BiocManager::install("muscat")`
+
+3.  Check that all the packages were installed successfully by loading them one at a time using the `library()` function.
+
+```{r}
+library(tidyverse)
+library(Seurat)
+library(BiocManager)
+library(Matrix)
+library(RCurl)
+library(readxl)
+library(scales)
+library(data.table)
+library(AnnotationHub)
+library(ensembldb)
+library(SingleR)
+library(celldex)
+library(org.Hs.eg.db)
+library(clusterProfiler)
+library(AnnotationDbi)
+library(biomaRt)
+library(enrichplot)
+library(muscat)
+```
+
+# 3. Data required to run the materials
+
+Please access the below folder to download data to run the prerequisites and course chapters.
+
+[Data](https://bd1-my.sharepoint.com/:f:/r/personal/yujuan_gui_bd_com/Documents/demo_data/data_for_boot_camp?csf=1&web=1&e=Q0QMU5)

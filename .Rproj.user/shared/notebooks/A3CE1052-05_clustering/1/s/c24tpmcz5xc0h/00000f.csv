@@ -1,0 +1,6 @@
+"0","FeaturePlot(integrate.filtered.rna, "
+"0","            reduction = ""umap"", "
+"0","            features = c(""CD79A"", ""MS4A1""), "
+"0","            order = TRUE,"
+"0","            min.cutoff = 'q10', "
+"0","            label = TRUE)"

@@ -1,0 +1,5 @@
+"0","mrna_data %>% "
+"0","  group_by(cell_status) %>% "
+"0","  summarize(mean = mean(counts),"
+"0","            median = median(counts),"
+"0","            n = n())  #calculates the total number of observations"

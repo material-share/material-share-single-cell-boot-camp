@@ -1,0 +1,4 @@
+"0","df_example$technology_type[df_example$technology_type == ""BD-Rhapsody""] <- ""microwell-based"""
+"0","df_example$technology_type[df_example$technology_type == ""10x""] <- ""droplet-based"""
+"0",""
+"0","df_example[,c(""platform"",""technology_type"")] %>% head #display columns"

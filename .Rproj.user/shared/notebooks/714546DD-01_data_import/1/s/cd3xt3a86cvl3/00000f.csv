@@ -1,0 +1,5 @@
+"0","smk <- fread(file = ""data/raw_data/WTA-AB-SMK-v2-0_Sample_Tag_Calls.csv"", "
+"0","                     sep = "","", "
+"0","                     header=TRUE) %>% "
+"0","  data.frame(row.names = 1)"
+"0",""

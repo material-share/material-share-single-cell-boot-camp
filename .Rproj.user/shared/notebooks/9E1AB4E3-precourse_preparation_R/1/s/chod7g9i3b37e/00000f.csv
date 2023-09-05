@@ -1,0 +1,1 @@
+"0","mrna_data %>% mutate(counts = rowSums(mrna_data)) -> mrna_data"

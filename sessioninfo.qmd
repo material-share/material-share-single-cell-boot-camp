@@ -1,0 +1,10 @@
+---
+title: "SessionInfo"
+execute:
+  warning: false
+  message: false
+---
+
+```{r}
+sessionInfo()
+```

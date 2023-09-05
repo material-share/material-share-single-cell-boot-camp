@@ -1,0 +1,1 @@
+"0","seuratObj <- readRDS(""data/precourse_preparation_data/seuratObj.rds"")"

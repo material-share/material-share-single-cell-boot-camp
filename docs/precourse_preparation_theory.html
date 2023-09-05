@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.340">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Precourse Preparation - Theory</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./precourse_preparation_theory.html">Precourse Preparation - Theory</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Single Cell Boot Camp: Analyzing Single Cell RNA-seq with R</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./about.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Setting up</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./precourse_preparation_R.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Precourse Preparation - R</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./precourse_preparation_theory.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Precourse Preparation - Theory</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_data_import.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 1 Data Import</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_quality_control.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 2 Quality Control</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03_normalization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 3 Normalization and PCA</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 4 Integration</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_clustering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 5 Clustering</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06_marker_identification.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 6 Marker Identification</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_differential_expression_analysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 7 Differential Expression Analysis</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_enrichment_analysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 8 Enrichment Analysis</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09_combining.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 9 Combine scRNAseq and AbSeq</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./sessioninfo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">SessionInfo</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#single-cell-principles" id="toc-single-cell-principles" class="nav-link active" data-scroll-target="#single-cell-principles">1. Single Cell Principles</a></li>
+  <li><a href="#bd-rhapsody-single---cell-workflow" id="toc-bd-rhapsody-single---cell-workflow" class="nav-link" data-scroll-target="#bd-rhapsody-single---cell-workflow">2. BD Rhapsody Single - Cell Workflow</a>
+  <ul class="collapse">
+  <li><a href="#bd-rhapsody-single-cell-assays" id="toc-bd-rhapsody-single-cell-assays" class="nav-link" data-scroll-target="#bd-rhapsody-single-cell-assays">2.1 BD Rhapsody Single-Cell Assays</a></li>
+  <li><a href="#analysis-of-single-cell-data" id="toc-analysis-of-single-cell-data" class="nav-link" data-scroll-target="#analysis-of-single-cell-data">2.2 Analysis of Single Cell Data</a></li>
+  <li><a href="#from-sequencing-data-to-expression-matrix" id="toc-from-sequencing-data-to-expression-matrix" class="nav-link" data-scroll-target="#from-sequencing-data-to-expression-matrix">2.3 From Sequencing Data to Expression Matrix</a>
+  <ul class="collapse">
+  <li><a href="#bd-rhapsody-sequencing-analysis-pipeline" id="toc-bd-rhapsody-sequencing-analysis-pipeline" class="nav-link" data-scroll-target="#bd-rhapsody-sequencing-analysis-pipeline">2.3.1 BD Rhapsody Sequencing Analysis Pipeline</a></li>
+  <li><a href="#expression-counts-by-umis" id="toc-expression-counts-by-umis" class="nav-link" data-scroll-target="#expression-counts-by-umis">2.3.2 Expression Counts by UMIs</a></li>
+  <li><a href="#output-files" id="toc-output-files" class="nav-link" data-scroll-target="#output-files">2.3.3 Output Files</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Precourse Preparation - Theory</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="single-cell-principles" class="level1">
+<h1>1. Single Cell Principles</h1>
+<p>Inside our bodies, there’s a huge variety of cell types that have different functions and interact with each other. Imagine it like a bustling city with different kinds of workers.</p>
+<p>To understand these cells better, scientists use single-cell RNA sequencing (scRNA-seq) technique. It’s like taking a close-up picture of each cell to see which genes are active. This helps us learn what each cell is up to in a really detailed way.</p>
+<p>This new and advanced technique can be employed to:</p>
+<ul>
+<li><p>Investigating the different types of cells in a specific part of the body. <strong>Example:</strong> Understanding the various cell types in the brain to study its functions better.</p></li>
+<li><p>Discovering cell types or states that are not well-known or rare. <strong>Example:</strong> Identifying unique cell types in the immune system that might have important roles.</p></li>
+<li><p>Figuring out how genes change their activity as cells transform or over time. <strong>Example:</strong> Tracking how genes behave as stem cells develop into specialized heart cells.</p></li>
+<li><p>Spotting genes that are only active in certain cell types under different conditions, like when there’s a disease. <strong>Example:</strong> Finding genes that are switched on only in lung cells during asthma.</p></li>
+<li><p>Examining how gene activity changes within a cell type and also consider aspects like where the genes are located, how they’re controlled, and their protein products. <strong>Example:</strong> Studying how nerve cells in the spinal cord change their gene activity and what proteins they make in response to injury.</p></li>
+</ul>
+</section>
+<section id="bd-rhapsody-single---cell-workflow" class="level1">
+<h1>2. BD Rhapsody Single - Cell Workflow</h1>
+<p>The BD Rhapsody<sup>™</sup>&nbsp;Express System enables single-cell capture and barcoding of hundreds to thousands of single cells for analysis of genomic and proteomic information.</p>
+<p>Before proceeding with Rhapsody workflow, sample of interest is processed to prepare the cells for capture. To focus study on specific population or capture very rare cell types the cell sorting can be added as additional step during experimental procedure.</p>
+<p><strong>The sample preparation and experimental set-up is a crucial step and has an impact on quality of the data and analysis.</strong></p>
+<p><img src="prerequisite_figures/BD_single_cell_workflow.png" class="img-fluid"></p>
+<p>In the next step the single cells are captured and barcoded in the Rhapsody Single-Cell Analysis System. Each cell is assigned a specific cell barcode and mRNA molecules are tagged, which helps to identify the origin of the RNA molecules within that cell.</p>
+<p>The data analysis and interpretation comes as the last piece of the full workflow. The upstream steps, including experimental design and sample processing will define the analysis process, for example, how we approach quality control, the data integration or cell annotation.</p>
+<p>In next chapter you will learn what types of data can be measured on the single-cell level in the BD Rhapsody<sup>™</sup> System.</p>
+<section id="bd-rhapsody-single-cell-assays" class="level2">
+<h2 class="anchored" data-anchor-id="bd-rhapsody-single-cell-assays">2.1 BD Rhapsody Single-Cell Assays</h2>
+<p><img src="prerequisite_figures/BD_Rhapsody_assays_summary.png" class="img-fluid"></p>
+<p>The BD Rhapsody™ System, along with diverse range of assays, enables simultaneous measurement of multiple cell parameters across tens of thousands of individual cells in parallel. By combining available assays, researchers can generate robust and intricate datasets, unlocking powerful insights:</p>
+<p><strong>Gene Expression:</strong> The primary purpose of scRNA-seq is to measure the expression of genes within individual cells. This allows to understand which genes are active or inactive in each cell and to identify different cell types based on their gene expression profiles.</p>
+<p><strong>Antibody-Based Protein Analysis:</strong> You can use antibodies conjugated with unique barcodes to simultaneously measure the expression of specific proteins in individual cells. This enables protein-level analysis alongside gene expression.</p>
+<p><strong>Sample multiplexing with antibody-based techniques:</strong> involves using generic antibody conjugated with unique barcodes to label the cells for different samples. Each sample is labeled and idenfied with unique antibody barcode.</p>
+<p><strong>Immune Repertoire Profiling:</strong> Rhapsody can be used for immune profiling, allowing researchers to analyze the diversity and clonality of T-cell and B-cell receptor repertoires. This is valuable for studying the immune response and identifying antigen-specific cells.</p>
+<p><strong>Antigen-Specific T-cell Analysis:</strong> Immudex’s technology combined with the Rhapsody system, enables the precise profiling of T cells that recognize specific antigens, like viral epitopes or tumor-related antigens. This expands immune profiling possibilities, aiding vaccine development, immunotherapy research, and the study of immune-related diseases.</p>
+<p>From scRNA-seq for gene expression profiling to antibody-based protein analysis, these assays empower researchers to explore and dissect the multifaceted world of cellular functions and molecular dynamics with precision</p>
+</section>
+<section id="analysis-of-single-cell-data" class="level2">
+<h2 class="anchored" data-anchor-id="analysis-of-single-cell-data">2.2 Analysis of Single Cell Data</h2>
+<p>The analysis of single cell data can be split into two parts. The <strong>primary analysis</strong> transforms raw data into an expression matrix, where each row represents a gene, each column represents a cell, and each entry in the matrix contains the count of molecules for a particular gene or protein in a specific cell. <strong>Secondary analysis</strong> focus on extracting meaningful biological insights from this expression matrix, such as identifying cell types, studying differential gene expression, and understanding cellular processes and functions.</p>
+<p><img src="prerequisite_figures/primary_secondary_analyses.png" class="img-fluid"></p>
+<p>The workshop will focus on providing insights into secondary analysis. At the same time the primary analysis lays the foundation for secondary and downstream analyses. The next chapter covers information about primary analysis useful to know while working with single-cell data.</p>
+</section>
+<section id="from-sequencing-data-to-expression-matrix" class="level2">
+<h2 class="anchored" data-anchor-id="from-sequencing-data-to-expression-matrix">2.3 From Sequencing Data to Expression Matrix</h2>
+<p>The analysis of sequencing data is handled by the software provided by BD to Rhapsody users that enables fast and easy data processing. In this chapter we will cover a key features of the pipeline and explain key concepts necessary to understand while working with single cell data.</p>
+<section id="bd-rhapsody-sequencing-analysis-pipeline" class="level3">
+<h3 class="anchored" data-anchor-id="bd-rhapsody-sequencing-analysis-pipeline">2.3.1 BD Rhapsody Sequencing Analysis Pipeline</h3>
+<p>The BD Rhapsody sequencing analysis pipeline is a series of computational and analytical steps used to process and extract meaningful information from the raw sequencing data generated by the BD Rhapsody system.</p>
+<p>The goal of sequencing analysis is to transform text-based genomic data into numerical data, and we achieve this through a series of steps in our pipeline. The steps of the pipeline are listed in simplified graphics below.</p>
+<p><img src="prerequisite_figures/sequencing_pipeline.png" class="img-fluid"></p>
+<p>The main steps of the pipeline include quality control of raw sequencing data, molecule counting, identifying the putative cells and sample of origin if multiple samples were processed in one experiment.</p>
+<p>Crucial Steps in the process are decoding the unique barcodes associated with individual cells and the information about gene expression. Additionally, we use a technique called Unique Molecular Identifiers (UMIs) to count gene expression accurately. These steps enable us to precisely identify and quantify the activity of genes in each cell, forming the basis for further analysis.</p>
+</section>
+<section id="expression-counts-by-umis" class="level3">
+<h3 class="anchored" data-anchor-id="expression-counts-by-umis">2.3.2 Expression Counts by UMIs</h3>
+<p>Unique Molecular Identifiers (UMIs) are used to distinguish between molecules expressed in a cell by providing a way to count individual molecules accurately. Here’s how they work to differentiate and quantify molecules in a cell:</p>
+<ul>
+<li><p><strong>Adding UMIs during RNA sequencing preparation:</strong> UMIs are small, unique sequences of DNA that are added to the capture sequences of the bead during the production. Each bead contains tens of thousands of unique UMI barcodes which are followed by the polyA capture sequence. During the cell processing, the polyadenylated molecules in a cell, as mRNAs are captured on the bead. Each UMI is specific to the molecule it’s attached to and become it’s unique tag (see Figure below).</p>
+<p><img src="prerequisite_figures/Umis_after_capture.png" class="img-fluid"></p></li>
+</ul>
+<!-- -->
+<ul>
+<li><p><strong>Creating copies of RNA molecules:</strong> After adding UMIs, scientists make many copies of all the RNA molecules in the cell by running PCR. This step ensures that there are enough copies to work with.</p></li>
+<li><p><strong>Sequencing the molecules:</strong> The copies of RNA molecules, including the attached UMIs, are then sequenced. Sequencing means reading the genetic code of these molecules to determine their identity.</p></li>
+</ul>
+<p>Analyzing the data: When the sequencing is done, scientists look at the data. Here’s where UMIs become important:</p>
+<ul>
+<li><p><strong>Removing duplicates:</strong> Because UMIs are unique to each original RNA molecule, any duplicates (multiple copies of the same RNA molecule) with the same UMI are likely the result of PCR (Polymerase Chain Reaction) amplification during the sequencing process. Scientists can identify and remove these duplicates to get an accurate count of different RNA molecules.</p></li>
+<li><p><strong>Counting unique molecules:</strong> By looking at the UMIs, scientists can count how many unique RNA molecules were originally present in the cell. This helps them understand which genes were active in the cell and to what extent.</p></li>
+<li><p><strong>Quantifying gene expression:</strong> By counting the unique UMIs associated with each gene, scientists can measure the expression level of genes in the cell. Genes with more UMIs were more active in the cell, while genes with fewer UMIs were less active.</p></li>
+</ul>
+<p>In summary, UMIs are used to distinguish between molecules expressed in a cell by providing a unique identifier for each original molecule. This helps in accurately counting and quantifying gene expression, which is crucial for understanding how genes function in single cells and studying cellular processes in detail.</p>
+</section>
+<section id="output-files" class="level3">
+<h3 class="anchored" data-anchor-id="output-files">2.3.3 Output Files</h3>
+<p>We handle various types of data all at once during primary analysis. This includes data related to gene expression at first but can include as well protein expression or information about T-cell receptors (TCR), B-cell receptors (BCR), and sample tags depending on experimental part. The assays run during experiments determine what type of data will be generated and what output files are available for the users for downstream analysis.</p>
+<p>The information about cells is stored in multiple output files. In below you can find summary of what output files relates to which information about the cell.</p>
+<p><img src="prerequisite_figures/output_files_cell.png" class="img-fluid"></p>
+<p>The primary analysis output files are taken as an input to secondary analysis. During the workshop we will work with data that include mRNA, protein and sample tag information. You will get to know how to load the expression matrice in MEX format for downstream analysis.</p>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

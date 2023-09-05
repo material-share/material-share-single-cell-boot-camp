@@ -1,0 +1,59 @@
+---
+title: "Introduction"
+execute:
+  warning: false
+  message: false
+  eval: false
+---
+
+# How to use the materials?
+
+This repository contains the materials for the Single Cell Boot Camp.
+
+It has two chapters of precourse preparation and nine chapters of the course.
+
+For those who are new to R, please review **Precourse Preparation - R**. If you are familiar with the functions listed in this chapter, you can skip it.
+
+For all participants, please review **Precourse Preparation - Theory.**
+
+For **chapters 1 to 9**, we will go through it together in the course. Welcome to review them before the course if you have time (The learning outcome is much better if you go through the materials before attending the course from feedback of our previous students).
+
+# Next occurrence
+
+Sept 19 - 20, 2023 \| 10 am - 2:30 \~ 3:00 pm \| Online
+
+# Description
+
+The Single Cell Boot Camp: Analysis of scRNA-seq with R is to provide an overview of the analysis of single-cell RNA-seq using R. It is designed for early-stage researchers who want to adopt single-cell analysis in their toolbox. The workshop consists of theory in presentation and application in hands-on practice.
+
+The workshop starts with a fast-paced training session on the common workflow of single-cell RNA-seq analysis, then continues with sessions on the common workflow of scRNA-seq using bioinformatics packages like Seurat.
+
+# Prerequisites
+
+Each participant are expected to have:
+
+1\. An introductory background in statistics, specifically in the below concepts: Median, log2 fold change, p-value, adjusted p-value, variance, PCA.
+
+2\. Basic familiarity with R and tidyr package, specifically in the below functions: %\>% (pipe), filter, mutate, pivot_longer, pivot_wider, map, pmap, select, left_join.
+
+*If you would like to learn on your own with publicly available resources:*\
+Chapter 1 - 4 from MordernDive: https://moderndive.com/index.html\
+\
+*If you would like to participate in an instructor-led R course:*\
+R for Biologist from Edinburgh Genomics (https://genomics.ed.ac.uk/services/r-biologists-0#overlay-context=services/training). For details, please contact Edinburgh Genomics.
+
+# Expected outcome
+
+By the end of the workshop, participants will be familiar with the following topics: - Common workflow of single cell analysis (pre-processing, quality control, filtering, normalization, Clustering, Cell type annotation) - Combining AbSeq and scRNA-seq for downstream analysis
+
+For further information, please contact: biox_support_emea\@bd.com
+
+# Disclaimer
+
+Recommendations given by representatives of BD in the context of the creation and setup of customer-specific applications and assays and the composition of antibody panels for use in flow cytometry assays are provided in a diligent manner. However, the Customer acknowledges that (i) such recommendations should not be treated as a substitute for the Customer's own examination, (ii) BD does not make any promises nor guarantees that recommendations are accurate and complete and will meet the Customer's present or future needs or will produce positive or specific results and (iii) Customer remains solely responsible for validating and deciding on any such recommendations.
+
+BD therefore accepts no liability whatsoever in connection with any such recommendation and/or any results generated on the basis of such recommendations and, to the fullest extent permitted by law, expressly disclaims any and all warranties and any liability in this respect. In particular, the Customer assumes sole responsibility for the validation, use, selection, and suitability of the recommendations for its needs and objectives.
+
+# License
+
+See the [LICENSE](LICENSE.md) file for license rights and limitations (MIT).

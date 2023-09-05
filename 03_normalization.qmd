@@ -1,0 +1,137 @@
+---
+title: "Chapter 3 Normalization and PCA"
+execute:
+  warning: false
+  message: false
+---
+
+```{r}
+# libraries for this chapter
+library(tidyverse)
+library(Seurat)
+library(data.table)
+library(celldex)
+library(SingleR)
+library(ExperimentHub)
+```
+
+# Load RData
+
+Load the RData which contain all files from previous chapter.
+
+```{r}
+load("data/intermediate_data/chapter2.RData")
+```
+
+# 
+
+# 1. Normalization
+
+We will perform normalization on UMI counts using `LogNormalize`.
+
+`LogNormalize` divides the UMI counts of a gene in a cell into the total UMI counts in that cell. After division, we take the natural log.
+
+```{r}
+filtered.rna <- NormalizeData(filtered.rna, 
+                              normalization.method = "LogNormalize")
+```
+
+::: callout-important
+## Question
+
+Where are the normalized counts stored?
+:::
+
+::: {.callout-tip collapse="T"}
+## Answer
+
+The normalizaed counts are stored in the slot `RNA`.
+
+```{r}
+filtered.rna@assays[["RNA"]]@data[1:5, 1:5]
+```
+:::
+
+# 2. Evaluating effects of mitochondrial percentage
+
+The unwanted variation, such as the difference in mitochondrial percentage, could affect the downstream analysis.
+
+For example, we don't want the cells clustered based on the difference in mitochondrial percentage.
+
+Let's first look at if the mitochondrial percentage introduces unwanted variation. We take the normalized counts and see if we have unwanted variation from the mitochondrial percentage.
+
+1.  The mitochondrial percentage is a series of numbers. We can turn the mitochondrial percentage variable into a categorical variable based on quartiles.
+
+```{r}
+summary(filtered.rna$percent.mt)
+```
+
+Below 1st quartile: Low.
+
+Between 1st and Median: Median.
+
+Between Median and 3rd quartile: Median high.
+
+beyond 3rd quartile (15.4158%): High.
+
+Next, we create a new variable based on the cutoff.
+
+```{r}
+filtered.rna$quartile.mt <- cut(filtered.rna$percent.mt, 
+                                breaks=c(-Inf, 10.1004, 12.4155, 15.1489, Inf),
+                                labels=c("Low","Medium","Medium high", "High"))
+```
+
+We want to check whether the mitochondrial percentage is a source of variation using PCA. We plot the first two principal components to visualize the data.
+
+```{r}
+# Identify the most variable genes
+filtered.rna <- FindVariableFeatures(filtered.rna,
+                                           selection.method = "vst",
+                                           nfeatures = 2000, 
+                                           verbose = FALSE)
+		     
+# Scale the data
+filtered.rna <- ScaleData(filtered.rna, features = rownames(filtered.rna))
+
+# perform PCA
+filtered.rna <- RunPCA(filtered.rna)
+
+# Plot pc1 and pc2
+DimPlot(filtered.rna,
+        reduction = "pca",
+        group.by= "quartile.mt",
+        split.by = "quartile.mt")
+```
+
+Based on the above plot, we can see a different scatter pattern in cells with "Low" mitochondrial percentage.
+
+We observe that the lobe of cells in the left middle side of the plot is in the category "Low". For all other levels of mitochondrial percentage, we see a more even distribution of cells across the PCA plot.
+
+::: callout-tip
+Oftentimes, it is helpful to regress out variation due to mitochondrial percentage. However, if the differences in mitochondrial gene expression represent a biological phenomenon that might help to distinguish cell clusters, then we do not regress it out.
+:::
+
+::: callout-tip
+Cell cycle is another common variation. For instructions, please refer to <https://satijalab.org/seurat/articles/cell_cycle_vignette.html>
+:::
+
+To regress out the effect mitochondrial percentage, add the argument `vars.to.regress = "percent.mt"` to the `ScaleData`.
+
+```{r}
+# Scale the data
+filtered.rna <- ScaleData(filtered.rna, 
+                                features = rownames(filtered.rna), 
+                                vars.to.regress = "percent.mt")
+
+# perform PCA
+filtered.rna <- RunPCA(filtered.rna)
+```
+
+# 3. Save
+
+Save the files into RData for documentation.
+
+```{r}
+# save(filtered.rna, expMat, file = "data/intermediate_data/chapter3.RData")
+```

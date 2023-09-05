@@ -1,0 +1,248 @@
+"0","#| include: false"
+"0",""
+"0","# library"
+"0","library(tidyverse)"
+"0","library(Seurat)"
+"2","Attaching SeuratObject
+"
+"0","library(data.table)"
+"2","data.table 1.14.8 using 1 threads (see ?getDTthreads).  Latest news: r-datatable.com
+"
+"2","**********
+This installation of data.table has not detected OpenMP support. It should still work but in single-threaded mode.
+This is a Mac. Please read https://mac.r-project.org/openmp/. Please engage with Apple and ask them for support. Check r-datatable.com for updates, and our Mac instructions here: https://github.com/Rdatatable/data.table/wiki/Installation. After several years of many reports of installation problems on Mac, it's time to gingerly point out that there have been no similar problems on Windows or Linux.
+**********
+"
+"2","
+Attaching package: ‘data.table’
+
+"
+"2","The following objects are masked from ‘package:lubridate’:
+
+    hour, isoweek, mday, minute, month, quarter, second, wday, week, yday, year
+
+"
+"2","The following objects are masked from ‘package:dplyr’:
+
+    between, first, last
+
+"
+"2","The following object is masked from ‘package:purrr’:
+
+    transpose
+
+"
+"0","library(celldex)"
+"2","Loading required package: SummarizedExperiment
+"
+"2","Loading required package: MatrixGenerics
+"
+"2","Warning: package ‘MatrixGenerics’ was built under R version 4.3.1"
+"2","Loading required package: matrixStats
+"
+"2","
+Attaching package: ‘matrixStats’
+
+"
+"2","The following object is masked from ‘package:dplyr’:
+
+    count
+
+"
+"2","
+Attaching package: ‘MatrixGenerics’
+
+"
+"2","The following objects are masked from ‘package:matrixStats’:
+
+    colAlls, colAnyNAs, colAnys, colAvgsPerRowSet, colCollapse, colCounts, colCummaxs, colCummins,
+    colCumprods, colCumsums, colDiffs, colIQRDiffs, colIQRs, colLogSumExps, colMadDiffs, colMads,
+    colMaxs, colMeans2, colMedians, colMins, colOrderStats, colProds, colQuantiles, colRanges,
+    colRanks, colSdDiffs, colSds, colSums2, colTabulates, colVarDiffs, colVars, colWeightedMads,
+    colWeightedMeans, colWeightedMedians, colWeightedSds, colWeightedVars, rowAlls, rowAnyNAs,
+    rowAnys, rowAvgsPerColSet, rowCollapse, rowCounts, rowCummaxs, rowCummins, rowCumprods,
+    rowCumsums, rowDiffs, rowIQRDiffs, rowIQRs, rowLogSumExps, rowMadDiffs, rowMads, rowMaxs,
+    rowMeans2, rowMedians, rowMins, rowOrderStats, rowProds, rowQuantiles, rowRanges, rowRanks,
+    rowSdDiffs, rowSds, rowSums2, rowTabulates, rowVarDiffs, rowVars, rowWeightedMads,
+    rowWeightedMeans, rowWeightedMedians, rowWeightedSds, rowWeightedVars
+
+"
+"2","Loading required package: GenomicRanges
+"
+"2","Loading required package: stats4
+"
+"2","Loading required package: BiocGenerics
+"
+"2","
+Attaching package: ‘BiocGenerics’
+
+"
+"2","The following objects are masked from ‘package:lubridate’:
+
+    intersect, setdiff, union
+
+"
+"2","The following objects are masked from ‘package:dplyr’:
+
+    combine, intersect, setdiff, union
+
+"
+"2","The following objects are masked from ‘package:stats’:
+
+    IQR, mad, sd, var, xtabs
+
+"
+"2","The following objects are masked from ‘package:base’:
+
+    anyDuplicated, aperm, append, as.data.frame, basename, cbind, colnames, dirname, do.call,
+    duplicated, eval, evalq, Filter, Find, get, grep, grepl, intersect, is.unsorted, lapply, Map,
+    mapply, match, mget, order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank, rbind,
+    Reduce, rownames, sapply, setdiff, sort, table, tapply, union, unique, unsplit, which.max,
+    which.min
+
+"
+"2","Loading required package: S4Vectors
+"
+"2","
+Attaching package: ‘S4Vectors’
+
+"
+"2","The following objects are masked from ‘package:data.table’:
+
+    first, second
+
+"
+"2","The following objects are masked from ‘package:lubridate’:
+
+    second, second<-
+
+"
+"2","The following objects are masked from ‘package:dplyr’:
+
+    first, rename
+
+"
+"2","The following object is masked from ‘package:tidyr’:
+
+    expand
+
+"
+"2","The following object is masked from ‘package:utils’:
+
+    findMatches
+
+"
+"2","The following objects are masked from ‘package:base’:
+
+    expand.grid, I, unname
+
+"
+"2","Loading required package: IRanges
+"
+"2","Warning: package ‘IRanges’ was built under R version 4.3.1"
+"2","
+Attaching package: ‘IRanges’
+
+"
+"2","The following object is masked from ‘package:data.table’:
+
+    shift
+
+"
+"2","The following object is masked from ‘package:lubridate’:
+
+    %within%
+
+"
+"2","The following objects are masked from ‘package:dplyr’:
+
+    collapse, desc, slice
+
+"
+"2","The following object is masked from ‘package:purrr’:
+
+    reduce
+
+"
+"2","Loading required package: GenomeInfoDb
+"
+"2","Warning: package ‘GenomeInfoDb’ was built under R version 4.3.1"
+"2","Loading required package: Biobase
+"
+"2","Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with 'browseVignettes()'. To cite Bioconductor,
+    see 'citation(""Biobase"")', and for packages 'citation(""pkgname"")'.
+
+"
+"2","
+Attaching package: ‘Biobase’
+
+"
+"2","The following object is masked from ‘package:MatrixGenerics’:
+
+    rowMedians
+
+"
+"2","The following objects are masked from ‘package:matrixStats’:
+
+    anyMissing, rowMedians
+
+"
+"2","
+Attaching package: ‘SummarizedExperiment’
+
+"
+"2","The following object is masked from ‘package:SeuratObject’:
+
+    Assays
+
+"
+"2","The following object is masked from ‘package:Seurat’:
+
+    Assays
+
+"
+"2","Registered S3 methods overwritten by 'dbplyr':
+  method         from
+  print.tbl_lazy     
+  print.tbl_sql      
+"
+"0","library(SingleR)"
+"2","
+Attaching package: ‘SingleR’
+
+"
+"2","The following objects are masked from ‘package:celldex’:
+
+    BlueprintEncodeData, DatabaseImmuneCellExpressionData, HumanPrimaryCellAtlasData, ImmGenData,
+    MonacoImmuneData, MouseRNAseqData, NovershternHematopoieticData
+
+"
+"0","library(ExperimentHub)"
+"2","Warning: package ‘ExperimentHub’ was built under R version 4.3.1"
+"2","Loading required package: AnnotationHub
+"
+"2","Loading required package: BiocFileCache
+"
+"2","Loading required package: dbplyr
+"
+"2","
+Attaching package: ‘dbplyr’
+
+"
+"2","The following objects are masked from ‘package:dplyr’:
+
+    ident, sql
+
+"
+"2","
+Attaching package: ‘AnnotationHub’
+
+"
+"2","The following object is masked from ‘package:Biobase’:
+
+    cache
+
+"
+"0","library(muscat)"

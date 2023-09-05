@@ -1,0 +1,2 @@
+"0","modified_df_example <- df_example[ , colnames(df_example) != ""patient""]    # Drop column ""patient"""
+"0","modified_df_example %>% head"
