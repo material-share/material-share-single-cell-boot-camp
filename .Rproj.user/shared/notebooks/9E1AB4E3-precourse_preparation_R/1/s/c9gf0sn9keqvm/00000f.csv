@@ -1,2 +1,2 @@
-"0","# choosing the column of CD4 gene"
-"0","expMat %>% dplyr::select(""CD4"") -> CD4_column"
+"0","#choosing all the columns with AbSeq counts and saving to abseq_data"
+"0","expMat %>% dplyr::select(contains(""pAbO"")) -> abseq_data"

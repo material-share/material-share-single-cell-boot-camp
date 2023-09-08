@@ -1,0 +1,13 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+data/
+_freeze/
+*_cache/
+*_files/
+*pics/
+*prerequisite_figures/
+
+/.quarto/

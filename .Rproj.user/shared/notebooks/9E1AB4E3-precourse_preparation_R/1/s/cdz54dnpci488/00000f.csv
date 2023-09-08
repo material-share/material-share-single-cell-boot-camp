@@ -1,5 +1,0 @@
-"0","expMat <- fread(file = ""data/precourse_preparation_data/Demo-WTA-AbSeq.csv"", sep = "","", header=TRUE)"
-"0",""
-"0","# file: provide full directory to file"
-"0","# sep: indicate separator, in this case coma"
-"0","# header = True is indicating to take the first row as a column names"

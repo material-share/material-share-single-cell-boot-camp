@@ -1,5 +1,0 @@
-"0","#calcuate and add cell_status to mrna table"
-"0","mrna_data %>% mutate(cell_status = if_else(mrna_data[""counts""] > 2000, ""high_transcriptome"", ""low_transcriptome"")) -> mrna_data"
-"0",""
-"0","#display cell status column "
-"0","mrna_data %>% dplyr::select(cell_status) %>% head"
