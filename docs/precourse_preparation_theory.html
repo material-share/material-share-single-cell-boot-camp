@@ -191,18 +191,19 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#single-cell-principles" id="toc-single-cell-principles" class="nav-link active" data-scroll-target="#single-cell-principles">1. Single Cell Principles</a></li>
-  <li><a href="#bd-rhapsody-single---cell-workflow" id="toc-bd-rhapsody-single---cell-workflow" class="nav-link" data-scroll-target="#bd-rhapsody-single---cell-workflow">2. BD Rhapsody Single - Cell Workflow</a>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">1. Introduction</a></li>
+  <li><a href="#bd-rhapsody-single-cell-workflow" id="toc-bd-rhapsody-single-cell-workflow" class="nav-link" data-scroll-target="#bd-rhapsody-single-cell-workflow">2. BD Rhapsody<sup>™</sup> Single Cell Workflow</a>
   <ul class="collapse">
-  <li><a href="#bd-rhapsody-single-cell-assays" id="toc-bd-rhapsody-single-cell-assays" class="nav-link" data-scroll-target="#bd-rhapsody-single-cell-assays">2.1 BD Rhapsody Single-Cell Assays</a></li>
-  <li><a href="#analysis-of-single-cell-data" id="toc-analysis-of-single-cell-data" class="nav-link" data-scroll-target="#analysis-of-single-cell-data">2.2 Analysis of Single Cell Data</a></li>
-  <li><a href="#from-sequencing-data-to-expression-matrix" id="toc-from-sequencing-data-to-expression-matrix" class="nav-link" data-scroll-target="#from-sequencing-data-to-expression-matrix">2.3 From Sequencing Data to Expression Matrix</a>
+  <li><a href="#bd-rhapsody-single-cell-system" id="toc-bd-rhapsody-single-cell-system" class="nav-link" data-scroll-target="#bd-rhapsody-single-cell-system">2.1 BD Rhapsody<sup>™</sup> Single Cell System</a></li>
+  <li><a href="#overview-of-single-cell-data-analysis" id="toc-overview-of-single-cell-data-analysis" class="nav-link" data-scroll-target="#overview-of-single-cell-data-analysis">2.2 Overview of Single Cell Data Analysis</a></li>
+  <li><a href="#primary-analysis---from-sequencing-data-to-expression-matrix" id="toc-primary-analysis---from-sequencing-data-to-expression-matrix" class="nav-link" data-scroll-target="#primary-analysis---from-sequencing-data-to-expression-matrix">2.3 Primary analysis - From Sequencing Data to Expression Matrix</a>
   <ul class="collapse">
-  <li><a href="#bd-rhapsody-sequencing-analysis-pipeline" id="toc-bd-rhapsody-sequencing-analysis-pipeline" class="nav-link" data-scroll-target="#bd-rhapsody-sequencing-analysis-pipeline">2.3.1 BD Rhapsody Sequencing Analysis Pipeline</a></li>
-  <li><a href="#expression-counts-by-umis" id="toc-expression-counts-by-umis" class="nav-link" data-scroll-target="#expression-counts-by-umis">2.3.2 Expression Counts by UMIs</a></li>
-  <li><a href="#output-files" id="toc-output-files" class="nav-link" data-scroll-target="#output-files">2.3.3 Output Files</a></li>
+  <li><a href="#bd-rhapsody-sequencing-analysis-pipeline" id="toc-bd-rhapsody-sequencing-analysis-pipeline" class="nav-link" data-scroll-target="#bd-rhapsody-sequencing-analysis-pipeline">2.3.1 BD Rhapsody<sup>™</sup> Sequencing Analysis Pipeline</a></li>
+  <li><a href="#quantify-feature-expression-with-umis" id="toc-quantify-feature-expression-with-umis" class="nav-link" data-scroll-target="#quantify-feature-expression-with-umis">2.3.2 Quantify feature expression with UMIs</a></li>
+  <li><a href="#output-files-from-primary-pipeline" id="toc-output-files-from-primary-pipeline" class="nav-link" data-scroll-target="#output-files-from-primary-pipeline">2.3.3 Output Files from Primary Pipeline</a></li>
   </ul></li>
   </ul></li>
+  <li><a href="#additional-information-on-running-primary-pipeline" id="toc-additional-information-on-running-primary-pipeline" class="nav-link" data-scroll-target="#additional-information-on-running-primary-pipeline">Additional Information on Running Primary Pipeline</a></li>
   </ul>
 </nav>
     </div>
@@ -226,86 +227,106 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<section id="single-cell-principles" class="level1">
-<h1>1. Single Cell Principles</h1>
-<p>Inside our bodies, there’s a huge variety of cell types that have different functions and interact with each other. Imagine it like a bustling city with different kinds of workers.</p>
-<p>To understand these cells better, scientists use single-cell RNA sequencing (scRNA-seq) technique. It’s like taking a close-up picture of each cell to see which genes are active. This helps us learn what each cell is up to in a really detailed way.</p>
-<p>This new and advanced technique can be employed to:</p>
+<section id="introduction" class="level1">
+<h1>1. Introduction</h1>
+<p>Our body has many cell types with different functions and they interact with each other in a daily basis. We can imagine it like a bustling city with different workers specializing in different tasks.</p>
+<p>Single-cell RNA sequencing (scRNAseq) can help to understand the cell types and their functionality. It’s like taking a close-up picture of each cell and see which genes are active.</p>
+<p>This technique can be applied to:</p>
 <ul>
-<li><p>Investigating the different types of cells in a specific part of the body. <strong>Example:</strong> Understanding the various cell types in the brain to study its functions better.</p></li>
-<li><p>Discovering cell types or states that are not well-known or rare. <strong>Example:</strong> Identifying unique cell types in the immune system that might have important roles.</p></li>
-<li><p>Figuring out how genes change their activity as cells transform or over time. <strong>Example:</strong> Tracking how genes behave as stem cells develop into specialized heart cells.</p></li>
-<li><p>Spotting genes that are only active in certain cell types under different conditions, like when there’s a disease. <strong>Example:</strong> Finding genes that are switched on only in lung cells during asthma.</p></li>
-<li><p>Examining how gene activity changes within a cell type and also consider aspects like where the genes are located, how they’re controlled, and their protein products. <strong>Example:</strong> Studying how nerve cells in the spinal cord change their gene activity and what proteins they make in response to injury.</p></li>
+<li><p>Investigating different types of cells in a specific tissue. Example<strong>:</strong> Understanding the various cell types in the brain.</p></li>
+<li><p>Discovering noval cell types or states. Example<strong>:</strong> Identifying unique cell types in the immune system.</p></li>
+<li><p>Figuring out how genes change their activity as cells differentiate over time. Example<strong>:</strong> Tracking gene expression dynamics such as stem cells differentiation.</p></li>
+<li><p>Finding genes that are active in certain cell types under certain conditions. Example<strong>:</strong> Finding genes that switch on in lung cells in asthma.</p></li>
+<li><p>Examining how gene activity changes within a cell type under certain conditions. Example<strong>:</strong> Studying how nerve cells in the spinal cord change their gene activity in response to injury.</p></li>
 </ul>
 </section>
-<section id="bd-rhapsody-single---cell-workflow" class="level1">
-<h1>2. BD Rhapsody Single - Cell Workflow</h1>
+<section id="bd-rhapsody-single-cell-workflow" class="level1">
+<h1>2. BD Rhapsody<sup>™</sup> Single Cell Workflow</h1>
 <p>The BD Rhapsody<sup>™</sup>&nbsp;Express System enables single-cell capture and barcoding of hundreds to thousands of single cells for analysis of genomic and proteomic information.</p>
-<p>Before proceeding with Rhapsody workflow, sample of interest is processed to prepare the cells for capture. To focus study on specific population or capture very rare cell types the cell sorting can be added as additional step during experimental procedure.</p>
-<p><strong>The sample preparation and experimental set-up is a crucial step and has an impact on quality of the data and analysis.</strong></p>
+<p>Before proceeding with Rhapsody workflow, sample of interest is processed to have <strong>live</strong> <strong>single cells in cell suspension</strong>. It is optional to sort cells to concentrate on cell type of interest.</p>
+<p>The sample preparation and experimental setup are crucial and have big impacts on data quality and the following analysis. We expect live single cells in cell suspension (avoid clumps or dead cells).</p>
 <p><img src="prerequisite_figures/BD_single_cell_workflow.png" class="img-fluid"></p>
-<p>In the next step the single cells are captured and barcoded in the Rhapsody Single-Cell Analysis System. Each cell is assigned a specific cell barcode and mRNA molecules are tagged, which helps to identify the origin of the RNA molecules within that cell.</p>
-<p>The data analysis and interpretation comes as the last piece of the full workflow. The upstream steps, including experimental design and sample processing will define the analysis process, for example, how we approach quality control, the data integration or cell annotation.</p>
-<p>In next chapter you will learn what types of data can be measured on the single-cell level in the BD Rhapsody<sup>™</sup> System.</p>
-<section id="bd-rhapsody-single-cell-assays" class="level2">
-<h2 class="anchored" data-anchor-id="bd-rhapsody-single-cell-assays">2.1 BD Rhapsody Single-Cell Assays</h2>
+<p>Once we obtain single cell suspension, the cells are captured and barcoded by the BD Rhapsody<sup>™</sup> Single-Cell Analysis System. Each cell is assigned with a unique cell barcode and mRNA molecules of a cell are tagged with that barcode. This helps to associate the RNA molecules with the cell in downstream analysis.</p>
+<p>The data analysis and interpretation come as the last piece of the workflow. The upstream steps, including experimental design and sample processing, will define the analysis process: how we approach quality control, data integration or cell annotation, etc.</p>
+<p>In the next chapter, you will learn what can be measured on the single cell level with BD Rhapsody<sup>™</sup> System.</p>
+<section id="bd-rhapsody-single-cell-system" class="level2">
+<h2 class="anchored" data-anchor-id="bd-rhapsody-single-cell-system">2.1 BD Rhapsody<sup>™</sup> Single Cell System</h2>
 <p><img src="prerequisite_figures/BD_Rhapsody_assays_summary.png" class="img-fluid"></p>
-<p>The BD Rhapsody™ System, along with diverse range of assays, enables simultaneous measurement of multiple cell parameters across tens of thousands of individual cells in parallel. By combining available assays, researchers can generate robust and intricate datasets, unlocking powerful insights:</p>
-<p><strong>Gene Expression:</strong> The primary purpose of scRNA-seq is to measure the expression of genes within individual cells. This allows to understand which genes are active or inactive in each cell and to identify different cell types based on their gene expression profiles.</p>
-<p><strong>Antibody-Based Protein Analysis:</strong> You can use antibodies conjugated with unique barcodes to simultaneously measure the expression of specific proteins in individual cells. This enables protein-level analysis alongside gene expression.</p>
-<p><strong>Sample multiplexing with antibody-based techniques:</strong> involves using generic antibody conjugated with unique barcodes to label the cells for different samples. Each sample is labeled and idenfied with unique antibody barcode.</p>
-<p><strong>Immune Repertoire Profiling:</strong> Rhapsody can be used for immune profiling, allowing researchers to analyze the diversity and clonality of T-cell and B-cell receptor repertoires. This is valuable for studying the immune response and identifying antigen-specific cells.</p>
-<p><strong>Antigen-Specific T-cell Analysis:</strong> Immudex’s technology combined with the Rhapsody system, enables the precise profiling of T cells that recognize specific antigens, like viral epitopes or tumor-related antigens. This expands immune profiling possibilities, aiding vaccine development, immunotherapy research, and the study of immune-related diseases.</p>
-<p>From scRNA-seq for gene expression profiling to antibody-based protein analysis, these assays empower researchers to explore and dissect the multifaceted world of cellular functions and molecular dynamics with precision</p>
+<p>The BD Rhapsody™ Single Cell System enables simultaneous measurement of multiple cell parameters in thousands of individual cells. By combining available assays, researchers can generate robust and intricate datasets to unlock powerful insights.</p>
+<p><strong>Gene Expression (scRNAseq):</strong> The primary purpose of scRNAseq is to measure the gene expression in individual cells. This allows to understand which genes are active or inactive and to identify different cell types based on their gene expression profiles.</p>
+<p><strong>Antibody-Based Protein Analysis (AbSeq):</strong> You can use antibodies conjugated with unique barcodes to measure protein expression alongside with gene expression in individual cells.</p>
+<p><strong>Sample multiplexing with antibody-based techniques (SMK):</strong> Sample multiplexing kit (SMK) use generic antibody conjugated with unique barcodes to label cells from different samples. This enables pooling of multiple samples in one cartridge.</p>
+<p><strong>Immune Repertoire Profiling:</strong> Full length V(D)J assay profiles the diversity of T cell and/or B cell receptor repertoires. This is valuable for studying the immune response and identifying antigen-specific cells.</p>
+<p><strong>Antigen-Specific T-cell Analysis:</strong> Immudex’s technology enables the profiling of T cells that recognize specific antigens such as viral epitopes or tumor-related antigens. This expands the offering of immune profiling, aiding vaccine development and immunotherapy research.</p>
+<p>From gene expression profiling to antibody-based protein analysis, all assays can be combined or performed standalone to explore cellular functions and molecular dynamics in single cell resolution.</p>
 </section>
-<section id="analysis-of-single-cell-data" class="level2">
-<h2 class="anchored" data-anchor-id="analysis-of-single-cell-data">2.2 Analysis of Single Cell Data</h2>
-<p>The analysis of single cell data can be split into two parts. The <strong>primary analysis</strong> transforms raw data into an expression matrix, where each row represents a gene, each column represents a cell, and each entry in the matrix contains the count of molecules for a particular gene or protein in a specific cell. <strong>Secondary analysis</strong> focus on extracting meaningful biological insights from this expression matrix, such as identifying cell types, studying differential gene expression, and understanding cellular processes and functions.</p>
+<section id="overview-of-single-cell-data-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="overview-of-single-cell-data-analysis">2.2 Overview of Single Cell Data Analysis</h2>
+<p>In general, the analysis of single cell data can be split into two parts.</p>
+<p>The <strong>primary analysis</strong> transforms raw data (usually in fastq.gz format) into an expression matrix, where each row represents a gene, each column represents a cell, and each entry in the matrix contains the molecule counts of a particular feature (gene or protein) in a cell. <strong>Secondary analysis</strong> focuses on extracting meaningful biological insights from the expression matrix.</p>
 <p><img src="prerequisite_figures/primary_secondary_analyses.png" class="img-fluid"></p>
-<p>The workshop will focus on providing insights into secondary analysis. At the same time the primary analysis lays the foundation for secondary and downstream analyses. The next chapter covers information about primary analysis useful to know while working with single-cell data.</p>
 </section>
-<section id="from-sequencing-data-to-expression-matrix" class="level2">
-<h2 class="anchored" data-anchor-id="from-sequencing-data-to-expression-matrix">2.3 From Sequencing Data to Expression Matrix</h2>
-<p>The analysis of sequencing data is handled by the software provided by BD to Rhapsody users that enables fast and easy data processing. In this chapter we will cover a key features of the pipeline and explain key concepts necessary to understand while working with single cell data.</p>
+<section id="primary-analysis---from-sequencing-data-to-expression-matrix" class="level2">
+<h2 class="anchored" data-anchor-id="primary-analysis---from-sequencing-data-to-expression-matrix">2.3 Primary analysis - From Sequencing Data to Expression Matrix</h2>
+<p>After sequencing, one will receive raw sequecning data. The raw sequencing data is usually in fastq.gz format. You may also see fq.gz.</p>
+<p>The raw sequencing data is usually handled by the software, BD Rhapsody<sup>™</sup> Primary Analysis Pipeline, to enables fast and easy data processing. In this chapter, we will cover key features of the pipeline and explain key concepts necessary to understand prior working with single cell data.</p>
 <section id="bd-rhapsody-sequencing-analysis-pipeline" class="level3">
-<h3 class="anchored" data-anchor-id="bd-rhapsody-sequencing-analysis-pipeline">2.3.1 BD Rhapsody Sequencing Analysis Pipeline</h3>
-<p>The BD Rhapsody sequencing analysis pipeline is a series of computational and analytical steps used to process and extract meaningful information from the raw sequencing data generated by the BD Rhapsody system.</p>
-<p>The goal of sequencing analysis is to transform text-based genomic data into numerical data, and we achieve this through a series of steps in our pipeline. The steps of the pipeline are listed in simplified graphics below.</p>
-<p><img src="prerequisite_figures/sequencing_pipeline.png" class="img-fluid"></p>
-<p>The main steps of the pipeline include quality control of raw sequencing data, molecule counting, identifying the putative cells and sample of origin if multiple samples were processed in one experiment.</p>
-<p>Crucial Steps in the process are decoding the unique barcodes associated with individual cells and the information about gene expression. Additionally, we use a technique called Unique Molecular Identifiers (UMIs) to count gene expression accurately. These steps enable us to precisely identify and quantify the activity of genes in each cell, forming the basis for further analysis.</p>
+<h3 class="anchored" data-anchor-id="bd-rhapsody-sequencing-analysis-pipeline">2.3.1 BD Rhapsody<sup>™</sup> Sequencing Analysis Pipeline</h3>
+<p>The BD Rhapsody<sup>™</sup> Sequencing Analysis Pipeline contains a series of computational steps to process and extract meaningful information from the raw sequencing data generated by the BD Rhapsody<sup>™</sup> Sinlge Cell System.</p>
+<p>The goal of sequencing analysis is to transform text-based genomic data into numerical data, and we achieve this through a series of steps in the pipeline. The steps of the pipeline are listed in simplified graphics below.</p>
+<p><img src="prerequisite_figures/sequencing_pipeline.png" class="img-fluid" width="1000"></p>
+<p>The main steps include decoding the unique barcodes and feature molecules associated with individual cells. Oftentimes, scRNAseq relies on <strong>u</strong>nique <strong>m</strong>olecular <strong>i</strong>dentifiers (UMIs) to quantify feature expression.</p>
 </section>
-<section id="expression-counts-by-umis" class="level3">
-<h3 class="anchored" data-anchor-id="expression-counts-by-umis">2.3.2 Expression Counts by UMIs</h3>
-<p>Unique Molecular Identifiers (UMIs) are used to distinguish between molecules expressed in a cell by providing a way to count individual molecules accurately. Here’s how they work to differentiate and quantify molecules in a cell:</p>
+<section id="quantify-feature-expression-with-umis" class="level3">
+<h3 class="anchored" data-anchor-id="quantify-feature-expression-with-umis">2.3.2 Quantify feature expression with UMIs</h3>
+<p><strong>U</strong>nique <strong>m</strong>olecular <strong>i</strong>dentifiers (UMIs) are used to quantify molecules expressed in a cell. Here’s how it works:</p>
 <ul>
-<li><p><strong>Adding UMIs during RNA sequencing preparation:</strong> UMIs are small, unique sequences of DNA that are added to the capture sequences of the bead during the production. Each bead contains tens of thousands of unique UMI barcodes which are followed by the polyA capture sequence. During the cell processing, the polyadenylated molecules in a cell, as mRNAs are captured on the bead. Each UMI is specific to the molecule it’s attached to and become it’s unique tag (see Figure below).</p>
+<li><p><strong>Bead structure:</strong> UMIs are small, unique sequences of DNA that are added to the capture sequence of beads. Each bead contains tens of thousands of unique UMIs followed by the polyA capture sequence. Each UMI is specific to the molecule it attaches to and becomes its unique tag.</p>
 <p><img src="prerequisite_figures/Umis_after_capture.png" class="img-fluid"></p></li>
+<li><p>Thousands RNA molecule copies are created by PCR during library preparation.</p></li>
+<li><p>The RNA molecule copies, including the attached UMIs, are then sequenced.</p></li>
 </ul>
-<!-- -->
+<p>UMIs can help to differentiate PCR copies and we can quantify correctly the feature expression. After sequencing, we count the number of unique UMIs rather than the number of reads of a transcript as feature expression. UMIs help to:</p>
 <ul>
-<li><p><strong>Creating copies of RNA molecules:</strong> After adding UMIs, scientists make many copies of all the RNA molecules in the cell by running PCR. This step ensures that there are enough copies to work with.</p></li>
-<li><p><strong>Sequencing the molecules:</strong> The copies of RNA molecules, including the attached UMIs, are then sequenced. Sequencing means reading the genetic code of these molecules to determine their identity.</p></li>
+<li><p><strong>Remove PCR duplicates:</strong> Because UMIs are unique to each original RNA molecule, any duplicates (multiple copies of the same RNA molecule) with the same UMI are likely the result of PCR amplification during library preparation.</p></li>
+<li><p><strong>Count unique molecules:</strong> By looking at the UMIs, one can count how many unique RNA molecules are originally present in the cell.</p></li>
+<li><p><strong>Quantify gene expression:</strong> By counting the unique UMIs associated with each gene, one can measure the expression level of features in a cell. Genes with more UMIs are more active, while genes with fewer UMIs are less active.</p></li>
 </ul>
-<p>Analyzing the data: When the sequencing is done, scientists look at the data. Here’s where UMIs become important:</p>
-<ul>
-<li><p><strong>Removing duplicates:</strong> Because UMIs are unique to each original RNA molecule, any duplicates (multiple copies of the same RNA molecule) with the same UMI are likely the result of PCR (Polymerase Chain Reaction) amplification during the sequencing process. Scientists can identify and remove these duplicates to get an accurate count of different RNA molecules.</p></li>
-<li><p><strong>Counting unique molecules:</strong> By looking at the UMIs, scientists can count how many unique RNA molecules were originally present in the cell. This helps them understand which genes were active in the cell and to what extent.</p></li>
-<li><p><strong>Quantifying gene expression:</strong> By counting the unique UMIs associated with each gene, scientists can measure the expression level of genes in the cell. Genes with more UMIs were more active in the cell, while genes with fewer UMIs were less active.</p></li>
-</ul>
-<p>In summary, UMIs are used to distinguish between molecules expressed in a cell by providing a unique identifier for each original molecule. This helps in accurately counting and quantifying gene expression, which is crucial for understanding how genes function in single cells and studying cellular processes in detail.</p>
+<p>In summary, UMIs are used to distinguish real feature molecules from PCR copy by providing a unique identifier for each original molecule.</p>
 </section>
-<section id="output-files" class="level3">
-<h3 class="anchored" data-anchor-id="output-files">2.3.3 Output Files</h3>
-<p>We handle various types of data all at once during primary analysis. This includes data related to gene expression at first but can include as well protein expression or information about T-cell receptors (TCR), B-cell receptors (BCR), and sample tags depending on experimental part. The assays run during experiments determine what type of data will be generated and what output files are available for the users for downstream analysis.</p>
-<p>The information about cells is stored in multiple output files. In below you can find summary of what output files relates to which information about the cell.</p>
+<section id="output-files-from-primary-pipeline" class="level3">
+<h3 class="anchored" data-anchor-id="output-files-from-primary-pipeline">2.3.3 Output Files from Primary Pipeline</h3>
+<p>The primary pipeline produces many output files. Below you can find a summary of output files relating to different assays.</p>
 <p><img src="prerequisite_figures/output_files_cell.png" class="img-fluid"></p>
-<p>The primary analysis output files are taken as an input to secondary analysis. During the workshop we will work with data that include mRNA, protein and sample tag information. You will get to know how to load the expression matrice in MEX format for downstream analysis.</p>
-
-
+<p>The primary analysis output files are the input of secondary analysis. During the course, we will work with demo data that include mRNA, protein and sample tag information. You will get to know how to load the expression matrix in MEX format, how to perform quality control and other common steps in Chapter 1 - 9.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The course will ONLY cover the secondary analysis.</p>
+</div>
+</div>
 </section>
 </section>
+</section>
+<section id="additional-information-on-running-primary-pipeline" class="level1">
+<h1>Additional Information on Running Primary Pipeline</h1>
+<p>Here is how to set up and run the BD Rhapsody™ Analysis pipelines: BD® Single-Cell Multiomics Analysis Setup User Guide.&nbsp; (<a href="https://scomix.bd.com/hc/article_attachments/16954103767949" class="uri">https://scomix.bd.com/hc/article_attachments/16954103767949</a>)<br>
+<br>
+- This guide provides detailed instructions on how to set up and run the BD Rhapsody™ Analysis pipelines on the Seven Bridges Genomics platform or a local installation.<br>
+&nbsp;<br>
+Here is the bioinformatics handbook as a resource: BD® Single-Cell Multiomics Bioinformatics Handbook. (<a href="https://scomix.bd.com/hc/article_attachments/16954089124621" class="uri">https://scomix.bd.com/hc/article_attachments/16954089124621</a>)<br>
+<br>
+- This handbook is a comprehensive reference to help you prepare and analyze single-cell libraries with the BD Rhapsody™ Single-Cell Analysis system or the BD Rhapsody™ Express Single-Cell Analysis system. Major aspects of the BD® Single-Cell Multiomics bioinformatics workflow are covered. This reference explains the BD single-cell multiomics sequencing analysis algorithms to deepen your understanding of how single-cell mRNA and protein (AbSeq) expression profiles are generated. In addition, the handbook defines every analysis metric.<br>
+</p>
+
+
 </section>
 
 </main> <!-- /main -->

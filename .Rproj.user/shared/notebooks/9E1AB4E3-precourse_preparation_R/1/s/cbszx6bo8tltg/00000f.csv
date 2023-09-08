@@ -1,4 +1,4 @@
-"0","head(df_example$study) # head allows to display only 10 first elements "
+"0","df_example$study %>% head # head allows to display only 10 first elements "
 "1","[1]"
 "1"," ""Adams_Kaminski_2020"""
 "1"," ""Adams_Kaminski_2020"""

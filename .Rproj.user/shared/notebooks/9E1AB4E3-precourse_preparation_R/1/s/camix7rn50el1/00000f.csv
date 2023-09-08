@@ -1,2 +1,2 @@
-"0","#add new column with the same value"
-"0","abseq_data %>% mutate(data_modality = ""protein_expression"") -> abseq_data "
+"0","#display results"
+"0","abseq_data %>% dplyr::select(""data_modality"") %>% head"

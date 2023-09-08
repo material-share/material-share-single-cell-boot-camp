@@ -1,2 +1,0 @@
-"0","#pipe operations"
-"0","expMat <- fread(file = ""data/precourse_preparation_data/Demo-WTA-AbSeq.csv"", sep = "","", header=TRUE) %>% data.frame(row.names = 1)"

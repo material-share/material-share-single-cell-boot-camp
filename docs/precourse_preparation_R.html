@@ -212,7 +212,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li>
 <a href="#data-frame" id="toc-data-frame" class="nav-link" data-scroll-target="#data-frame">1. Data frame</a>
   <ul class="collapse">
-<li><a href="#what-is-data-frame" id="toc-what-is-data-frame" class="nav-link" data-scroll-target="#what-is-data-frame">1.1 What is data frame</a></li>
+<li><a href="#what-is-a-data-frame" id="toc-what-is-a-data-frame" class="nav-link" data-scroll-target="#what-is-a-data-frame">1.1 What is a data frame?</a></li>
   <li><a href="#convenient-version-of-data-frame-tibble" id="toc-convenient-version-of-data-frame-tibble" class="nav-link" data-scroll-target="#convenient-version-of-data-frame-tibble">1.2 Convenient version of data frame: “Tibble”</a></li>
   <li>
 <a href="#working-with-data-frames-in-r" id="toc-working-with-data-frames-in-r" class="nav-link" data-scroll-target="#working-with-data-frames-in-r">1.3 Working with data frames in R</a>
@@ -277,19 +277,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="introduction" class="level1"><h1>Introduction</h1>
 <p>This tutorial will help you to understand the basic concepts in R. It will cover the following topics:</p>
 <ol type="1">
-<li>Working with Dataframes</li>
+<li>Working with data frames</li>
 <li>Tidyverse library</li>
 <li>Understanding the Seurat object</li>
-</ol></section><section id="data-frame" class="level1"><h1>1. Data frame</h1>
-<section id="what-is-data-frame" class="level2"><h2 class="anchored" data-anchor-id="what-is-data-frame">1.1 What is data frame</h2>
-<p>Data frame is data structure in R that store values of any type. You can think of it as a table with columns and rows storing the data as in below example.</p>
+</ol>
+<p>Note: If you are familiar with R and tidyverse package, you can skip this chapter.</p>
+</section><section id="data-frame" class="level1"><h1>1. Data frame</h1>
+<section id="what-is-a-data-frame" class="level2"><h2 class="anchored" data-anchor-id="what-is-a-data-frame">1.1 What is a data frame?</h2>
+<p>Data frame is a data structure in R that stores values of any type. You can think of it as a table with columns and rows storing the data as in the below example.</p>
 <p><img src="prerequisite_figures/data_frame.png" class="img-fluid"></p>
 <p>Credit: https://www.geeksforgeeks.org/r-data-frames/</p>
-<p>Often in data science language the columns are named as variables, the rows are observations and each entry in a table is a value.</p>
-<p>Some of the most common examples of input files that can be loaded into R as data frames are spreadsheets, TSVs, CSVs files. TSV and CSV stands for tab-separated or coma-separated values.</p>
-<p>Another way to view data frame is as list of vectors of the same length. The vector can be defined as type of data structure that contains elements of the same type. Below you can find example on how create the table presented in Figure 1 from vectors.</p>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-2_3b71934de04094eaf789ad5d16d8ad81">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#define vectors which will create columns with data in data frame</span></span>
+<p>Often in data science language, the columns are variables, the rows are observations and each entry in a table is a value.</p>
+<p>Some of the most common examples of input files that can be loaded into R as data frames are spreadsheets, TSVs, or CSVs files. TSV and CSV stands for tab-separated or coma-separated values.</p>
+<p>Another way to view data frame is as a list of vectors of the same length. The vector can be defined as a type of data structure that contains elements of the same type. Below you can find example on how to create the table presented in the beyond figer from vectors.</p>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-2_e828e2e6e9460eaab734e4b5848da929">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Define vectors which will be used to create the data frame</span></span>
 <span></span>
 <span><span class="co">## Vector of names</span></span>
 <span><span class="va">Name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Avrey Bradley"</span>,<span class="st">"John Holland"</span>,<span class="st">"Jonas Jerebko"</span>,<span class="st">"Jordan Midkey"</span>,<span class="st">"Terry Rozier"</span>,<span class="st">"Jared Sullinger"</span>,<span class="st">"Evan Turner"</span><span class="op">)</span></span>
@@ -306,7 +308,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="co">## Vector of age</span></span>
 <span><span class="va">Age</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">25.0</span>,<span class="fl">27.0</span>,<span class="fl">29.0</span>,<span class="fl">21.0</span>,<span class="fl">22.0</span>,<span class="cn">NaN</span>,<span class="fl">27.0</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#create data frame from vectors</span></span>
+<span><span class="co">## Create a data frame from vectors</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">Name</span>,<span class="va">Team</span>,<span class="va">Number</span>,<span class="va">Position</span>,<span class="va">Age</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>             Name           Team Number Position Age
@@ -320,24 +322,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section><section id="convenient-version-of-data-frame-tibble" class="level2"><h2 class="anchored" data-anchor-id="convenient-version-of-data-frame-tibble">1.2 Convenient version of data frame: “Tibble”</h2>
-<p>The tibble is package that manipulate data frames. The tibble type of table looks like data frame but have some advantages over using regular data frames.</p>
-<p>For example, while loading data as classical data frame, the spaces in names are conversed to periods or “x” before numeric columns is added. While using tibbles, the input names and types remain unchanged. In this tutorial we will work mainly with tibble data frame type.</p>
+<p>The <code>tibble</code> is a package that manipulates data frames. The tibble type of table looks like a data frame but has some advantages over using regular data frames.</p>
+<p>For example, while loading data as a classical data frame, the spaces in names are converted to periods or “x” before numeric columns is added. While using tibbles, the input names and data types remain unchanged. In this tutorial, we will work mainly with tibble data frame type.</p>
 </section><section id="working-with-data-frames-in-r" class="level2"><h2 class="anchored" data-anchor-id="working-with-data-frames-in-r">1.3 Working with data frames in R</h2>
 <section id="example-data" class="level3"><h3 class="anchored" data-anchor-id="example-data">1.3.1 Example data</h3>
-<p>In this part of tutorial, we will work on table downloaded from supplementary data of Salcher, Stefan et al.&nbsp;publication (doi:10.1016/j.ccell.2022.10.008). The table contains the metadata of patients for which samples were processed on different single-cell platforms.</p>
+<p>In this part of tutorial, we will work on table downloaded from supplementary data of Salcher, Stefan et al.&nbsp;(doi:10.1016/j.ccell.2022.10.008). The table contains the metadata of patients for which samples were processed on different single-cell platforms.</p>
 </section><section id="loading-data" class="level3"><h3 class="anchored" data-anchor-id="loading-data">1.3.2 Loading data</h3>
-<p>Depending on the input format, there are different dedicated libraries to load data into R. Here we start from excel spreadsheet and use function from <code>readxl</code> library. The <code>readxl</code> library is part of tidyverse packages that will be covered in second chapter of this tutorial.</p>
+<p>Depending on the input format, there are different dedicated libraries to load data into R. Here we start from excel spreadsheet and use function from <code>readxl</code> library. The <code>readxl</code> library is part of <code>tidyverse</code> package that will be covered in second chapter of this tutorial.</p>
 <div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-3_e1dda88f81f0b8a9a5670780abbeb2f8">
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df_example</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="st">"data/precourse_preparation_data/mmc4.xlsx"</span>, skip <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>NOTE:</strong></p>
 <ol type="1">
-<li><p>The two first rows in the table are empty and therefore skipped while loading.</p></li>
-<li><p>One of the columns in excel spreadsheet is empty (column N). The R assign automatically the default name to that column and keep it within data frame.</p></li>
+<li><p>The two first rows in the original table are empty, so we skip them when loading.</p></li>
+<li><p>One of the columns in excel spreadsheet is empty (column N). The R assign automatically the default name <code>..1</code> to that column and keep it within the data frame.</p></li>
 <li><p>All the missing entries in rows will be filled with “NA” values automatically.</p></li>
 </ol></section><section id="viewing-the-content" class="level3"><h3 class="anchored" data-anchor-id="viewing-the-content">1.3.3 Viewing the content</h3>
 <p>There are different ways to view the content of data frame. You can directly click on <code>df_example</code> to display the content.</p>
-<p>The “str” function lists directly in the console: the type of data (tibble), dimensions (322x18), columns with first values displayed and type of values.</p>
+<p>The <code>str</code> function lists directly in the console: the type of data (tibble), dimensions (322x18), columns with first values displayed and type of values.</p>
 <div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-4_7e0444c22b1e352579347d90ce755daa">
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">df_example</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -363,7 +365,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section><section id="extracting-information" class="level3"><h3 class="anchored" data-anchor-id="extracting-information">1.3.4 Extracting information</h3>
-<p>Extracting data from an R data frame means to access its rows or columns. First let’s list all columns available in the dataset.</p>
+<p>Extracting data from a data frame means to access its rows or columns. First let’s list all columns available in the data frame.</p>
 <div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-5_f6ee30ec309c278be3760bc8ae893b26">
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">df_example</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -378,39 +380,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 [17] "tissue: tumor_primary"    "tissue: tumor_metastasis"</code></pre>
 </div>
 </div>
-<p>To extract values from single column of the data frame different options can be used:</p>
+<p>To extract values from single column of the data frame, different options can be used.</p>
 <ul>
-<li>Using $ operator and providing the column name</li>
+<li>Using <code>$</code> operator and providing the column name</li>
 </ul>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-6_1212d34eaab5759a2d367ed979b14339">
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">df_example</span><span class="op">$</span><span class="va">study</span><span class="op">)</span> <span class="co"># head allows to display only 10 first elements </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-6_c580b05bc296e604fe440300f976dad2">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df_example</span><span class="op">$</span><span class="va">study</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="va">head</span> <span class="co"># head allows to display first few elements </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Adams_Kaminski_2020" "Adams_Kaminski_2020" "Adams_Kaminski_2020"
 [4] "Adams_Kaminski_2020" "Adams_Kaminski_2020" "Adams_Kaminski_2020"</code></pre>
 </div>
 </div>
 <ul>
-<li>Using [ , ] and providing the column number (index)</li>
+<li>Using <code>[[]]</code> and providing column number (index)</li>
 </ul>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-7_57fb84db338a3224fd19d3f7a0569517">
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df_example</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># head allows to display only 10 first elements </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 1
-  study              
-  &lt;chr&gt;              
-1 Adams_Kaminski_2020
-2 Adams_Kaminski_2020
-3 Adams_Kaminski_2020
-4 Adams_Kaminski_2020
-5 Adams_Kaminski_2020
-6 Adams_Kaminski_2020</code></pre>
-</div>
-</div>
-<ul>
-<li>Using [[]] and providing column number (index)</li>
-</ul>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-8_327bca4802e8bd4651dc38dd05cc36f9">
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df_example</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-7_524438c71d5af2083ae1949475ce1042">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df_example</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># disply the first 6 elements in column 2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Adams_Kaminski_2020" "Adams_Kaminski_2020" "Adams_Kaminski_2020"
 [4] "Adams_Kaminski_2020" "Adams_Kaminski_2020" "Adams_Kaminski_2020"</code></pre>
@@ -419,8 +404,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li>Using column name</li>
 </ul>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-9_d7da9f0323ae2dccbec24c62f684c327">
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df_example</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"study"</span><span class="op">)</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="va">head</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-8_a3e92cd93c816deed320c81631bb8e0d">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df_example</span><span class="op">[</span>, <span class="st">"study"</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="va">head</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 1
   study              
@@ -433,13 +418,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 6 Adams_Kaminski_2020</code></pre>
 </div>
 </div>
-<p>To extract multiple columns or rows at the same time the following rules apply:</p>
+<p>To extract multiple columns or rows at the same time, the following rules apply:</p>
 <p><img src="prerequisite_figures/df_rows_columns.jpg" class="img-fluid"></p>
 <ul>
 <li>Extract rows range, include all columns.</li>
 </ul>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-10_153d79279461f78d69f822171ef82676">
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df_example</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span>,<span class="op">]</span> <span class="co">#display rows from 2-4 and all columns</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-9_2ef6e0d877d6e09115b48ba992fbdeab">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df_example</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span>, <span class="op">]</span> <span class="co">#display rows from 2-4 and all columns</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 18
    ...1 study           dataset patient uicc_stage tumor_stage sex   ever_smoker
@@ -456,8 +441,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li>Extract rows, include all columns.</li>
 </ul>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-11_6cc2067a1db622e0c3786e185c673644">
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df_example</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">4</span><span class="op">)</span>,<span class="op">]</span> <span class="co">#display rows 2 and 4 and all columns</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-10_0614fb883348d08fe51cbfab1aa0af86">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df_example</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">4</span><span class="op">)</span>,<span class="op">]</span> <span class="co">#display rows 2 AND 4 and all columns</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 18
    ...1 study           dataset patient uicc_stage tumor_stage sex   ever_smoker
@@ -473,8 +458,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li>Extract columns range, include all rows.</li>
 </ul>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-12_69e94a405c65ba0aebba76863deb578a">
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df_example</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="va">head</span> <span class="co">#display columns from 2-4 and all rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-11_d62fdc2c2a2950cae01781e53edb3d4c">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df_example</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="va">head</span> <span class="co">#display columns from 2-4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 3
   study               dataset             patient                 
@@ -490,8 +475,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li>Extract columns, include all rows.</li>
 </ul>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-13_d5c741d5492191f11da2aaa9abb863aa">
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df_example</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">4</span><span class="op">)</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="va">head</span> <span class="co">#display columns 2 and 4 and all rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-12_bc4a45d46fe7ce551602c3d184fc1192">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df_example</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">4</span><span class="op">)</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="va">head</span> <span class="co">#display columns 2 AND 4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 2
   study               patient                 
@@ -535,92 +520,33 @@ Tip
 <ul>
 <li><strong>Answer</strong></li>
 </ul>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-14_94a4237d59453668089ce641d7df536a">
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df_example</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">8</span><span class="op">)</span><span class="op">]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-13_9b4fd98df6d03d80066744d742d74026">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df_example</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">8</span><span class="op">)</span><span class="op">]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
 </div>
 </section><section id="modifying-information" class="level3"><h3 class="anchored" data-anchor-id="modifying-information">1.3.4 Modifying information</h3>
 <p>The columns or rows can be removed or added to data frame as needed. It is possible to drop specific columns indicating the column indexes.</p>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-15_84ec7f9f3511d45aa860b529c17f9cd0">
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">modified_df_example</span> <span class="op">&lt;-</span> <span class="va">df_example</span><span class="op">[</span>, <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">5</span><span class="op">)</span><span class="op">]</span>    <span class="co"># Drop columns 1,2,5 and include all columns</span></span>
-<span><span class="va">modified_df_example</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="va">head</span> <span class="co"># data frame with excluded columns </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 15
-  dataset     patient tumor_stage sex   ever_smoker driver_genes condition   age
-  &lt;chr&gt;       &lt;chr&gt;   &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;       &lt;chr&gt;        &lt;chr&gt;     &lt;dbl&gt;
-1 Adams_Kami… Adams_… &lt;NA&gt;        male  no          &lt;NA&gt;         non-canc…    22
-2 Adams_Kami… Adams_… &lt;NA&gt;        fema… no          &lt;NA&gt;         non-canc…    25
-3 Adams_Kami… Adams_… &lt;NA&gt;        fema… no          &lt;NA&gt;         non-canc…    67
-4 Adams_Kami… Adams_… &lt;NA&gt;        male  yes         &lt;NA&gt;         COPD         65
-5 Adams_Kami… Adams_… &lt;NA&gt;        male  yes         &lt;NA&gt;         COPD         66
-6 Adams_Kami… Adams_… &lt;NA&gt;        male  yes         &lt;NA&gt;         non-canc…    49
-# ℹ 7 more variables: platform &lt;chr&gt;, platform_fine &lt;chr&gt;, ...14 &lt;lgl&gt;,
-#   `tissue: normal` &lt;dbl&gt;, `tissue: normal_adjacent` &lt;dbl&gt;,
-#   `tissue: tumor_primary` &lt;dbl&gt;, `tissue: tumor_metastasis` &lt;dbl&gt;</code></pre>
-</div>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-14_8abbbe3ec7e33704703e51866caec6ad">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">modified_df_example</span> <span class="op">&lt;-</span> <span class="va">df_example</span><span class="op">[</span>, <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">5</span><span class="op">)</span><span class="op">]</span>    <span class="co"># Drop columns 1,2,5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The same principle apply to excluding the rows</p>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-16_40d894f216f81f0e3bc169e19e09b571">
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">modified_df_example</span> <span class="op">&lt;-</span> <span class="va">df_example</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">5</span><span class="op">)</span>,<span class="op">]</span>     <span class="co"># Drop rows 1,2,5 and include all columns</span></span>
-<span><span class="va">modified_df_example</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="va">head</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 18
-   ...1 study           dataset patient uicc_stage tumor_stage sex   ever_smoker
-  &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;      
-1     2 Adams_Kaminski… Adams_… Adams_… &lt;NA&gt;       &lt;NA&gt;        fema… no         
-2     3 Adams_Kaminski… Adams_… Adams_… &lt;NA&gt;       &lt;NA&gt;        male  yes        
-3     5 Adams_Kaminski… Adams_… Adams_… &lt;NA&gt;       &lt;NA&gt;        male  yes        
-4     6 Adams_Kaminski… Adams_… Adams_… &lt;NA&gt;       &lt;NA&gt;        fema… yes        
-5     7 Adams_Kaminski… Adams_… Adams_… &lt;NA&gt;       &lt;NA&gt;        fema… yes        
-6     8 Adams_Kaminski… Adams_… Adams_… &lt;NA&gt;       &lt;NA&gt;        fema… no         
-# ℹ 10 more variables: driver_genes &lt;chr&gt;, condition &lt;chr&gt;, age &lt;dbl&gt;,
-#   platform &lt;chr&gt;, platform_fine &lt;chr&gt;, ...14 &lt;lgl&gt;, `tissue: normal` &lt;dbl&gt;,
-#   `tissue: normal_adjacent` &lt;dbl&gt;, `tissue: tumor_primary` &lt;dbl&gt;,
-#   `tissue: tumor_metastasis` &lt;dbl&gt;</code></pre>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-15_6121781dba8e687f918c61a6ef1dec7e">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">modified_df_example</span> <span class="op">&lt;-</span> <span class="va">df_example</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">5</span><span class="op">)</span>,<span class="op">]</span>     <span class="co"># Drop rows 1,2,5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>We can remove column with specific names. To drop column, we chose all the columns (called by “colnames”) except (!=) “patient”.</p>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-16_28a054547c702fd185abecf38823445f">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">modified_df_example</span> <span class="op">&lt;-</span> <span class="va">df_example</span><span class="op">[</span> , <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">df_example</span><span class="op">)</span> <span class="op">!=</span> <span class="st">"patient"</span><span class="op">]</span>    <span class="co"># Drop column "patient"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>We can remove column with specific name. To drop column, we chose all the columns (called by “colnames”) except (!=) “patient”.</p>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-17_2562beb0ef53440ee5ab58722ffaca0a">
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">modified_df_example</span> <span class="op">&lt;-</span> <span class="va">df_example</span><span class="op">[</span> , <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">df_example</span><span class="op">)</span> <span class="op">!=</span> <span class="st">"patient"</span><span class="op">]</span>    <span class="co"># Drop column "patient"</span></span>
-<span><span class="va">modified_df_example</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="va">head</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 17
-   ...1 study      dataset uicc_stage tumor_stage sex   ever_smoker driver_genes
-  &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;   &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;       &lt;chr&gt;       
-1     0 Adams_Kam… Adams_… &lt;NA&gt;       &lt;NA&gt;        male  no          &lt;NA&gt;        
-2     1 Adams_Kam… Adams_… &lt;NA&gt;       &lt;NA&gt;        fema… no          &lt;NA&gt;        
-3     2 Adams_Kam… Adams_… &lt;NA&gt;       &lt;NA&gt;        fema… no          &lt;NA&gt;        
-4     3 Adams_Kam… Adams_… &lt;NA&gt;       &lt;NA&gt;        male  yes         &lt;NA&gt;        
-5     4 Adams_Kam… Adams_… &lt;NA&gt;       &lt;NA&gt;        male  yes         &lt;NA&gt;        
-6     5 Adams_Kam… Adams_… &lt;NA&gt;       &lt;NA&gt;        male  yes         &lt;NA&gt;        
-# ℹ 9 more variables: condition &lt;chr&gt;, age &lt;dbl&gt;, platform &lt;chr&gt;,
-#   platform_fine &lt;chr&gt;, ...14 &lt;lgl&gt;, `tissue: normal` &lt;dbl&gt;,
-#   `tissue: normal_adjacent` &lt;dbl&gt;, `tissue: tumor_primary` &lt;dbl&gt;,
-#   `tissue: tumor_metastasis` &lt;dbl&gt;</code></pre>
-</div>
-</div>
-<p>The new columns can be added to data frame. To add new column, use $ to indicate the column name for a new column as in the example below.</p>
+<p>We can also add columns into data frame. To add new column, use <code>$</code> to indicate the column name for a new column as in the example below.</p>
 <p>Here we assign the values from already existing column to a new column. The new column is added at the end of the data table.</p>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-18_2295df84157ef87ee5bd38278eba3f2f">
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df_example</span><span class="op">$</span><span class="va">technology_type</span> <span class="op">&lt;-</span> <span class="va">df_example</span><span class="op">$</span><span class="va">platform</span> <span class="co"># add new column named "technology_type" with values from "platform" existing column</span></span>
-<span><span class="va">df_example</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">df_example</span><span class="op">)</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="va">head</span> <span class="co">#show all rows and last column</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 1
-  technology_type
-  &lt;chr&gt;          
-1 10x            
-2 10x            
-3 10x            
-4 10x            
-5 10x            
-6 10x            </code></pre>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-17_7c6e0f7e49df345f911c30cf332a027a">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df_example</span><span class="op">$</span><span class="va">technology_type</span> <span class="op">&lt;-</span> <span class="va">df_example</span><span class="op">$</span><span class="va">platform</span> <span class="co"># add new column named "technology_type" with values from "platform" existing column</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</div>
-<p>The values from chosen column can be replaced with other values. In example below we search in df_example data frame in technology_type column for rows that contain “BD-Rhapsody” text. For those values we assign “microwell-based”.</p>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-19_204c1f41d8747927ae345fa2da5c4bb8">
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df_example</span><span class="op">$</span><span class="va">technology_type</span><span class="op">[</span><span class="va">df_example</span><span class="op">$</span><span class="va">technology_type</span> <span class="op">==</span> <span class="st">"BD-Rhapsody"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"microwell-based"</span></span>
+<p>The values from chosen column can be replaced with other values. In example below we search in <code>df_example</code> data frame in <code>technology_type</code> column for rows that contain “BD-Rhapsody” text. For those values we assign “microwell-based”.</p>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-18_60089d1e571f25bf78aa04e137e1967d">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df_example</span><span class="op">$</span><span class="va">technology_type</span><span class="op">[</span><span class="va">df_example</span><span class="op">$</span><span class="va">technology_type</span> <span class="op">==</span> <span class="st">"BD-Rhapsody"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"microwell-based"</span></span>
 <span><span class="va">df_example</span><span class="op">$</span><span class="va">technology_type</span><span class="op">[</span><span class="va">df_example</span><span class="op">$</span><span class="va">technology_type</span> <span class="op">==</span> <span class="st">"10x"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"droplet-based"</span></span>
 <span></span>
 <span><span class="va">df_example</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"platform"</span>,<span class="st">"technology_type"</span><span class="op">)</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="va">head</span> <span class="co">#display columns</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -636,9 +562,9 @@ Tip
 6 10x      droplet-based  </code></pre>
 </div>
 </div>
-<p>The last useful function to cover in this chapter is summary(). The function gives the statistical summary of each of the columns when applied on data frame. It can be applied on slice of data as for example only on one column or chosen columns and rows.</p>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-20_b8677d62fc53457a93e7a9b745ec6062">
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">df_example</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The last useful function to cover in this chapter is <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code>. The function gives the statistical summary of each of the columns when applied on data frame. It can be applied on slice of data as for example only on one column or chosen columns and rows.</p>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-19_c4ef917e6e31fe73ba8f25ef97f40483">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">df_example</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      ...1           study             dataset            patient         
  Min.   :  0.00   Length:322         Length:322         Length:322        
@@ -682,8 +608,8 @@ Tip
                                                                   </code></pre>
 </div>
 </div>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-21_c23d08c9aa3334823087321ce07dc1d7">
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">df_example</span><span class="op">$</span><span class="va">age</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-20_9479cd665dd21e21d4aa2b8186585765">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">df_example</span><span class="op">$</span><span class="va">age</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
   20.00   56.00   63.00   60.73   69.00   90.00      89 </code></pre>
@@ -691,34 +617,34 @@ Tip
 </div>
 </section></section></section><section id="tidyverse" class="level1"><h1>2. Tidyverse</h1>
 <p>Data often need to be re-shaped, re-arranged, and re-formatted, so that they can be visualized or used in downstream analysis. Throughout this chapter you will learn how to use the tidyverse library to navigate through and adjust the tables you work with.</p>
-<p>The tidyverse is collection of R packages. The core packages included in tidyverse are ggplot2, tidyr, readr, dplyr, stringr, purrr, and forcats. Each of the packages is dedicated to handle different operations. In below graphics you can find a summary of all packages and their core functionalities.</p>
+<p>The tidyverse is a collection of R packages. The core packages included in tidyverse are <code>ggplot2</code>, <code>tidyr</code>, <code>readr</code>, <code>dplyr</code>, <code>stringr</code>, <code>purrr</code>, and <code>forcats</code>. Each of the packages is dedicated to handle different operations. In below graphics, you can find a summary of all packages and their core functionalities.</p>
 <p><img src="prerequisite_figures/tidyverse_libs_summary_graphics.png" class="img-fluid"></p>
 <p>Credit: https://www.storybench.org/getting-started-with-tidyverse-in-r/</p>
-<p>In this chapter we will cover some of the functions included in tidyverse library and used during workshop. If you would like to learn more about tidyverse and additional libraries, we encourage you to visit official website <a href="https://www.tidyverse.org/" class="uri">https://www.tidyverse.org/</a>.</p>
-<p>When tidyverse is loaded you will see the list of packages included and loaded with tidyverse.</p>
-<p>After loading tidyverse, the R inform you about conflicting packages. The reason is there are other packages already loaded by default in R.</p>
+<p>In this chapter we will cover some of the functions that are going to be used during the course. If you would like to learn more about tidyverse and additional libraries, we encourage you to visit the official website <a href="https://www.tidyverse.org/" class="uri">https://www.tidyverse.org/</a>.</p>
+<p>When <code>tidyverse</code> is loaded, you will see the list of packages included and loaded with tidyverse.</p>
+<p>After loading <code>tidyverse</code>, the R inform you about conflicting packages. The reason is that there are other packages already loaded by default in R.</p>
 <p>Packages consist of a collection of functions related to a particular purpose. Those functions can have naming conflicts with functions from other packages.</p>
-<p>The two functions from stats package: filer and lag, exist as well in tidyverse. After loading tidyverse package, the functions from stats package are masked and by default the tidyverse functions will be used. If you would like to use filter() or lag() functions from stats package, you should indicate the package name as in example below.</p>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-22_417f4f81aa794f251ae508d4c69b03e4">
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="op">)</span></span>
+<p>The two functions from <code>stats</code> package: <code>filer</code> and <code>lag</code>, exist as well in tidyverse. After loading tidyverse package, the functions from <code>stats</code> package are masked and by default the <code>tidyverse</code> functions will be used. If you would like to use <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code> or <code><a href="https://dplyr.tidyverse.org/reference/lead-lag.html">lag()</a></code> functions from <code>stats</code> package, you should indicate the package name as in example below.</p>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-21_cf33f875ec0291ef63feff7b86e6a8f0">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Function in this example are empty for illustration purposes. To use that function you need to provide arguments inside.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Without indicating the package name in front of function name, R will use the package that was loaded the most recently in your R session.</p>
+<p>Without indicating the package name in front of function name, R will use the package that is loaded the most recently in your R session.</p>
 <section id="pipe" class="level2"><h2 class="anchored" data-anchor-id="pipe">2.1 Pipe</h2>
-<p>A pipe is a type of operator in R <code>%&gt;%</code>. It takes the output of one function and passes it as the first argument of the next function, allowing us to chain together several steps in R.</p>
+<p>A pipe <code>%&gt;%</code> is a type of operator in <code>tidyverse</code>. It takes the output of one function and passes it as the first argument of the next function, allowing us to chain together several steps in R.</p>
 <p><img src="prerequisite_figures/pipe_tidyverse.png" class="img-fluid"></p>
 <p>Credit: tidyverse.org</p>
 <p>The pipe sends the data on left side of the pipe to be the first argument of the function on the right side of the pipe.</p>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-23_cd0242fa0d7d4e273e8f018fc005ae7e">
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fl">16</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># is equivalent to sqrt(16)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-22_29329a048e664d7c5ea877a1e3004ff2">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fl">16</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># is equivalent to sqrt(16)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 4</code></pre>
 </div>
 </div>
 <p>We can pipe multiple functions together. The operations are performed from the left to the right sequentially.</p>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-24_d2947c348157532b5001ca023e40ad1a">
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fl">16</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log2</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># is equivalent to log2(sqrt(16))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-23_fddba3200b488731549b6058d09a5fc1">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fl">16</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log2</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># is equivalent to log2(sqrt(16))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 2</code></pre>
 </div>
@@ -737,8 +663,8 @@ Important
 <ol type="1">
 <li>Exercise: What would be the equivalent mathematical expression to below piped sequence of operations?</li>
 </ol>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-25_bcb384f238fbe106f340655dce96227f">
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fl">26</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="op">-</span><span class="fl">22</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="op">+</span><span class="fl">4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-24_b950d7d9e452beed6645e4fdd9839adc">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fl">26</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="op">-</span><span class="fl">22</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="op">+</span><span class="fl">4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -757,8 +683,8 @@ Tip
 <ol type="1">
 <li>Answer:</li>
 </ol>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-26_f82b81ad2328022b14b32e85adb9ea4b">
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fl">26</span><span class="op">-</span><span class="fl">22</span><span class="op">)</span> <span class="op">+</span> <span class="fl">4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-25_a32fd6d3cf27a754693c4c4bfe829d32">
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fl">26</span><span class="op">-</span><span class="fl">22</span><span class="op">)</span> <span class="op">+</span> <span class="fl">4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -776,8 +702,8 @@ Important
 <ol start="2" type="1">
 <li>Exercise: How below mathematical operation can be shown with pipe option?</li>
 </ol>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-27_96ec07c87b69ccbe7b07bc591b7fe5a6">
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log2</a></span><span class="op">(</span><span class="fl">64</span><span class="op">)</span><span class="op">)</span> <span class="op">-</span> <span class="fl">8</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-26_b5315033ca27eb201b88efd35c7aaae7">
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log2</a></span><span class="op">(</span><span class="fl">64</span><span class="op">)</span><span class="op">)</span> <span class="op">-</span> <span class="fl">8</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -796,24 +722,24 @@ Tip
 <ol start="2" type="1">
 <li>Answer</li>
 </ol>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-28_e50ba5610b70edb78f4ad4a9dd86c73b">
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fl">64</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log2</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="op">-</span><span class="fl">8</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-27_151b06b1b379ad3315f415de4131835f">
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fl">64</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log2</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="op">-</span><span class="fl">8</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
 </div>
 </section><section id="example-data-1" class="level2"><h2 class="anchored" data-anchor-id="example-data-1">2.2 Example data</h2>
-<p>In this chapter we will work on an expression matrix table which is in CSV format. Below is example of how to load the table.</p>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-29_a0da19e499a0a98daabbfb6e0adc9065">
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">expMat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fread.html">fread</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"data/precourse_preparation_data/Demo-WTA-AbSeq.csv"</span>, sep <span class="op">=</span> <span class="st">","</span>, header<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<p>In this chapter we will work on an expression matrix table (gene expression) which is in CSV format. Below is example of how to load the table.</p>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-28_919fdc87e08baf342f8b67d000a5cf44">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">expMat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fread.html">fread</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"data/precourse_preparation_data/Demo-WTA-AbSeq.csv"</span>, sep <span class="op">=</span> <span class="st">","</span>, header<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># file: provide full directory to file</span></span>
 <span><span class="co"># sep: indicate separator, in this case coma</span></span>
 <span><span class="co"># header = True is indicating to take the first row as a column names</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Displaying first rows and columns of the table gives us a glimpse on what the data contain.</p>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-30_2df643b5cd8ac0580059884a9393a7ae">
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">expMat</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-29_deae1865cfc00d2f46696d1402e850cb">
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">expMat</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>         V1 A1BG A1BG.AS1 A1CF A2M
 1:  3261781    0        0    0   0
@@ -825,45 +751,46 @@ Tip
 </div>
 <p>The gene names are displayed in columns and rows contain information about the cells. The column named V1 hold information about the cell index that is given to each cell in primary analysis.</p>
 <p>We will set the V1 column as row names. In that way all the columns will contain the gene or protein counts.</p>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-31_15d0199e1463b351d2ad4272f01ef8b2">
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#use first column as row names</span></span>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-30_74b4630ee1cb8540244db4774bf0d04d">
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#use first column as row names</span></span>
 <span><span class="va">expMat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">expMat</span>, row.names <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The same set of above operations can be performed with pipe in one line of code. We read the file and convert first column to row names and save as data frame. The result is assigned to expMat variable by using the arrow.</p>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-32_8c0ceff125d0a3442416500b5fcf7431">
-<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#pipe operations</span></span>
-<span><span class="va">expMat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fread.html">fread</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"data/precourse_preparation_data/Demo-WTA-AbSeq.csv"</span>, sep <span class="op">=</span> <span class="st">","</span>, header<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>row.names <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-31_890e70cc313a0d8c1539ecdd9d85b35f">
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#pipe operations</span></span>
+<span><span class="va">expMat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fread.html">fread</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"data/precourse_preparation_data/Demo-WTA-AbSeq.csv"</span>, sep <span class="op">=</span> <span class="st">","</span>, header<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>row.names <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="select" class="level2"><h2 class="anchored" data-anchor-id="select">2.3 <code>select()</code>
 </h2>
-<p><strong>Functionality:</strong> Select only the columns (variables) that you want to see. Gets rid of all other columns.</p>
-<p>Imagine you are interested to extract the data only for one gene existing in your dataset. You can use the gene name, for example “CD4”, to indicate in select function which column should be selected.</p>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-33_cc45295601b17c34d24d45dc94ebb1c3">
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># choosing the column of CD4 gene</span></span>
+<p><strong>Functionality:</strong> Select only the columns (variables) that you want to see.</p>
+<p>Imagine you are interested to extract the data only for one gene existing in your dataset. You can use the gene name, for example “CD4”, to indicate in <code>select</code> function which column should be selected.</p>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-32_8ba0a08ed34e0554246d410fc22e90f3">
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># choosing the column of CD4 gene</span></span>
 <span><span class="va">expMat</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="st">"CD4"</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">CD4_column</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>In the table we work on, the protein and gene expression information are provided. All the protein markers are labeled with “pAbO” abbreviation, in addition to marker name. We can <strong>select</strong> all the columns that <strong>contain</strong> pAbO in name and save to new table.</p>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-34_e2b6a3a9e93e66b137508390445af04d">
-<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#choosing all the columns with AbSeq counts and saving to abseq_data</span></span>
+<p>In the table we work on, the protein and gene expression information are provided. All the protein markers are labeled with “pAbO” abbreviation in addition to marker name. We can <strong>select</strong> all the columns that <strong>contain</strong> pAbO in name and save to new table.</p>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-33_e6867d13e0dafa034992ba27bd728a98">
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#choosing all the columns with AbSeq counts and saving to abseq_data</span></span>
 <span><span class="va">expMat</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">contains</a></span><span class="op">(</span><span class="st">"pAbO"</span><span class="op">)</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">abseq_data</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>All the columns that does not contain the “pAbO” are representing genes. To create a gene data, we can use the contains() function with exclamation mark as in below example.</p>
+<p>All the columns that does not contain the “pAbO” are representing genes. To create a gene data, we can use the <code><a href="https://tidyselect.r-lib.org/reference/starts_with.html">contains()</a></code> function with exclamation mark as in below example.</p>
 <p>The “!” is used for negation in R language and is interpreted as “do not”. Below expression will be interpreted as “<strong>select</strong> from expMat columns that <strong>do not</strong> <strong>contain</strong> pAbO.”.</p>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-35_ddab400be74e675ac4331db55cb15968">
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># choosing all columns that does not contain AbSeq counts (mRNA only)</span></span>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-34_3f422eb22cee98506356c7b9cb1cb383">
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># choosing all columns that does not contain AbSeq counts (mRNA only)</span></span>
 <span><span class="va">expMat</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">contains</a></span><span class="op">(</span><span class="st">"pAbO"</span><span class="op">)</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">mrna_data</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="mutate" class="level2"><h2 class="anchored" data-anchor-id="mutate">2.4 <code>mutate()</code>
 </h2>
 <p><strong>Functionality:</strong> Adds new columns or modifies current variables in the dataset.</p>
-<p>The mutate function allows in easy way to add new columns in existing tables. Let’s say we want to add column named “measurement_type” and fill with “protein expression” in abseq data table we created in previous step.</p>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-36_8a0675ff8ec85276a922696bc662e7fe">
-<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#add new column with the same value</span></span>
+<p>The mutate function allows in easy way to add new columns in existing tables. Let’s say we want to add column “measurement_type” and fill with “protein expression” in abseq data table we created in previous step.</p>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-35_fffe6c30fabe60dd0ad7aed973c39d2f">
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#add new column with the same value</span></span>
 <span><span class="va">abseq_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>data_modality <span class="op">=</span> <span class="st">"protein_expression"</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">abseq_data</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The new column will be added at the end of table. We can show the column by selecting the column name.</p>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-37_739fc9aa8ea2dce166949456003e2c07">
-<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#display results</span></span>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-36_679623bcd18f060b6aa4014e341e920d">
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#display results</span></span>
 <span><span class="va">abseq_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="st">"data_modality"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="va">head</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>              data_modality
@@ -875,10 +802,10 @@ Tip
 11951658 protein_expression</code></pre>
 </div>
 </div>
-<p>Mutate function can be used in combination with other functions.</p>
-<p>In this example we will calculate sum of expression count for each cell and store information in table. We summarize the counts from all rows ad add as a new column. The rowSums function is useful for calculating the sum of counts in each row.</p>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-38_3beef63d6d8dabdb19026ffe2b605120">
-<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span><span class="op">(</span><span class="va">mrna_data</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">mRNA_count_sum</span></span>
+<p><code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> function can be used in combination with other functions.</p>
+<p>In this example, we will calculate sum of expression count for each cell and store the information in a table. We summarize the counts from all rows and add as a new column. The <code>rowSums</code> function is useful for calculating the sum of counts in each row.</p>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-37_4dd353266c42b9b8a5c8799e7849ea05">
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span><span class="op">(</span><span class="va">mrna_data</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">mRNA_count_sum</span></span>
 <span></span>
 <span><span class="co">#display results</span></span>
 <span><span class="va">mRNA_count_sum</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="va">head</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -887,9 +814,9 @@ Tip
    35231    34733    33238    31618    31664    30786 </code></pre>
 </div>
 </div>
-<p>After running rowSums we got for each cell the number of counts. The values can be added in mrna data table as a new column.</p>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-39_9a9b9b46d79650c28b676ed8d0dc8f92">
-<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mrna_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>counts <span class="op">=</span> <span class="va">mRNA_count_sum</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">mrna_data</span></span>
+<p>After running <code>rowSums</code>, we got for each cell the number of counts. The values can be added in <code>mrna_data</code> data table as a new column.</p>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-38_3e074d16244e510cd0f8c027fcbd7cc3">
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mrna_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>counts <span class="op">=</span> <span class="va">mRNA_count_sum</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">mrna_data</span></span>
 <span><span class="va">mrna_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="va">head</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>         counts
@@ -901,21 +828,21 @@ Tip
 11951658  30786</code></pre>
 </div>
 </div>
-<p>The same result can be generated with option below, where the rowSums function is nested inside the mutate function.</p>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-40_0e1d492ec661fed6681383818c523b75">
-<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mrna_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>counts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span><span class="op">(</span><span class="va">mrna_data</span><span class="op">)</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">mrna_data</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The same result can be generated with option below, where the <code>rowSums</code> function is nested inside the mutate function.</p>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-39_0a795d9d0b31de25b95bd0c58734cacc">
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mrna_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>counts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span><span class="op">(</span><span class="va">mrna_data</span><span class="op">)</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">mrna_data</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Notice that mrna_data is given twice in that case as an argument. The mrna_data is taken by mutate function as first argument and then in rowSums function as second argument.</p>
-<p>In above example we used pipe to direct the mrna_data to mutate() function as argument. However the mrna_data was not forwarded by pipe to rowSums. For that reason we had to type it in the rowSums function. By default pipe operator forwards data only as first argument to a function. If you want the pipe to forward data as well as second (and next) argument to function you can use a dot.</p>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-41_618893502284a90e2b7f46a38171d548">
-<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mrna_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>counts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">mrna_data</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Notice that <code>mrna_data</code> is given twice in that case as an argument. The <code>mrna_data</code> is taken by <code>mutate</code> function as first argument and then in <code>rowSums</code> function as second argument.</p>
+<p>In the above example we used pipe to direct the <code>mrna_data</code> to <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> function as an argument. However the <code>mrna_data</code> was not forwarded by pipe to <code>rowSums</code>. For that reason we have to type it in the <code>rowSums</code> function. By default, the pipe operator forwards data only as first argument to a function. If you want the pipe to forward data as well as second (and next) argument to function you can use a dot.</p>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-40_cfebe3f224a121101d706c48f162d7b0">
+<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mrna_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>counts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">mrna_data</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="summarise" class="level2"><h2 class="anchored" data-anchor-id="summarise">2.5 <code>summarise()</code>
 </h2>
-<p><strong>Functionality:</strong> Collapses all rows and returns a one-row summary.</p>
-<p>In the example below, summarize function allow us to calculate the max/min, median and mean values for counts.</p>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-42_1137a06f530011f39c2f324e3d4f4d60">
-<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mrna_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span>,    <span class="co">#mean counts</span></span>
+<p><strong>Functionality:</strong> Collapse all rows and returns a one-row summary.</p>
+<p>In the example below, <code>summarise</code> function allow us to calculate the max/min, median and mean values for counts.</p>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-41_e5960cb0bc60fcb47abd26ba83637300">
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mrna_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span>,    <span class="co">#mean counts</span></span>
 <span>                             median <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span>,    <span class="co">#median counts</span></span>
 <span>                             max <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span>,    <span class="co">#maximum count</span></span>
 <span>                             min <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span><span class="op">)</span>   <span class="co">#minimum count</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -927,25 +854,25 @@ Tip
 <p>In above summary we have the overview of the expression range and how minimum and maximum values of molecules expressed differ. Some of cells will have very low transcriptome size in comparison to others.</p>
 </section><section id="if_else" class="level2"><h2 class="anchored" data-anchor-id="if_else">2.6 <code>if_else()</code>
 </h2>
-<p>The if_else() function in R is a conditional function. It allows to test the hypothesis and perform actions based on answer.</p>
-<p>Let’s assume we want to label the cells according to transcriptom size. Based on threshold of counts we give a label of “low_transcriptome” or “high_transcriptome” for a cell status. We can make assumption that all cells with sum of counts lower then thousand are low transcriptome cells and remaining cells are categorized as high transcriptome cells.</p>
-<p>The if_else function with combination of mutate will help us to achieve the goal.</p>
-<p>First we need to know what is the structure of if_else statement. The first argument of if_else function is the hypotheses or the statement. In our case we want to test if count for cell is below or above the threshold. Second argument of a function is an action to perform if the statement is true. Third argument of if_else function is an action to perform when the statement is false.</p>
+<p>The <code><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else()</a></code> function in R is a conditional function. It allows to test the hypothesis and perform actions based on answer.</p>
+<p>Let’s assume we want to label the cells according to transcriptom size. Based on threshold of counts we give a label of “low_transcriptome” or “high_transcriptome” for a cell status. We can make assumption that all cells with sum of counts lower then a threthold are low transcriptome cells and remaining cells are categorized as high transcriptome cells.</p>
+<p>The <code>if_else</code> function with combination of mutate will help us to achieve the goal.</p>
+<p>First we need to know what is the structure of <code>if_else</code> statement. The first argument of <code>if_else</code> function is the hypotheses or the statement. We want to test if the counts for cell is below or above the threshold. Second argument is an action to perform if the statement is true. Third argument is an action to perform when the statement is false.</p>
 <p><img src="prerequisite_figures/ifelse.jpg" class="img-fluid"></p>
-<p>In our case the hypothesis to test is if counts in a cell are below or above the threshold. We can set the condition to have a counts above 2000. If the counts are above the threshold the statement is true. When the statement is true the action is to set the label as “high_transcriptome”. When the statement is false we set the label as “low_transciptome”.</p>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-43_501e50016dd1db9be7225ffe65c85591">
-<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="va">mrna_data</span><span class="op">$</span><span class="va">counts</span> <span class="op">&gt;</span> <span class="fl">2000</span>, <span class="st">"high_transcriptome"</span>, <span class="st">"low_transcriptome"</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">cell_status</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In our case, the hypothesis to test is if counts in a cell is below or above a threshold. We can set the condition to have a counts above 2000. If the counts are above the threshold the statement is true. When the statement is true the action is to set the label as “high_transcriptome”. When the statement is false we set the label as “low_transciptome”.</p>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-42_7c83ae2f6daa303e76cc259e8e8f95ab">
+<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="va">mrna_data</span><span class="op">$</span><span class="va">counts</span> <span class="op">&gt;</span> <span class="fl">2000</span>, <span class="st">"high_transcriptome"</span>, <span class="st">"low_transcriptome"</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">cell_status</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>In that way we created a cell status for cells based on counts. We should see in a cell_status that was generated two labels. To verify if that is the case we can display unique values of a created vector.</p>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-44_7442f8e732c605cda2e41ac84bb57209">
-<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">cell_status</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In that way we created a <code>cell_status</code> string based on counts. We should see <code>cell_status</code> that was generated has two labels. To verify if that is the case we can display the unique values of <code>cell_status</code>.</p>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-43_8d058c1864e0383d497eb63bdbcc60a5">
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">cell_status</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "high_transcriptome" "low_transcriptome" </code></pre>
 </div>
 </div>
 <p>If we would like to add that information as a new column to data table, we can use mutate function as in previous examples.</p>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-45_5d729cdde9098ba644c8100cb9338d83">
-<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#calcuate and add cell_status to mrna table</span></span>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-44_4f322ca69a49a2214e3b8dd8f4fb1eb0">
+<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#calcuate and add cell_status to mrna table</span></span>
 <span><span class="va">mrna_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>cell_status <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="va">mrna_data</span><span class="op">[</span><span class="st">"counts"</span><span class="op">]</span> <span class="op">&gt;</span> <span class="fl">2000</span>, <span class="st">"high_transcriptome"</span>, <span class="st">"low_transcriptome"</span><span class="op">)</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">mrna_data</span></span>
 <span></span>
 <span><span class="co">#display cell status column </span></span>
@@ -962,10 +889,10 @@ Tip
 </div>
 </section><section id="count" class="level2"><h2 class="anchored" data-anchor-id="count">2.7 <code>count()</code>
 </h2>
-<p><strong>Functionality:</strong> Collapses the rows and counts the number of observations per group of values.</p>
-<p>The count function is a quick way to have an overview on number of occurrences. For example to we can use <code><a href="https://dplyr.tidyverse.org/reference/count.html">count()</a></code> to see how many cells were categorized as low or high transcriptome cells.</p>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-46_63d0cb4077bd31bca5b03d5c30a6acd3">
-<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mrna_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">cell_status</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Functionality:</strong> Collapse the rows and counts the number of observations per group of values.</p>
+<p>The <code>count</code> function is a quick way to have an overview on number of occurrences. For example, we can use <code><a href="https://dplyr.tidyverse.org/reference/count.html">count()</a></code> to see how many cells were categorized as low or high transcriptome cells.</p>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-45_395d9beed9a73bd02ce427f780a96c59">
+<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mrna_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">cell_status</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>         cell_status    n
 1 high_transcriptome 5204
@@ -974,13 +901,13 @@ Tip
 </div>
 </section><section id="group_by" class="level2"><h2 class="anchored" data-anchor-id="group_by">2.8 <code>group_by()</code>
 </h2>
-<p><strong>Functionality</strong>: Takes existing data and groups specific variables together for future operations.</p>
-<p>The function takes an existing table and convert it into grouped table where operations are performed by group.</p>
-<p>Let’s have a look into following example and assume that we want to compare the mean and median counts for low and high transcriptome cells. In that case we can group data by cell status and calculate average values for those groups.</p>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-47_e69af62fd32130b873cfaa3493f9a77d">
-<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mrna_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<p><strong>Functionality</strong>: Take the existing data and group specific variables together for future operations.</p>
+<p>The function takes an existing table and convert it into a grouped table where operations are performed by group.</p>
+<p>Let’s have a look in the following example and assume that we want to compare the mean and median counts for low and high transcriptome cells. In that case we can group data by cell status and calculate average values for those groups.</p>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-46_d0602aaafa9325156512d6a2e2c1f7cb">
+<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mrna_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">cell_status</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span>,</span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span>,</span>
 <span>            median <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span>,</span>
 <span>            n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>  <span class="co">#calculates the total number of observations</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -991,13 +918,13 @@ Tip
 2 low_transcriptome   1611.  1638    597</code></pre>
 </div>
 </div>
-<p>In the above code, we have grouped by cell status, meaning that calculations performed on our data will account for high transcriptome and low transcriptome cells separately. Following code execution, the console displays the mean count, the median count and the total number of cells (n()) for low transcriptome and for high transcriptome cells (group_by(cell_status)).</p>
+<p>In the above code, we first group cells by cell status, meaning that calculations performed on our data will account for high transcriptome and low transcriptome cells separately. Following code execution, the console displays the mean count, the median count and the total number of cells (<code><a href="https://dplyr.tidyverse.org/reference/context.html">n()</a></code>) for low transcriptome and for high transcriptome cells (<code>group_by(cell_status)</code>).</p>
 </section><section id="filter" class="level2"><h2 class="anchored" data-anchor-id="filter">2.8 <code>filter()</code>
 </h2>
 <p><strong>Functionality:</strong> Only retain specific rows of data that meet the specified requirement(s).</p>
-<p>Filter function display from the data values that meet defined condition. For example, we can filter all cells with low transcriptome cell status and retain only high transcriptome cells.</p>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-48_be2f3066b67041d5e351030c687b89d9">
-<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mrna_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">cell_status</span> <span class="op">==</span> <span class="st">"high_transcriptome"</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">signal_cells</span></span>
+<p><code>filter</code> function displays the data values that meet defined condition. For example, we can filter all cells with low transcriptome cell status and retain only high transcriptome cells.</p>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-47_cc4053345d0840a3d2fc30014d350e0d">
+<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mrna_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">cell_status</span> <span class="op">==</span> <span class="st">"high_transcriptome"</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">signal_cells</span></span>
 <span></span>
 <span><span class="co">#display last column</span></span>
 <span><span class="va">signal_cells</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html">last_col</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1013,10 +940,10 @@ Tip
 </div>
 </section><section id="rename" class="level2"><h2 class="anchored" data-anchor-id="rename">2.9 <code>rename()</code>
 </h2>
-<p><strong>Functionality:</strong> Renames a column/variable by name and index.</p>
-<p>Renames the cell_status variable as SIGNAL_CELLS (notice that the new label goes first in the argument).</p>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-49_4b148ada7ed0560c7e85fc8254d40ac5">
-<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mrna_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>SIGNAL_CELLS <span class="op">=</span> <span class="va">cell_status</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">mrna_data</span></span>
+<p><strong>Functionality:</strong> Rename a column/variable by name and index.</p>
+<p>Rename the cell_status variable as SIGNAL_CELLS (notice that the new label goes first in the argument).</p>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-48_ffca719dd46b4076d622db8c14024e06">
+<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mrna_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>SIGNAL_CELLS <span class="op">=</span> <span class="va">cell_status</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">mrna_data</span></span>
 <span></span>
 <span><span class="co">#display results</span></span>
 <span><span class="va">mrna_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html">last_col</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="va">head</span> <span class="co">#chose last column from mrna_data</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1031,23 +958,23 @@ Tip
 </div>
 </div>
 </section></section><section id="seurat-object" class="level1"><h1>3. Seurat object</h1>
-<p>Seurat object is a data structure designed for storing single-cell genomics data and associated information. We can think about Seurat object as a box with different sections to keep single-cell data in organized manner.</p>
-<p>In this chapter we will have a look in what information we can find in Seurat object and how to categorize them.</p>
+<p>Seurat object is a data structure designed for storing single-cell multiomics data and its information. We can think about Seurat object as a box with different sections to keep single-cell data in an organized manner.</p>
+<p>In this chapter we will look at what information we can find in Seurat object and how to access them.</p>
 <section id="seurat-object-structure" class="level2"><h2 class="anchored" data-anchor-id="seurat-object-structure">3.1 Seurat Object Structure</h2>
-<p>Seurat object stores information about the single cell multiomics data and the analysis that was done during downstream workflow. As we move through the workflow and make calculations, the results are added to Seurat object and stored in different “boxes”. Those different “boxes” are called slots.</p>
-<p>Let’s load the Seurat object into R.</p>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-50_6b62104bc045240d701b9028f33595b1">
-<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">seuratObj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span><span class="op">(</span><span class="st">"data/precourse_preparation_data/seuratObj.rds"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Seurat object stores information about the single cell multiomics data and the analysis that is performed. As we move through the workflow and make calculations, the results are added to Seurat object and stored in different “boxes”. Those different “boxes” are called <strong>slots</strong>.</p>
+<p>Let’s load an example Seurat object into R.</p>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-49_a5775d6982f2c9c05ea6224ea15b9687">
+<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">seuratObj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span><span class="op">(</span><span class="st">"data/precourse_preparation_data/seuratObj.rds"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Loaded Seurat object was created including mRNA counts table obtained from primary analysis. While Seurat object is generated the following information are added to Seurat slots by default: assays, meta data, active assay, active identity, project name and version.</p>
-<p><img src="prerequisite_figures/seurat_slots.jpg" class="img-fluid"></p>
-<p>The remaining Seurat slots highlighted in grey are empty and filled in with information while it is calculated over analysis.</p>
-<p>You can open the Seurat object in separate tab and review its content.</p>
+<p>The example Seurat object has a mRNA counts table. While Seurat object is generated, the following information are added to Seurat slots by default: assays, meta data, active assay, active identity, project name and version.</p>
+<p><img src="prerequisite_figures/seurat_slots.jpg" class="img-fluid" width="200"></p>
+<p>The remaining Seurat slots highlighted in grey are empty and will be filled with information during the analysis.</p>
+<p>You can open the Seurat object in a separate tab and review its content.</p>
 </section><section id="assays" class="level2"><h2 class="anchored" data-anchor-id="assays">3.2 Assays</h2>
-<p>The assays slot contain different assays loaded into Seurat object. Those can be for example mRNA expression data or protein expression data. The assay slot is described by additional subslots that stores ‘transformations’ of the data, including raw counts (<code>counts</code> slot), normalized data (<code>data</code> slot), and scaled data for dimensional reduction (<code>scale.data</code> slot).</p>
-<p>The assays slots can be accessed by function <code>GetAssayData</code>. In example below we access the <code>counts</code> slot.</p>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-51_9c5e22b80958a52931a9f0ac13cefd6b">
-<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#Seurat object saved before normalization</span></span>
+<p>The <code>assays</code> slot contain different assays loaded into Seurat object. Those can be mRNA expression data or protein expression data. The <code>assay</code> slot has additional subslots that store the ‘transformation’ of the data, including raw counts (<code>counts</code> slot), normalized data (<code>data</code> slot), and scaled data for dimensional reduction (<code>scale.data</code> slot).</p>
+<p>The assays slots can be accessed by function <code>GetAssayData</code>. In the example below, we access the <code>counts</code> slot.</p>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-50_033d89b8a3b0f8ec34b885dfa229c77a">
+<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#Seurat object saved before normalization</span></span>
 <span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/AssayData.html">GetAssayData</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">seuratObj</span>, slot <span class="op">=</span> <span class="st">"counts"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="va">.</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span> , <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"6660551"</span>,<span class="st">"2066735"</span>,<span class="st">"9164959"</span>,<span class="st">"3709837"</span><span class="op">)</span><span class="op">]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1061,10 +988,11 @@ A2M.AS1        .       .       .       .</code></pre>
 </div>
 </div>
 <p>We can perform normalization and store the normalized counts in <code>data</code> slot.</p>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-52_a582a703504e55937879a99f5513b14a">
-<div class="sourceCode" id="cb84"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#Seurat object saved after normalization</span></span>
-<span><span class="fu"><a href="https://satijalab.org/seurat/reference/NormalizeData.html">NormalizeData</a></span><span class="op">(</span><span class="va">seuratObj</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
-<span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/AssayData.html">GetAssayData</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">.</span>, slot <span class="op">=</span> <span class="st">"data"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-51_da3e5392ac1ef7459338e272fabdb60b">
+<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#Seurat object saved after normalization</span></span>
+<span><span class="va">seuratObj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/NormalizeData.html">NormalizeData</a></span><span class="op">(</span><span class="va">seuratObj</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/AssayData.html">GetAssayData</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">seuratObj</span>, slot <span class="op">=</span> <span class="st">"data"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="va">.</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span> , <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"6660551"</span>,<span class="st">"2066735"</span>,<span class="st">"9164959"</span>,<span class="st">"3709837"</span><span class="op">)</span><span class="op">]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>5 x 4 sparse Matrix of class "dgCMatrix"
@@ -1076,15 +1004,15 @@ A2M      .        .         .         0.6642082
 A2M.AS1  .        .         .         .        </code></pre>
 </div>
 </div>
-<p>By running above example you can see the raw values in data slot are changed due to LogTransform normalization.</p>
-<p>Below you can find a useful graphics indicating how data are altered in assays slots in Seurat object after applying different functions related to normalization and scaling the data.</p>
-<p><img src="prerequisite_figures/seurat_explained_cropped.png" class="img-fluid"></p>
+<p>By running above example, you can see the raw values in data slot are changed due to LogTransform normalization.</p>
+<p>Below you can find a useful graphics indicating how data are altered in assays slots in Seurat object after applying different functions.</p>
+<p><img src="prerequisite_figures/seurat_explained_cropped.png" class="img-fluid" width="800"></p>
 <p>Credit: Lior Pachter https://twitter.com/lpachter/status/1524413513233575936</p>
 </section><section id="meta-data" class="level2"><h2 class="anchored" data-anchor-id="meta-data">3.3 Meta Data</h2>
-<p><code>meta.data</code> slot stores information calculated for cells as for example number of features in each cell, number of counts or cell clusters calculated in downstream process.</p>
-<p>The meta.data information is stored in a table that can be accessed in Seurat object as below.</p>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-53_c31517240c51bc044edbb7c0fef9f6f4">
-<div class="sourceCode" id="cb86"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">seuratObj</span><span class="op">@</span><span class="va">meta.data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="va">head</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><code>meta.data</code> slot stores information calculated for cells such as number of features and number of counts in each cell.</p>
+<p>The <code>meta.data</code> information is stored in a table that can be accessed in Seurat object as below.</p>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-52_0130399063fc6e66d84276081ee45d08">
+<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">seuratObj</span><span class="op">@</span><span class="va">meta.data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="va">head</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            orig.ident nCount_RNA nFeature_RNA
 3261781  SeuratProject      35231         5823
@@ -1096,15 +1024,15 @@ A2M.AS1  .        .         .         .        </code></pre>
 </div>
 </div>
 <p>To view list of all available meta.data in Seurat object we can view the column names from the data table.</p>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-54_b51b0031c2cd652b2efd9fc7f5c7795e">
-<div class="sourceCode" id="cb88"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">seuratObj</span><span class="op">@</span><span class="va">meta.data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-53_199e4a7b5aecab4bc0e62f01163fff5b">
+<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">seuratObj</span><span class="op">@</span><span class="va">meta.data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "orig.ident"   "nCount_RNA"   "nFeature_RNA"</code></pre>
 </div>
 </div>
-<p>It is possible to add new information to meta data. It can be any information about the cells as experimental batch or sub-population identity.</p>
-<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-55_e115fdd34bc5bdd04b44b1aba18d3eaa">
-<div class="sourceCode" id="cb90"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#add meta data</span></span>
+<p>It is possible to add new information to <code>meta.data</code>. It can be any information about the cells such as experimental batch or sub-population identity.</p>
+<div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-54_acbf5752b8305d8de51d4b3a46e9fdda">
+<div class="sourceCode" id="cb84"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#add meta data</span></span>
 <span><span class="va">seuratObj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/AddMetaData.html">AddMetaData</a></span><span class="op">(</span><span class="va">seuratObj</span>, <span class="co">#indicate object</span></span>
 <span>            <span class="st">"experiment_1"</span>, <span class="co">#metadata to be added</span></span>
 <span>            <span class="st">"batch"</span><span class="op">)</span> <span class="co">#column name for metadata</span></span>
@@ -1122,12 +1050,13 @@ A2M.AS1  .        .         .         .        </code></pre>
 </div>
 </div>
 </section></section><section id="references-and-resources" class="level1"><h1>4. References and Resources</h1>
-<p>https://www.geeksforgeeks.org/r-data-frames/</p>
-<p>https://bookdown.org/yih_huynh/Guide-to-R-Book/tidyverse.html</p>
-<p>https://silviacanelon.com/talk/2020-tour-of-the-tidyverse/</p>
-<p>https://oliviergimenez.github.io/intro_tidyverse/</p>
-<p>https://jhudatascience.org/tidyversecourse/get-data.html</p>
-<p>https://www.analyticsvidhya.com/blog/2019/05/beginner-guide-tidyverse-most-powerful-collection-r-packages-data-science/</p>
+<p>For more details, please consult:</p>
+<p><a href="https://www.geeksforgeeks.org/r-data-frames/" class="uri">https://www.geeksforgeeks.org/r-data-frames/</a></p>
+<p><a href="https://bookdown.org/yih_huynh/Guide-to-R-Book/tidyverse.html" class="uri">https://bookdown.org/yih_huynh/Guide-to-R-Book/tidyverse.html</a></p>
+<p><a href="https://silviacanelon.com/talk/2020-tour-of-the-tidyverse/" class="uri">https://silviacanelon.com/talk/2020-tour-of-the-tidyverse/</a></p>
+<p><a href="https://oliviergimenez.github.io/intro_tidyverse/" class="uri">https://oliviergimenez.github.io/intro_tidyverse/</a></p>
+<p><a href="https://jhudatascience.org/tidyversecourse/get-data.html" class="uri">https://jhudatascience.org/tidyversecourse/get-data.html</a></p>
+<p><a href="https://www.analyticsvidhya.com/blog/2019/05/beginner-guide-tidyverse-most-powerful-collection-r-packages-data-science/" class="uri">https://www.analyticsvidhya.com/blog/2019/05/beginner-guide-tidyverse-most-powerful-collection-r-packages-data-science/</a></p>
 
 
 </section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
