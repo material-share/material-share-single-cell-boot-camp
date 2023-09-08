@@ -240,7 +240,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">ExperimentHub</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="load-rdata" class="level1"><h1>Load RData</h1>
-<p>Load the RData which contain all files from previous chapter.</p>
+<p>Load the RData which contains all files from the previous chapter.</p>
 <div class="cell" data-hash="09_combining_cache/html/unnamed-chunk-2_8cbd265a0d48c2b89535cf217bd8bb0b">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/intermediate_data/chapter8.RData"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -260,7 +260,7 @@ Note
 </div>
 </div>
 </section><section id="processing-abseq" class="level1"><h1>1. Processing AbSeq</h1>
-<p>When we analyzed the scRNAseq, the dataset was filtered and only high quality cells are kept. AbSeq dataset is filtered to have the same cells in.</p>
+<p>When we analyzed the scRNAseq in the previous chapters, the dataset was filtered and only high quality cells are kept. AbSeq dataset is filtered to have the same cells.</p>
 <div class="cell" data-hash="09_combining_cache/html/unnamed-chunk-3_9ac000d20c7c6266a9820f673ea61394">
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># get AbSeq from expMat</span></span>
 <span><span class="va">ab</span> <span class="op">&lt;-</span> <span class="va">expMat</span><span class="op">$</span><span class="va">`Antibody Capture`</span></span>
@@ -287,7 +287,7 @@ Active assay: RNA (19347 features, 0 variable features)
  4 dimensional reductions calculated: pca, umap, integrated_dr, ref.umap</code></pre>
 </div>
 </div>
-<p>Next, we split the Seurat object by sample to normalize them separately.</p>
+<p>Next, we normalize the AbSeq counts.</p>
 <p>The recommended normalization method for AbSeq is CLR, Centered Log Ratio. Due to the unspecific binding background signal of antibody, log-normalization doesn’t work well in AbSeq data.</p>
 <p>There are 20 AbSeq in the experiment. We are going to use all of them as variable features.</p>
 <div class="cell" data-hash="09_combining_cache/html/unnamed-chunk-5_528c97ce5fb23c7ade49dc2b4adae16f">
@@ -303,17 +303,19 @@ Active assay: RNA (19347 features, 0 variable features)
 <span>  <span class="fu"><a href="https://satijalab.org/seurat/reference/RunPCA.html">RunPCA</a></span><span class="op">(</span>reduction.name <span class="op">=</span> <span class="st">'apca'</span>, approx <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="weighted-nearest-neighbour-wnn" class="level1"><h1>2. Weighted nearest neighbour (WNN)</h1>
-<p>The weighted nearest neighbor (WNN) is a statistical framework implemented in Seurat for the multimodal analysis. WNN requires pre-processing and dimentionality reduction on both assays independently.</p>
+<p>The weighted nearest neighbor (WNN) is a statistical framework implemented in Seurat for the multimodal analysis. WNN requires pre-processing and dimentionality reduction on both assays independently upfront.</p>
 <div class="cell" data-hash="09_combining_cache/html/unnamed-chunk-6_d154144072b51036809dc3b70ffb307b">
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">combined</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindMultiModalNeighbors.html">FindMultiModalNeighbors</a></span><span class="op">(</span><span class="va">combined</span>, </span>
 <span>                                    reduction.list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"pca"</span>, <span class="st">"apca"</span><span class="op">)</span>, </span>
 <span>                                    dims.list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">15</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">18</span><span class="op">)</span>, </span>
 <span>                                    modality.weight.name <span class="op">=</span> <span class="st">"RNA.weight"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><code>reduction.list</code> Dimentionality reduction to use from each element</p>
-<p><code>dims.list</code> Number of PCs to include from each element</p>
-<p><code>modality.weight.name</code> Give a name to the weight of each element</p>
-<p>Now, we run UMP using the calculated WNN.</p>
+<ul>
+<li><p><code>reduction.list</code> Dimentionality reduction to use from each element</p></li>
+<li><p><code>dims.list</code> Number of PCs to include from each element</p></li>
+<li><p><code>modality.weight.name</code> Give a name to the weight of each element</p></li>
+</ul>
+<p>Now, we run UMAP using the calculated WNN.</p>
 <p>For each cell, we calculate its closest neighbors in the dataset based on a weighted combination of RNA and protein similarities. We specify the dimensionality of each modality (similar to specifying the number of PCs to include in scRNA-seq clustering). We use the same number of PCs as we did in previous steps.</p>
 <div class="cell" data-hash="09_combining_cache/html/unnamed-chunk-7_a8cec9192b668759e737f14581566862">
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># run UMAP</span></span>
@@ -329,23 +331,30 @@ Active assay: RNA (19347 features, 0 variable features)
 <span>                         verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Look at the results in UMAP.</p>
-<div class="cell" data-hash="09_combining_cache/html/unnamed-chunk-8_24b957d3d96380782c2f78b27bb3c0c2">
+<div class="cell" data-hash="09_combining_cache/html/unnamed-chunk-8_4123b6e50f9740b18e49eb331f501c2e">
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># visualize the result in UMAP</span></span>
-<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html">DimPlot</a></span><span class="op">(</span><span class="va">combined</span>, reduction <span class="op">=</span> <span class="st">'wnn.umap'</span>, label <span class="op">=</span> <span class="cn">TRUE</span>, repel <span class="op">=</span> <span class="cn">TRUE</span>, label.size <span class="op">=</span> <span class="fl">2.5</span>, group.by <span class="op">=</span> <span class="st">"predicted.celltype.l1"</span><span class="op">)</span></span>
+<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html">DimPlot</a></span><span class="op">(</span><span class="va">combined</span>, reduction <span class="op">=</span> <span class="st">'wnn.umap'</span>, </span>
+<span>              label <span class="op">=</span> <span class="cn">TRUE</span>, repel <span class="op">=</span> <span class="cn">TRUE</span>, label.size <span class="op">=</span> <span class="fl">2.5</span>, </span>
+<span>              group.by <span class="op">=</span> <span class="st">"predicted.celltype.l1"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html">DimPlot</a></span><span class="op">(</span><span class="va">combined</span>, reduction <span class="op">=</span> <span class="st">'wnn.umap'</span>, label <span class="op">=</span> <span class="cn">TRUE</span>, repel <span class="op">=</span> <span class="cn">TRUE</span>, label.size <span class="op">=</span> <span class="fl">2.5</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html">DimPlot</a></span><span class="op">(</span><span class="va">combined</span>, reduction <span class="op">=</span> <span class="st">'wnn.umap'</span>, </span>
+<span>              label <span class="op">=</span> <span class="cn">TRUE</span>, repel <span class="op">=</span> <span class="cn">TRUE</span>, label.size <span class="op">=</span> <span class="fl">2.5</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">p1</span><span class="op">|</span><span class="va">p2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="09_combining_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>Let’s compare the UMAPs from RNA only and from WNN. The T cells cluster better in WNN UMAP. Becuase AbSeq is often handpicked and cell type specific, bringing AbSeq in can have a better resolution.</p>
-<div class="cell" data-hash="09_combining_cache/html/unnamed-chunk-9_7579dc6769b352a30639117701d25dcf">
+<p>Let’s compare the UMAPs from RNA only and from WNN. The T cells cluster better in WNN UMAP. Because AbSeq is often handpicked and cell type specific, bringing AbSeq in can have a better resolution.</p>
+<div class="cell" data-hash="09_combining_cache/html/unnamed-chunk-9_ef82152080764cacb79e60e9ba1bf4c3">
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># compare the UMAPs based on RNA and on WNN</span></span>
-<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html">DimPlot</a></span><span class="op">(</span><span class="va">combined</span>, reduction <span class="op">=</span> <span class="st">'umap'</span>, group.by <span class="op">=</span> <span class="st">'predicted.celltype.l1'</span>, label <span class="op">=</span> <span class="cn">TRUE</span>, repel <span class="op">=</span> <span class="cn">TRUE</span>, label.size <span class="op">=</span> <span class="fl">2.5</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/SeuratTheme.html">NoLegend</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"RNA"</span><span class="op">)</span></span>
+<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html">DimPlot</a></span><span class="op">(</span><span class="va">combined</span>, reduction <span class="op">=</span> <span class="st">'umap'</span>, group.by <span class="op">=</span> <span class="st">'predicted.celltype.l1'</span>, </span>
+<span>              label <span class="op">=</span> <span class="cn">TRUE</span>, repel <span class="op">=</span> <span class="cn">TRUE</span>, label.size <span class="op">=</span> <span class="fl">2.5</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://satijalab.org/seurat/reference/SeuratTheme.html">NoLegend</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"RNA"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html">DimPlot</a></span><span class="op">(</span><span class="va">combined</span>, reduction <span class="op">=</span> <span class="st">'wnn.umap'</span>, group.by <span class="op">=</span> <span class="st">'predicted.celltype.l1'</span>, label <span class="op">=</span> <span class="cn">TRUE</span>, repel <span class="op">=</span> <span class="cn">TRUE</span>, label.size <span class="op">=</span> <span class="fl">2.5</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/SeuratTheme.html">NoLegend</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"WNN"</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html">DimPlot</a></span><span class="op">(</span><span class="va">combined</span>, reduction <span class="op">=</span> <span class="st">'wnn.umap'</span>, group.by <span class="op">=</span> <span class="st">'predicted.celltype.l1'</span>, </span>
+<span>              label <span class="op">=</span> <span class="cn">TRUE</span>, repel <span class="op">=</span> <span class="cn">TRUE</span>, label.size <span class="op">=</span> <span class="fl">2.5</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://satijalab.org/seurat/reference/SeuratTheme.html">NoLegend</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"WNN"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">p1</span><span class="op">|</span><span class="va">p2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -354,35 +363,27 @@ Active assay: RNA (19347 features, 0 variable features)
 </div>
 </section><section id="abseq-visualization" class="level1"><h1>3. AbSeq visualization</h1>
 <p>We have several assays stored in the Seurat object. We can easily switch between them and work on different assays.</p>
-<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Note
+Important
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <p>It is important to know which assay you are working on. We may get unexpected results if working on the wrong assay.</p>
 </div>
 </div>
-<div class="cell" data-hash="09_combining_cache/html/unnamed-chunk-10_82f62a84508acab586b6c56ccab54457">
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">combined</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>An object of class Seurat 
-40809 features across 4160 samples within 7 assays 
-Active assay: AB (20 features, 20 variable features)
- 6 other assays present: RNA, integrated, refAssay, prediction.score.celltype.l1, prediction.score.celltype.l2, prediction.score.celltype.l3
- 6 dimensional reductions calculated: pca, umap, integrated_dr, ref.umap, apca, wnn.umap</code></pre>
-</div>
-</div>
 <p>Let’s look at the protein and gene expression side by side. By setting the default assay, we can visualize one or the other.</p>
 <p>CD19 is a B cell marker. We can plot the UMAP with annotation side by side with the CD19 AbSeq.</p>
-<div class="cell" data-hash="09_combining_cache/html/unnamed-chunk-11_3e2ce10f19a915677011f2ea6a1c69f7">
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># switch default assay to AbSeq to plot protein expression</span></span>
+<div class="cell" data-hash="09_combining_cache/html/unnamed-chunk-10_ea4571f702a096293d811320ba17b3f6">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># switch default assay to AbSeq to plot protein expression</span></span>
 <span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/DefaultAssay.html">DefaultAssay</a></span><span class="op">(</span><span class="va">combined</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"AB"</span></span>
-<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html">FeaturePlot</a></span><span class="op">(</span><span class="va">combined</span>, <span class="st">"CD19-CD19-AHS0030-pAbO"</span>, cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"lightgrey"</span>, <span class="st">"darkgreen"</span><span class="op">)</span>, reduction <span class="op">=</span> <span class="st">'wnn.umap'</span><span class="op">)</span></span>
+<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html">FeaturePlot</a></span><span class="op">(</span><span class="va">combined</span>, <span class="st">"CD19-CD19-AHS0030-pAbO"</span>, </span>
+<span>                  cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"lightgrey"</span>, <span class="st">"darkgreen"</span><span class="op">)</span>, </span>
+<span>                  reduction <span class="op">=</span> <span class="st">'wnn.umap'</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># switch default to RNA to plot gene expression</span></span>
 <span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/DefaultAssay.html">DefaultAssay</a></span><span class="op">(</span><span class="va">combined</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"RNA"</span></span>
@@ -391,13 +392,13 @@ Active assay: AB (20 features, 20 variable features)
 <span><span class="co"># place plots side-by-side</span></span>
 <span><span class="va">p1</span> <span class="op">|</span> <span class="va">p2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="09_combining_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+<p><img src="09_combining_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section><section id="save" class="level1"><h1>4. Save</h1>
 <p>Save the files into RData for documentation.</p>
-<div class="cell" data-hash="09_combining_cache/html/unnamed-chunk-12_4f1178b274b478632fe21b1ed66ac696">
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># save(combined, expMat, ab, integrate.filtered.rna, file = "data/intermediate_data/chapter9.RData")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="09_combining_cache/html/unnamed-chunk-11_5f39e99f41f8c0a80339640a944d5996">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># save(combined, expMat, ab, integrate.filtered.rna, file = "data/intermediate_data/chapter9.RData")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 

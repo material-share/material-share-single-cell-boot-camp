@@ -211,7 +211,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><a href="#load-rdata" id="toc-load-rdata" class="nav-link active" data-scroll-target="#load-rdata">Load RData</a></li>
   <li><a href="#findmarkers" id="toc-findmarkers" class="nav-link" data-scroll-target="#findmarkers">1. FindMarkers</a></li>
   <li>
-<a href="#muscat-for-differential-state-analysis-ds" id="toc-muscat-for-differential-state-analysis-ds" class="nav-link" data-scroll-target="#muscat-for-differential-state-analysis-ds">2. Muscat for Differential State analysis (DS)</a>
+<a href="#muscat-for-differential-state-analysis-ds" id="toc-muscat-for-differential-state-analysis-ds" class="nav-link" data-scroll-target="#muscat-for-differential-state-analysis-ds">2. <code>muscat</code> for Differential State analysis (DS)</a>
   <ul class="collapse">
 <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">2.1 Setup</a></li>
   <li><a href="#select-cell-groups" id="toc-select-cell-groups" class="nav-link" data-scroll-target="#select-cell-groups">2.2 Select cell groups</a></li>
@@ -248,7 +248,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/HelenaLC/muscat">muscat</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="load-rdata" class="level1"><h1>Load RData</h1>
-<p>Load the RData which contain all files from previous chapter.</p>
+<p>Load the RData which contains all files from the previous chapter.</p>
 <div class="cell" data-hash="07_differential_expression_analysis_cache/html/unnamed-chunk-2_bbb934c1998fd2e9b767ed8ce73b1599">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/intermediate_data/chapter6.RData"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -279,30 +279,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 6  GBP5 3.297043e-247   2.334895 0.625 0.094 6.378789e-243</code></pre>
 </div>
 </div>
-<p><code>gene</code> Gene symbol.</p>
-<p><code>p_val</code> p-value without multiple testing.</p>
-<p><code>avg_log2FC</code> log2 fold-change of the average expression between the two groups.</p>
-<p>We can also find genes deferentially expressed in CD4 T cells between the two samples. We start by subsetting the cells being annotated as “CD4 T”.</p>
-<div class="cell" data-hash="07_differential_expression_analysis_cache/html/unnamed-chunk-5_b67403db5738905a0cb9cca2c20e1fda">
+<ul>
+<li><p><code>gene</code> Gene symbol.</p></li>
+<li><p><code>p_val</code> P-value without multiple testing.</p></li>
+<li><p><code>avg_log2FC</code> log2 fold-change of the average expression between the two groups.</p></li>
+</ul>
+<p>We can also find genes deferentially expressed in CD4 T cells between the two samples. We start by subsetting the cells annotated as “CD4 T”.</p>
+<div class="cell" data-hash="07_differential_expression_analysis_cache/html/unnamed-chunk-5_7ad0beb633ec24fecdcaea69ebf933d6">
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># subset CD4 T cells</span></span>
 <span><span class="va">cd4t</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/subset.html">subset</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, subset <span class="op">=</span> <span class="va">predicted.celltype.l1</span> <span class="op">==</span> <span class="st">"CD4 T"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Find genes differentially expressed between activated vs. naive samples in CD4 T cells</span></span>
 <span><span class="va">treated_naive_cd4t</span> <span class="op">&lt;-</span> </span>
-<span>  <span class="fu"><a href="https://satijalab.org/seurat/reference/FindMarkers.html">FindMarkers</a></span><span class="op">(</span><span class="va">cd4t</span>, ident.1 <span class="op">=</span> <span class="st">"treated"</span>, ident.2 <span class="op">=</span> <span class="st">"naive"</span>, assay <span class="op">=</span> <span class="st">"RNA"</span>, recorrect_umi <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://satijalab.org/seurat/reference/FindMarkers.html">FindMarkers</a></span><span class="op">(</span><span class="va">cd4t</span>, ident.1 <span class="op">=</span> <span class="st">"treated"</span>, ident.2 <span class="op">=</span> <span class="st">"naive"</span>, </span>
+<span>              assay <span class="op">=</span> <span class="st">"RNA"</span>, recorrect_umi <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html">rownames_to_column</a></span><span class="op">(</span><span class="st">"gene"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">p_val_adj</span> <span class="op">&lt;</span> <span class="fl">0.05</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section><section id="muscat-for-differential-state-analysis-ds" class="level1"><h1>2. Muscat for Differential State analysis (DS)</h1>
-<p>Pseudo-bulk aggregation transforms scRNA-seq data into bulk-like data by aggregating gene counts within each cell type and subject. We use the package <code>Muscat</code> (Multi-sample multi-group scRNA-seq data analysis tools) to perform pseudo-bulk analysis.</p>
+</section><section id="muscat-for-differential-state-analysis-ds" class="level1"><h1>2. <code>muscat</code> for Differential State analysis (DS)</h1>
+<p>Pseudo-bulk aggregation transforms scRNA-seq data into bulk-like data by aggregating gene counts within each cell type and subject. We use the package <code>muscat</code> (Multi-sample multi-group scRNA-seq data analysis tools) to perform pseudo-bulk analysis.</p>
 <section id="setup" class="level2"><h2 class="anchored" data-anchor-id="setup">2.1 Setup</h2>
-<p>Let’s assume we have three biological replicates in each condition (we made them up for illustration).</p>
-<div class="cell" data-hash="07_differential_expression_analysis_cache/html/unnamed-chunk-6_24861c3eb038acf242811df7764e06e8">
+<p>Let’s assume we have three biological replicates in each condition (we make them up for the purpose of illustration).</p>
+<div class="cell" data-hash="07_differential_expression_analysis_cache/html/unnamed-chunk-6_88c7545133dcddc0314272724f2456af">
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># read in dummy group</span></span>
 <span><span class="va">dummy</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="st">"data/dummy.csv"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># add the dummy meta into the seurat object</span></span>
-<span><span class="va">integrate.filtered.rna</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/AddMetaData.html">AddMetaData</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, <span class="va">dummy</span><span class="op">$</span><span class="va">dummy_group</span>, col.name <span class="op">=</span> <span class="st">"dummy_group"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="va">integrate.filtered.rna</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/AddMetaData.html">AddMetaData</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, </span>
+<span>                                      <span class="va">dummy</span><span class="op">$</span><span class="va">dummy_group</span>, </span>
+<span>                                      col.name <span class="op">=</span> <span class="st">"dummy_group"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="select-cell-groups" class="level2"><h2 class="anchored" data-anchor-id="select-cell-groups">2.2 Select cell groups</h2>
 <p>Let’s take a look at the cell type annotation in UMAP.</p>
@@ -337,7 +342,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 6     treated   treated_3 57   502    27 NA   36 137    22       3</code></pre>
 </div>
 </div>
-<p>Dendritic cells, other T cells, and other don’t have sufficient cells per dummy group. For demonstration, we will not include these cells for pseudo-bulk analysis. We will focus on “CD4 T”, “Mono”, and “NK”.</p>
+<p>Dendritic cells, other T cells, and the group of other don’t have sufficient cells per dummy group. For demonstration, we will not include these cell types for pseudo-bulk analysis. We will focus on “CD4 T”, “Mono”, and “NK”.</p>
 <div class="cell" data-hash="07_differential_expression_analysis_cache/html/unnamed-chunk-9_428674795b3085a2b229b4387f3aab62">
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">subset.rna</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/subset.html">subset</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, </span>
 <span>                     subset <span class="op">=</span> <span class="va">predicted.celltype.l1</span> <span class="op"><a href="https://rdrr.io/pkg/BiocGenerics/man/match.html">%in%</a></span> </span>
@@ -385,26 +390,47 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Next, we can run DS analysis by specifying <code>method</code> as <code>DESeq2</code>.</p>
-<div class="cell" data-hash="07_differential_expression_analysis_cache/html/unnamed-chunk-15_f809c3e919ccc0dcfc9af29fc0f49d3b">
+<div class="cell" data-hash="07_differential_expression_analysis_cache/html/unnamed-chunk-15_cac4d4277cbebfdf01294272444dc7da">
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># change group_id into a factor</span></span>
-<span><span class="va">subset.pb</span><span class="op">$</span><span class="va">group_id</span> <span class="op">&lt;-</span> <span class="va">subset.pb</span><span class="op">$</span><span class="va">group_id</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">subset.pb</span><span class="op">$</span><span class="va">group_id</span> <span class="op">&lt;-</span> <span class="va">subset.pb</span><span class="op">$</span><span class="va">group_id</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span>levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"treated"</span>, <span class="st">"naive"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># run DS analysis with DESeq2</span></span>
 <span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/muscat/man/pbDS.html">pbDS</a></span><span class="op">(</span><span class="va">subset.pb</span>, method <span class="op">=</span> <span class="st">"DESeq2"</span>, verbose <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The result is stored in the <code>table</code> slot of <code>res</code>.</p>
 <p>We will focus on the deferentially expressed genes in CD4 T cells.</p>
-<div class="cell" data-hash="07_differential_expression_analysis_cache/html/unnamed-chunk-16_e2850d53857b74a0521b6f25243a86e3">
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">cd4t</span> <span class="op">&lt;-</span> <span class="va">res</span><span class="op">$</span><span class="va">table</span><span class="op">$</span><span class="va">treated</span><span class="op">$</span><span class="va">`CD4 T`</span></span>
+<div class="cell" data-hash="07_differential_expression_analysis_cache/html/unnamed-chunk-16_5a59037adf93215468c2add1f5e74b73">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">cd4t</span> <span class="op">&lt;-</span> <span class="va">res</span><span class="op">$</span><span class="va">table</span><span class="op">$</span><span class="va">naive</span><span class="op">$</span><span class="va">`CD4 T`</span></span>
 <span></span>
 <span><span class="co"># Filter the results with p_adj.loc &lt; 0.05, abs(logFC) &gt; 1</span></span>
 <span><span class="va">cd4t.sig</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">cd4t</span>, <span class="va">p_adj.loc</span> <span class="op">&lt;</span> <span class="fl">0.05</span>, <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">logFC</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">p_adj.loc</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">p_adj.loc</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">cd4t.sig</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      gene cluster_id baseMean     logFC      lfcSE      stat p_val p_adj.loc
+1    ACTG1      CD4 T 2668.781 -2.659041 0.06523691 -40.75976     0         0
+2     ENO1      CD4 T 1551.952 -3.948824 0.10421979 -37.88939     0         0
+3 HSP90AA1      CD4 T 3313.136 -3.417375 0.07281262 -46.93383     0         0
+4 HSP90AB1      CD4 T 3142.790 -3.156739 0.06430620 -49.08919     0         0
+5     IL7R      CD4 T 1673.366  3.774151 0.05618277  67.17631     0         0
+6   MALAT1      CD4 T 2329.629  2.337009 0.05494380  42.53454     0         0
+  p_adj.glb contrast
+1         0    naive
+2         0    naive
+3         0    naive
+4         0    naive
+5         0    naive
+6         0    naive</code></pre>
 </div>
-<p><code>p_adj.loc</code> is produced by correcting for multiple testing across all genes tested within a cluster. <code>p_adj.glb</code> is produced by correcting for multiple testing across all genes tested in all clusters.</p>
+</div>
+<ul>
+<li><p><code>p_adj.loc</code> is produced by correcting for multiple testing across all genes tested within a cluster.</p></li>
+<li><p><code>p_adj.glb</code> is produced by correcting for multiple testing across all genes tested in all clusters.</p></li>
+</ul>
 <p>We can plot the DEGs from CD4+ T cells in a heatmap.</p>
 <div class="cell" data-hash="07_differential_expression_analysis_cache/html/unnamed-chunk-17_ab58e1bae9d13b131cb679264c833564">
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># scale the RNA data</span></span>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># scale the RNA data</span></span>
 <span><span class="va">integrate.filtered.rna</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/ScaleData.html">ScaleData</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html">rownames</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span><span class="op">)</span>, assay <span class="op">=</span> <span class="st">"RNA"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># plot heatmap</span></span>
@@ -418,7 +444,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section></section><section id="save" class="level1"><h1>3. Save</h1>
 <p>Save the files into RData for documentation.</p>
 <div class="cell" data-hash="07_differential_expression_analysis_cache/html/unnamed-chunk-18_eba885ce79fa1ce589685e16bbb14ed7">
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># save(integrate.filtered.rna, expMat, cd4t, file = "data/intermediate_data/chapter7.RData")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># save(integrate.filtered.rna, expMat, cd4t, file = "data/intermediate_data/chapter7.RData")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 

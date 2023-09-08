@@ -6,15 +6,15 @@ execute:
   eval: false
 ---
 
-::: callout-note
-**Note** The course will run on virtual machine. We have materials and RStudio setting up on the virtual machine, so you DO NOT need to set up anything on your desktop for the course.
+::: callout-important
+The course will run on virtual machine. We have materials and RStudio setting up on the virtual machine, so you DO NOT need to set up anything on your desktop for the course.
 
-However, if you are going to run through the Precourse preparation - R and the course chapters, please follow the instructions and set up RStudio on the desktop.
+However, if you are going to run through the Precourse preparation - R and the course chapters, please follow this chapter to set up R and RStudio on the desktop.
 :::
 
 # 1. R and RStudio
 
-Please follow the instruction to set up **the most up to date** R and RStudio on desktop: <https://posit.co/download/rstudio-desktop/>
+Please follow the instruction to set up the **most up to date** R and RStudio on desktop: <https://posit.co/download/rstudio-desktop/>
 
 # 2. Install R packages
 
@@ -30,10 +30,6 @@ At any point (especially if you have used R/Bioconductor in the past), in the co
 
 `install.packages("tidyverse")`
 
-`install.packages("Seurat")`
-
-`install.packages("BiocManager")`
-
 `install.packages("Matrix")`
 
 `install.packages("RCurl")`
@@ -43,6 +39,10 @@ At any point (especially if you have used R/Bioconductor in the past), in the co
 `install.packages("data.table")`
 
 `install.packages("readxl")`
+
+`install.packages("Seurat")`
+
+`install.packages("BiocManager")`
 
 2.  Install the packages listed below **one by one** from bioconductor using the `BiocManager::install()` function.
 
@@ -66,7 +66,7 @@ At any point (especially if you have used R/Bioconductor in the past), in the co
 
 `BiocManager::install("muscat")`
 
-3.  Check that all the packages were installed successfully by loading them one at a time using the `library()` function.
+3.  Check that all the packages were installed successfully by loading them **one by one** at a time using the `library()` function.
 
 ```{r}
 library(tidyverse)
@@ -89,14 +89,14 @@ library(enrichplot)
 library(muscat)
 ```
 
-# 3. Data required to run the materials
+# 3. Data to run the materials
 
 Please access the folder [Data](https://bd1-my.sharepoint.com/:f:/r/personal/yujuan_gui_bd_com/Documents/demo_data/data_for_boot_camp?csf=1&web=1&e=Q0QMU5) to download data to run the prerequisites and course chapters.
 
 You will also need to download the entire repository as a .zip from <https://github.com/material-share/material-share-single-cell-boot-camp/tree/master>.
 
-After download, unzip the repository and put the data folder in the repository.
+![](pics/1-5-github.png)
 
-To run the analysis, double click on **single-cell-boot-camp.Rproj** as below.
+After download, unzip the repository and **put the Data folder in the repository**.
 
-![](pics/1-4-instruction.png){width="500"}
+To run the analysis, double click on **single-cell-boot-camp.Rproj**. One should be able to bring the RStudio console.

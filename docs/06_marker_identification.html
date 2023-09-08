@@ -212,9 +212,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li>
 <a href="#find-marker-genes" id="toc-find-marker-genes" class="nav-link" data-scroll-target="#find-marker-genes">1. Find marker genes</a>
   <ul class="collapse">
-<li><a href="#findallmarkers" id="toc-findallmarkers" class="nav-link" data-scroll-target="#findallmarkers">1.1 FindAllMarkers</a></li>
-  <li><a href="#findconservedmarkers" id="toc-findconservedmarkers" class="nav-link" data-scroll-target="#findconservedmarkers">1.2 FindConservedMarkers</a></li>
-  <li><a href="#findmarkers" id="toc-findmarkers" class="nav-link" data-scroll-target="#findmarkers">1.3 FindMarkers</a></li>
+<li><a href="#findallmarkers" id="toc-findallmarkers" class="nav-link" data-scroll-target="#findallmarkers">1.1 <code>FindAllMarkers</code></a></li>
+  <li><a href="#findconservedmarkers" id="toc-findconservedmarkers" class="nav-link" data-scroll-target="#findconservedmarkers">1.2 <code>FindConservedMarkers</code></a></li>
+  <li><a href="#findmarkers" id="toc-findmarkers" class="nav-link" data-scroll-target="#findmarkers">1.3 <code>FindMarkers</code></a></li>
   </ul>
 </li>
   <li>
@@ -253,25 +253,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/FelixTheStudent/cellpypes">cellpypes</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="load-rdata" class="level1"><h1>Load RData</h1>
-<p>Load the RData which contain all files from previous chapter.</p>
+<p>Load the RData which contains all files from the previous chapter.</p>
 <div class="cell" data-hash="06_marker_identification_cache/html/unnamed-chunk-2_38dd3572e2382bc4cda1f5fa67a0e553">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/intermediate_data/chapter5.RData"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="find-marker-genes" class="level1"><h1>1. Find marker genes</h1>
-<section id="findallmarkers" class="level2"><h2 class="anchored" data-anchor-id="findallmarkers">1.1 FindAllMarkers</h2>
-<p>This type of analysis is typically for evaluating a single sample group/condition. With the <code>FindAllMarkers</code> function we are comparing each cluster against all other clusters to identify potential marker genes. The cells in each cluster are treated as replicates, and essentially a differential expression analysis is performed with some statistical test. By default, the test is Wilcoxon Rank Sum test.</p>
+<section id="findallmarkers" class="level2"><h2 class="anchored" data-anchor-id="findallmarkers">1.1 <code>FindAllMarkers</code>
+</h2>
+<p>This type of analysis is typically for evaluating a single sample group/condition. With the <code>FindAllMarkers</code> function, we are comparing each cluster to all other clusters to identify potential marker genes. The cells in each cluster are treated as replicates, and essentially a differential expression analysis is performed with some statistical test. By default, the test is Wilcoxon Rank Sum test.</p>
 <p>The <code>FindAllMarkers</code> function has three arguments to determine if a gene is a marker gene.</p>
-<p><code>logfc.threshold</code> Limit testing to genes that show, on average, at least an X-fold difference (log-scale) between the two groups of cells. The default is 0.25. Increasing logfc.threshold speeds up the function but can miss weaker signals.</p>
-<p><code>min.pct</code> Only test genes that are detected in a minimum fraction of min.pct cells in either of the two populations. It is meant to speed up the function by not testing infrequently expressed genes. The default is 0.1.</p>
-<p><code>only.pos</code> Only return positive markers (FALSE by default)</p>
-<p>We can combine these arguments. We can change the arguments depending on how stringent we want to be. Here we will use the default settings.</p>
-<p>We look at the marker genes in the clusters in sample “activated”.</p>
-<div class="cell" data-hash="06_marker_identification_cache/html/unnamed-chunk-3_26155b8394f9ef7254e0d5271da9ad5a">
+<ul>
+<li><p><code>logfc.threshold</code> Limit testing to genes that show, on average, at least an X-fold difference (log-scale) between the two groups of cells. The default is 0.25. Increasing <code>logfc.threshold</code> speeds up the function but can miss weaker signals.</p></li>
+<li><p><code>min.pct</code> Only test genes that are detected in a minimum fraction of cells in either of the two populations. It is meant to speed up the function by not testing infrequently expressed genes. The default is 0.1.</p></li>
+<li><p><code>only.pos</code> Only return positive markers (FALSE by default).</p></li>
+</ul>
+<p>One may change the arguments depending on how stringent to be.</p>
+<p>We look at the marker genes in the clusters in sample “treated”.</p>
+<div class="cell" data-hash="06_marker_identification_cache/html/unnamed-chunk-3_3d309c48297f8adfc7f2262ec5e23be5">
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">treated.markers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindAllMarkers.html">FindAllMarkers</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/subset.html">subset</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, subset <span class="op">=</span> <span class="va">Sample_Name</span> <span class="op">==</span> <span class="st">"treated"</span><span class="op">)</span>, </span>
-<span>                                    assay <span class="op">=</span> <span class="st">"RNA"</span>,</span>
-<span>                                    only.pos <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span>                                    min.pct <span class="op">=</span> <span class="fl">0.25</span>, </span>
-<span>                                    logfc.threshold <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>                                  assay <span class="op">=</span> <span class="st">"RNA"</span>,</span>
+<span>                                  only.pos <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>                                  min.pct <span class="op">=</span> <span class="fl">0.25</span>, </span>
+<span>                                  logfc.threshold <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s look at the top 2 significant marker genes in each cluster.</p>
 <div class="cell" data-hash="06_marker_identification_cache/html/unnamed-chunk-4_d6a5768d4bc4ed9c8792446e4bae4831">
@@ -297,17 +300,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>We get a table with the information on marker genes.</p>
-<p><code>p_val</code> p-value before multiple testing.</p>
-<p><code>avg_log2FC</code> log2 fold change on the average of gene expression between one cluster and the rest of cluster combined.</p>
-<p><code>pct.1</code> Percentage of cells express the gene in one group. Here is one cluster.</p>
-<p><code>pct.2</code> Percentage of cells express the gene in another group. Here is the rest of cluster combined.</p>
+<p><code>p_val</code> P-value before multiple testing.</p>
+<p><code>avg_log2FC</code> Log2 fold change on the average gene expression between one cluster and the rest of cluster combined.</p>
+<p><code>pct.1</code> Percentage of cells expressing the gene in one group. Here is one cluster.</p>
+<p><code>pct.2</code> Percentage of cells expressing the gene in another group. Here is the rest of cluster combined.</p>
 <p><code>p_val_adj</code> p-value with multiple testing correction.</p>
-</section><section id="findconservedmarkers" class="level2"><h2 class="anchored" data-anchor-id="findconservedmarkers">1.2 FindConservedMarkers</h2>
+</section><section id="findconservedmarkers" class="level2"><h2 class="anchored" data-anchor-id="findconservedmarkers">1.2 <code>FindConservedMarkers</code>
+</h2>
 <p>We have two samples, naïve and treated. We can find conserved markers between the conditions with the function, <code>FindConservedMarkers</code>.</p>
-<p>This function internally separates out cells by sample group/condition, then performs differential gene expression testing for a single specified cluster against all other clusters (or a second cluster, if specified).</p>
+<p>This function internally separates out cells by sample group/condition, then performs differential gene expression testing for a single specified cluster against all other clusters.</p>
 <p>Gene-level p-values are computed for each condition and then combined across groups using meta-analysis methods from the <code>MetaDE</code> R package.</p>
-<p>Many of the arguments in <code>FindConservedMarkers</code> are shared with <code>FindAllMarkers</code>. Here, we list some additional arguments when using <code>FindConservedMarkers</code>:</p>
-<p><code>ident.1</code> This function only evaluates one cluster at a time; here, you would specify the cluster of interest. <code>grouping.var</code> The variable (column header) in your metadata specifies the separation of cells into groups.</p>
+<p>Many of the arguments in <code>FindConservedMarkers</code> are shared with <code>FindAllMarkers</code>. Here, we list some additional arguments when using <code>FindConservedMarkers</code>.</p>
+<ul>
+<li><p><code>ident.1</code> This function only evaluates one cluster at a time; here, you would specify the cluster of interest.</p></li>
+<li><p><code>grouping.var</code> The variable (column name) in your metadata specifies the separation of cells into groups.</p></li>
+</ul>
 <div class="cell" data-hash="06_marker_identification_cache/html/unnamed-chunk-5_9342c7f74876e97e712d02fcf809915f">
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fcm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindConservedMarkers.html">FindConservedMarkers</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>,</span>
 <span>                     assay <span class="op">=</span> <span class="st">"RNA"</span>,</span>
@@ -344,11 +351,13 @@ CST7     1.331645e-231 5.390018e-149  1.376590e-235</code></pre>
 </div>
 </div>
 <p>We also get a table with information on marker genes. The statistics are computed for each group (naïve vs.&nbsp;treated), and the last two columns are the combined p-value across the two groups.</p>
-<p><code>condition_p_val</code> p-value before multiple testing.</p>
-<p><code>condition_avg_log2FC</code> log2 fold change on the average of gene expression between one cluster and the rest of the clusters combined.</p>
-<p><code>condition_pct.1</code> Percentage of cells expressing the gene in one group.</p>
-<p><code>condition_pct.2</code> Percentage of cells expressing the gene in another group.</p>
-<p><code>condition_p_val_adj</code> p-value with multiple testing correction.</p>
+<ul>
+<li><p><code>condition_p_val</code> P-value before multiple testing.</p></li>
+<li><p><code>condition_avg_log2FC</code> Log2 fold change on the average of gene expression between one cluster and the rest of the clusters combined.</p></li>
+<li><p><code>condition_pct.1</code> Percentage of cells expressing the gene in one group.</p></li>
+<li><p><code>condition_pct.2</code> Percentage of cells expressing the gene in another group.</p></li>
+<li><p><code>condition_p_val_adj</code> P-value with multiple testing correction.</p></li>
+</ul>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -382,7 +391,8 @@ Note
 <p><img src="06_marker_identification_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-</section><section id="findmarkers" class="level2"><h2 class="anchored" data-anchor-id="findmarkers">1.3 FindMarkers</h2>
+</section><section id="findmarkers" class="level2"><h2 class="anchored" data-anchor-id="findmarkers">1.3 <code>FindMarkers</code>
+</h2>
 <p>We can use the <code>FindMarkers</code> to determine the differentially expressed genes between two clusters.</p>
 <div class="cell" data-hash="06_marker_identification_cache/html/unnamed-chunk-8_03d8e9e68804194fcbbb427d46f4db9f">
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">example_findmarkers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindMarkers.html">FindMarkers</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>,</span>
@@ -392,9 +402,9 @@ Note
 <span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html">rownames_to_column</a></span><span class="op">(</span><span class="st">"gene"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section></section><section id="automatic-annotation" class="level1"><h1>2. Automatic annotation</h1>
-<p>So far, we already look at the marker genes based on knowledge (last chapter) and between clusters. The manual annotation usually takes time, and we might need to go back and forth to annotate the clusters. Another way to annotate the clusters is through the automatic annotation.</p>
+<p>So far, we already look at the marker genes based on knowledge (manual annotation) and between clusters by differential expression analysis. The manual annotation usually takes time, and we might need to go back and forth to annotate the clusters. Another way to annotate the clusters is through the automatic annotation.</p>
 <section id="reference-based" class="level2"><h2 class="anchored" data-anchor-id="reference-based">2.1 Reference-based</h2>
-<p>We look at the publicly available dataset with annotation and build a reference set based on its information. Then we can “transfer” the annotation from the reference to the query. Seurat provides the interface to connect with Azimuth.</p>
+<p>We look at the publicly available dataset with annotation and build a reference set based on its information. Then we can “transfer” the annotation from the reference to the query. Seurat provides the interface to connect with <code>Azimuth</code>.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -405,21 +415,29 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Because the annotation information is based on the reference set, the reference ideally are similar to the query. They may come from the same tissue, same organism, similar experimental procedure, etc.</p>
+<p>Because the annotation information is based on the reference set, the reference ideally is similar to the query. They may come from the same tissue, same organism, similar experimental procedure, etc.</p>
 </div>
 </div>
-<div class="cell" data-hash="06_marker_identification_cache/html/unnamed-chunk-9_6c55e00ec0d488fdbf68fdabae10602e">
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">integrate.filtered.rna</span> <span class="op">&lt;-</span> <span class="fu">Azimuth</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/Azimuth/man/RunAzimuth.html">RunAzimuth</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, reference <span class="op">=</span> <span class="st">"pbmcref"</span>, verbose <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="06_marker_identification_cache/html/unnamed-chunk-9_0e43b46fc4bd4c7933d3c01f2c7ba26c">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">integrate.filtered.rna</span> <span class="op">&lt;-</span> <span class="fu">Azimuth</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/Azimuth/man/RunAzimuth.html">RunAzimuth</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>,</span>
+<span>                                              reference <span class="op">=</span> <span class="st">"pbmcref"</span>,</span>
+<span>                                              verbose <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>An AzimuthData object - reference version: 1.0.0 
 Contains 3 meta.data field(s) to transfer.</code></pre>
 </div>
 </div>
-<p>We can look at the prediction on UMAP.</p>
-<div class="cell" data-hash="06_marker_identification_cache/html/unnamed-chunk-10_13bf7bf08475c6184f85bb52a30ea5eb">
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html">DimPlot</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, reduction <span class="op">=</span> <span class="st">"umap"</span>, group.by <span class="op">=</span> <span class="st">"predicted.celltype.l1"</span>, label <span class="op">=</span> <span class="cn">TRUE</span>, label.size <span class="op">=</span> <span class="fl">3</span> ,repel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/SeuratTheme.html">NoLegend</a></span><span class="op">(</span><span class="op">)</span></span>
+<p>We can look at the automatic annotation on UMAP.</p>
+<div class="cell" data-hash="06_marker_identification_cache/html/unnamed-chunk-10_a045b9c876c53493393d5949e42fe1de">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html">DimPlot</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, reduction <span class="op">=</span> <span class="st">"umap"</span>, </span>
+<span>              group.by <span class="op">=</span> <span class="st">"predicted.celltype.l1"</span>, </span>
+<span>              label <span class="op">=</span> <span class="cn">TRUE</span>, label.size <span class="op">=</span> <span class="fl">3</span> ,repel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://satijalab.org/seurat/reference/SeuratTheme.html">NoLegend</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html">DimPlot</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, reduction <span class="op">=</span> <span class="st">"umap"</span>, group.by <span class="op">=</span> <span class="st">"integrated_snn_res.0.6"</span>, label <span class="op">=</span> <span class="cn">TRUE</span>, label.size <span class="op">=</span> <span class="fl">3</span> ,repel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/SeuratTheme.html">NoLegend</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html">DimPlot</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, reduction <span class="op">=</span> <span class="st">"umap"</span>, </span>
+<span>              group.by <span class="op">=</span> <span class="st">"integrated_snn_res.0.6"</span>, </span>
+<span>              label <span class="op">=</span> <span class="cn">TRUE</span>, label.size <span class="op">=</span> <span class="fl">3</span> ,repel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://satijalab.org/seurat/reference/SeuratTheme.html">NoLegend</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">p1</span><span class="op">|</span><span class="va">p2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -428,19 +446,23 @@ Contains 3 meta.data field(s) to transfer.</code></pre>
 </div>
 </section><section id="marker-based" class="level2"><h2 class="anchored" data-anchor-id="marker-based">2.1 Marker-based</h2>
 <p>The <code>celldex</code> contains several curated reference datasets, mostly assembled from bulk RNA-seq or microarray data of sorted cell types. Here, we will use a reference constructed from Blueprint and ENCODE data (Martens and Stunnenberg 2013; The ENCODE Project Consortium 2012).</p>
-<div class="cell" data-hash="06_marker_identification_cache/html/unnamed-chunk-11_7e7ac7accc6207d6ce94d76edbee667d">
+<div class="cell" data-hash="06_marker_identification_cache/html/unnamed-chunk-11_5d9589593f154b1b4644b785a32a3bed">
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># get reference</span></span>
 <span><span class="co"># ref_encode &lt;- BlueprintEncodeData()</span></span>
 <span><span class="va">ref_encode</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span><span class="op">(</span><span class="st">"data/blueprint_encode_ref.rds"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># perform annotation</span></span>
-<span><span class="va">annot_encode</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/SingleR/man/SingleR.html">SingleR</a></span><span class="op">(</span>test <span class="op">=</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/as.SingleCellExperiment.html">as.SingleCellExperiment</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span><span class="op">)</span>, ref <span class="op">=</span> <span class="va">ref_encode</span>, labels <span class="op">=</span> <span class="va">ref_encode</span><span class="op">$</span><span class="va">label.main</span><span class="op">)</span></span>
+<span><span class="va">annot_encode</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/SingleR/man/SingleR.html">SingleR</a></span><span class="op">(</span>test <span class="op">=</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/as.SingleCellExperiment.html">as.SingleCellExperiment</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span><span class="op">)</span>, </span>
+<span>                        ref <span class="op">=</span> <span class="va">ref_encode</span>, </span>
+<span>                        labels <span class="op">=</span> <span class="va">ref_encode</span><span class="op">$</span><span class="va">label.main</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># get labels into Seurat object</span></span>
 <span><span class="va">integrate.filtered.rna</span><span class="op">$</span><span class="va">annot_encode</span> <span class="op">&lt;-</span> <span class="va">annot_encode</span><span class="op">$</span><span class="va">labels</span></span>
 <span></span>
 <span><span class="co"># Visualizae</span></span>
-<span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html">DimPlot</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, group.by <span class="op">=</span> <span class="st">"annot_encode"</span>, label <span class="op">=</span> <span class="cn">T</span>, reduction <span class="op">=</span> <span class="st">"umap"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html">DimPlot</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, </span>
+<span>        group.by <span class="op">=</span> <span class="st">"annot_encode"</span>, </span>
+<span>        label <span class="op">=</span> <span class="cn">T</span>, reduction <span class="op">=</span> <span class="st">"umap"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="06_marker_identification_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
 </div>

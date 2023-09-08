@@ -209,7 +209,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
 <li><a href="#load-rdata" id="toc-load-rdata" class="nav-link active" data-scroll-target="#load-rdata">Load RData</a></li>
-  <li><a href="#clustering-cells" id="toc-clustering-cells" class="nav-link" data-scroll-target="#clustering-cells">1. Clustering cells</a></li>
+  <li><a href="#clustering" id="toc-clustering" class="nav-link" data-scroll-target="#clustering">1. Clustering</a></li>
   <li><a href="#distribution-of-cells-per-cluster" id="toc-distribution-of-cells-per-cluster" class="nav-link" data-scroll-target="#distribution-of-cells-per-cluster">2. Distribution of cells per cluster</a></li>
   <li><a href="#exploring-known-cell-type-markers" id="toc-exploring-known-cell-type-markers" class="nav-link" data-scroll-target="#exploring-known-cell-type-markers">3. Exploring known cell type markers</a></li>
   <li><a href="#save" id="toc-save" class="nav-link" data-scroll-target="#save">4. Save</a></li>
@@ -240,35 +240,36 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">ExperimentHub</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="load-rdata" class="level1"><h1>Load RData</h1>
-<p>Load the RData which contain all files from previous chapter.</p>
+<p>Load the RData which contains all files from previous chapter.</p>
 <div class="cell" data-hash="05_clustering_cache/html/unnamed-chunk-2_94c8b72fec57179ab8ef7a30bb43728d">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/intermediate_data/chapter4.RData"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section><section id="clustering-cells" class="level1"><h1>1. Clustering cells</h1>
+</section><section id="clustering" class="level1"><h1>1. Clustering</h1>
 <p>Now that we have our high quality cells integrated, we want to know the different cell types present within our population of cells.</p>
 <p>Seurat uses a graph-based clustering approach, which embeds cells in a graph structure, using a K-nearest neighbor (KNN) graph (by default), with edges drawn between cells with similar gene expression patterns. Then, it attempts to partition this graph into highly interconnected ‘quasi-cliques’ or ‘communities’.</p>
-<p>We will use the <code>FindClusters</code> function to perform the graph-based clustering. The `resolution` is an important argument that sets the “granularity” of the downstream clustering and will need to be optimized for every individual experiment.</p>
-<div class="callout callout-style-default callout-note callout-titled">
+<p>We will use the <code>FindClusters</code> function to perform the graph-based clustering. The <code>resolution</code> is an important argument that sets the “granularity” of the downstream clustering and will need to be optimized for <strong>every individual experiment</strong>.</p>
+<div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Note
+Important
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Increased resolution values lead to a greater number of clusters, which is often required for larger datasets.</p>
+<p>Increasing resolution value leads to a greater number of clusters, which is often required for larger datasets.</p>
 </div>
 </div>
 <p>The <code>FindClusters</code> function allows us to enter a series of resolutions and will calculate the “granularity” of the clustering. This is very helpful for testing which resolution works for moving forward without having to run the function for each resolution.</p>
-<div class="cell" data-hash="05_clustering_cache/html/unnamed-chunk-3_c6c8362d9b9308972ec1ff46b84725ca">
+<div class="cell" data-hash="05_clustering_cache/html/unnamed-chunk-3_3d05d124c88b5367005d1ebf5d145a53">
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Determine the K-nearest neighbor graph</span></span>
 <span><span class="va">integrate.filtered.rna</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindNeighbors.html">FindNeighbors</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">integrate.filtered.rna</span>, dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span>
 <span>                                </span>
 <span><span class="co"># Determine the clusters for various resolutions                                </span></span>
 <span><span class="va">integrate.filtered.rna</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindClusters.html">FindClusters</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">integrate.filtered.rna</span>,</span>
-<span>                               resolution <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">0.4</span>, <span class="fl">0.6</span>,  <span class="fl">0.8</span>, <span class="fl">1</span>, <span class="fl">1.2</span>, <span class="fl">1.4</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>                                       resolution <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">0.4</span>, <span class="fl">0.6</span>,  <span class="fl">0.8</span>, <span class="fl">1</span>, <span class="fl">1.2</span>, <span class="fl">1.4</span><span class="op">)</span>,</span>
+<span>                                       verbose <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The <code>meta.data</code> has a separate column for each of the different resolution calculated. We can look at how many clusters in each resolution.</p>
 <div class="cell" data-hash="05_clustering_cache/html/unnamed-chunk-4_bb0778af81f45d8998fe46aa8b585a44">
@@ -284,7 +285,7 @@ integrated_snn_res.1.4
                     19 </code></pre>
 </div>
 </div>
-<p>We start with the resolution of 0.6. We will assign the identity of the clusters using the <code>Idents</code> function.</p>
+<p>We start with the resolution of 0.6. We assign the identity of the clusters using the <code>Idents</code> function to specify that we want to look at the clusters calculating with resolution = 0.6.</p>
 <div class="cell" data-hash="05_clustering_cache/html/unnamed-chunk-5_dcfe8219f9de4568e7b67766fffc2409">
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/Idents.html">Idents</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">integrate.filtered.rna</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"integrated_snn_res.0.6"</span></span>
 <span></span>
@@ -307,14 +308,14 @@ Exercise
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Change the other resolutions. How do the clusters change?</p>
+<p>Change to other resolution values. How do the clusters change?</p>
 </div>
 </div>
 </section><section id="distribution-of-cells-per-cluster" class="level1"><h1>2. Distribution of cells per cluster</h1>
-<p>The number of clusters are sensitive to the resolution. We have PBMC from both samples, and we expect each cluster contains cells from both samples.</p>
-<div class="cell" data-hash="05_clustering_cache/html/unnamed-chunk-6_e689e1abdec66fbf74f1094db15cc2d1">
+<p>The number of clusters are sensitive to the resolution. The demo dataset has PBMC and we expect each cluster contains cells from both samples.</p>
+<div class="cell" data-hash="05_clustering_cache/html/unnamed-chunk-6_bb900447f7704ec663bc33c63651f997">
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/FetchData.html">FetchData</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, </span>
-<span>                     vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ident"</span>, <span class="st">"Sample_Name"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>          vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ident"</span>, <span class="st">"Sample_Name"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">ident</span>, <span class="va">Sample_Name</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/spread.html">spread</a></span><span class="op">(</span><span class="va">ident</span>, <span class="va">n</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -323,6 +324,7 @@ Exercise
 2     treated 508 332 140 217 322 304  14 177 53 71 82 59 31</code></pre>
 </div>
 </div>
+<p>We can split the UMAP by sample.</p>
 <div class="cell" data-hash="05_clustering_cache/html/unnamed-chunk-7_c9209d82e84ccda27c219f7dea9702a1">
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># UMAP of cells in each cluster by sample</span></span>
 <span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html">DimPlot</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, </span>
@@ -334,20 +336,24 @@ Exercise
 </div>
 </section><section id="exploring-known-cell-type-markers" class="level1"><h1>3. Exploring known cell type markers</h1>
 <p>We can explore some known cell type markers to get an idea about the identity of clusters.</p>
-<p>Cell Type Markers:</p>
-<p>CD14+ monocytes: CD14, LYZ</p>
-<p>Conventional dendritic cells: FCER1A, CST3</p>
-<p>B cells: CD79A, MS4A1</p>
-<p>T cells: CD3D</p>
-<p>CD4+ T cells: CD3D, IL7R, CCR7</p>
-<p>CD8+ T cells: CD3D, CD8A</p>
-<p>NK cells: GNLY, NKG7</p>
-<p>Macrophages: MARCO, ITGAM, ADGRE1</p>
-<p>The <code>FeaturePlot</code> makes it easy to visualize a handful of genes using the gene IDs stored in the Seurat object. We can easily explore the expression of known gene markers on top of our UMAP visualizations. Let’s go through and determine the identities of the clusters. To access the normalized expression levels of all genes, we can use the normalized count stored in the <code>RNA</code> assay slot.</p>
+<p>Some typical cell type markers:</p>
+<ul>
+<li><p>CD14+ monocytes: CD14, LYZ</p></li>
+<li><p>Conventional dendritic cells: FCER1A, CST3</p></li>
+<li><p>B cells: CD79A, MS4A1</p></li>
+<li><p>T cells: CD3D</p></li>
+<li><p>CD4+ T cells: CD3D, IL7R, CCR7</p></li>
+<li><p>CD8+ T cells: CD3D, CD8A</p></li>
+<li><p>NK cells: GNLY, NKG7</p></li>
+<li><p>Macrophages: MARCO, ITGAM, ADGRE1</p></li>
+</ul>
+<p>The <code>FeaturePlot</code> makes it easy to visualize a handful of genes using the gene IDs stored in the Seurat object. We can easily explore the expression of known gene markers on top of our UMAPs. Let’s go through and determine the identities of the clusters. To access the normalized expression levels of all genes, we can use the normalized counts stored in the <code>RNA</code> assay slot.</p>
 <div class="cell" data-hash="05_clustering_cache/html/unnamed-chunk-8_588083a9855a205f9e47cec911b61fb7">
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/DefaultAssay.html">DefaultAssay</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"RNA"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>CD14+ monocytes: CD14, LYZ</p>
+<ul>
+<li>CD14+ monocytes: CD14, LYZ</li>
+</ul>
 <div class="cell" data-hash="05_clustering_cache/html/unnamed-chunk-9_1b3c30fb185aba2e45f62f8553d53574">
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html">FeaturePlot</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, </span>
 <span>            reduction <span class="op">=</span> <span class="st">"umap"</span>, </span>
@@ -359,7 +365,9 @@ Exercise
 <p><img src="05_clustering_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>B cells: CD79A, MS4A1</p>
+<ul>
+<li>B cells: CD79A, MS4A1</li>
+</ul>
 <div class="cell" data-hash="05_clustering_cache/html/unnamed-chunk-10_8759750003ffc03094d3a099865f45e9">
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html">FeaturePlot</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, </span>
 <span>            reduction <span class="op">=</span> <span class="st">"umap"</span>, </span>
@@ -371,7 +379,9 @@ Exercise
 <p><img src="05_clustering_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>NK cells: GNLY, NKG7</p>
+<ul>
+<li>NK cells: GNLY, NKG7</li>
+</ul>
 <div class="cell" data-hash="05_clustering_cache/html/unnamed-chunk-11_b93336db7204087bc5200f82899d99cd">
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html">FeaturePlot</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, </span>
 <span>            reduction <span class="op">=</span> <span class="st">"umap"</span>, </span>
@@ -383,7 +393,9 @@ Exercise
 <p><img src="05_clustering_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>T cells: CD3D</p>
+<ul>
+<li>T cells: CD3D</li>
+</ul>
 <div class="cell" data-hash="05_clustering_cache/html/unnamed-chunk-12_c2481c98ca3dcb8138fe898d45875b52">
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html">FeaturePlot</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, </span>
 <span>            reduction <span class="op">=</span> <span class="st">"umap"</span>, </span>
@@ -395,7 +407,9 @@ Exercise
 <p><img src="05_clustering_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>CD4+ T cells: CD3D, IL7R, CCR7</p>
+<ul>
+<li>CD4+ T cells: CD3D, IL7R, CCR7</li>
+</ul>
 <div class="cell" data-hash="05_clustering_cache/html/unnamed-chunk-13_9dfc07d0abbfadcad162aff07c49b32b">
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html">FeaturePlot</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, </span>
 <span>            reduction <span class="op">=</span> <span class="st">"umap"</span>, </span>
@@ -407,7 +421,9 @@ Exercise
 <p><img src="05_clustering_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>CD8+ T cells: CD3D, CD8A</p>
+<ul>
+<li>CD8+ T cells: CD3D, CD8A</li>
+</ul>
 <div class="cell" data-hash="05_clustering_cache/html/unnamed-chunk-14_840ef05b021e52f09509cc05f685596d">
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html">FeaturePlot</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, </span>
 <span>            reduction <span class="op">=</span> <span class="st">"umap"</span>, </span>

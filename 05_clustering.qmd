@@ -17,22 +17,22 @@ library(ExperimentHub)
 
 # Load RData
 
-Load the RData which contain all files from previous chapter.
+Load the RData which contains all files from the previous chapter.
 
 ```{r}
 load("data/intermediate_data/chapter4.RData")
 ```
 
-# 1. Clustering cells
+# 1. Clustering
 
 Now that we have our high quality cells integrated, we want to know the different cell types present within our population of cells.
 
 Seurat uses a graph-based clustering approach, which embeds cells in a graph structure, using a K-nearest neighbor (KNN) graph (by default), with edges drawn between cells with similar gene expression patterns. Then, it attempts to partition this graph into highly interconnected 'quasi-cliques' or 'communities'.
 
-We will use the `FindClusters` function to perform the graph-based clustering. The \`resolution\` is an important argument that sets the "granularity" of the downstream clustering and will need to be optimized for every individual experiment.
+We will use the `FindClusters` function to perform the graph-based clustering. The `resolution` is an important argument that sets the "granularity" of the downstream clustering and will need to be optimized for **every individual experiment**.
 
-::: callout-note
-Increased resolution values lead to a greater number of clusters, which is often required for larger datasets.
+::: callout-important
+Increasing resolution value leads to a greater number of clusters, which is often required for larger datasets.
 :::
 
 The `FindClusters` function allows us to enter a series of resolutions and will calculate the "granularity" of the clustering. This is very helpful for testing which resolution works for moving forward without having to run the function for each resolution.
@@ -43,7 +43,8 @@ integrate.filtered.rna <- FindNeighbors(object = integrate.filtered.rna, dims = 
                                 
 # Determine the clusters for various resolutions                                
 integrate.filtered.rna <- FindClusters(object = integrate.filtered.rna,
-                               resolution = c(0.2, 0.4, 0.6,  0.8, 1, 1.2, 1.4))
+                                       resolution = c(0.2, 0.4, 0.6,  0.8, 1, 1.2, 1.4),
+                                       verbose = F)
 ```
 
 The `meta.data` has a separate column for each of the different resolution calculated. We can look at how many clusters in each resolution.
@@ -54,7 +55,7 @@ integrate.filtered.rna@meta.data %>%
   map_int(~ unique(.x) %>% length)
 ```
 
-We start with the resolution of 0.6. We will assign the identity of the clusters using the `Idents` function.
+We start with the resolution of 0.6. We assign the identity of the clusters using the `Idents` function to specify that we want to look at the clusters calculating with resolution = 0.6.
 
 ```{r}
 Idents(object = integrate.filtered.rna) <- "integrated_snn_res.0.6"
@@ -69,19 +70,21 @@ DimPlot(integrate.filtered.rna,
 ::: callout-note
 ## Exercise
 
-Change the other resolutions. How do the clusters change?
+Change to other resolution values. How do the clusters change?
 :::
 
 # 2. Distribution of cells per cluster
 
-The number of clusters are sensitive to the resolution. We have PBMC from both samples, and we expect each cluster contains cells from both samples.
+The number of clusters are sensitive to the resolution. The demo dataset has PBMC and we expect each cluster contains cells from both samples.
 
 ```{r}
 FetchData(integrate.filtered.rna, 
-                     vars = c("ident", "Sample_Name")) %>%
+          vars = c("ident", "Sample_Name")) %>%
   dplyr::count(ident, Sample_Name) %>%
   tidyr::spread(ident, n)
 ```
+
+We can split the UMAP by sample.
 
 ```{r}
 # UMAP of cells in each cluster by sample
@@ -94,31 +97,31 @@ DimPlot(integrate.filtered.rna,
 
 We can explore some known cell type markers to get an idea about the identity of clusters.
 
-Cell Type Markers:
+Some typical cell type markers:
 
-CD14+ monocytes: CD14, LYZ
+-   CD14+ monocytes: CD14, LYZ
 
-Conventional dendritic cells: FCER1A, CST3
+-   Conventional dendritic cells: FCER1A, CST3
 
-B cells: CD79A, MS4A1
+-   B cells: CD79A, MS4A1
 
-T cells: CD3D
+-   T cells: CD3D
 
-CD4+ T cells: CD3D, IL7R, CCR7
+-   CD4+ T cells: CD3D, IL7R, CCR7
 
-CD8+ T cells: CD3D, CD8A
+-   CD8+ T cells: CD3D, CD8A
 
-NK cells: GNLY, NKG7
+-   NK cells: GNLY, NKG7
 
-Macrophages: MARCO, ITGAM, ADGRE1
+-   Macrophages: MARCO, ITGAM, ADGRE1
 
-The `FeaturePlot` makes it easy to visualize a handful of genes using the gene IDs stored in the Seurat object. We can easily explore the expression of known gene markers on top of our UMAP visualizations. Let's go through and determine the identities of the clusters. To access the normalized expression levels of all genes, we can use the normalized count stored in the `RNA` assay slot.
+The `FeaturePlot` makes it easy to visualize a handful of genes using the gene IDs stored in the Seurat object. We can easily explore the expression of known gene markers on top of our UMAPs. Let's go through and determine the identities of the clusters. To access the normalized expression levels of all genes, we can use the normalized counts stored in the `RNA` assay slot.
 
 ```{r}
 DefaultAssay(integrate.filtered.rna) <- "RNA"
 ```
 
-CD14+ monocytes: CD14, LYZ
+-   CD14+ monocytes: CD14, LYZ
 
 ```{r}
 FeaturePlot(integrate.filtered.rna, 
@@ -129,7 +132,7 @@ FeaturePlot(integrate.filtered.rna,
             label = TRUE)
 ```
 
-B cells: CD79A, MS4A1
+-   B cells: CD79A, MS4A1
 
 ```{r}
 FeaturePlot(integrate.filtered.rna, 
@@ -140,7 +143,7 @@ FeaturePlot(integrate.filtered.rna,
             label = TRUE)
 ```
 
-NK cells: GNLY, NKG7
+-   NK cells: GNLY, NKG7
 
 ```{r}
 FeaturePlot(integrate.filtered.rna, 
@@ -151,7 +154,7 @@ FeaturePlot(integrate.filtered.rna,
             label = TRUE)
 ```
 
-T cells: CD3D
+-   T cells: CD3D
 
 ```{r}
 FeaturePlot(integrate.filtered.rna, 
@@ -162,7 +165,7 @@ FeaturePlot(integrate.filtered.rna,
             label = TRUE)
 ```
 
-CD4+ T cells: CD3D, IL7R, CCR7
+-   CD4+ T cells: CD3D, IL7R, CCR7
 
 ```{r}
 FeaturePlot(integrate.filtered.rna, 
@@ -173,7 +176,7 @@ FeaturePlot(integrate.filtered.rna,
             label = TRUE)
 ```
 
-CD8+ T cells: CD3D, CD8A
+-   CD8+ T cells: CD3D, CD8A
 
 ```{r}
 FeaturePlot(integrate.filtered.rna, 

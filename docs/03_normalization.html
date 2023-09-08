@@ -211,7 +211,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><a href="#load-rdata" id="toc-load-rdata" class="nav-link active" data-scroll-target="#load-rdata">Load RData</a></li>
   <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
   <li><a href="#normalization" id="toc-normalization" class="nav-link" data-scroll-target="#normalization">1. Normalization</a></li>
-  <li><a href="#evaluating-effects-of-mitochondrial-percentage" id="toc-evaluating-effects-of-mitochondrial-percentage" class="nav-link" data-scroll-target="#evaluating-effects-of-mitochondrial-percentage">2. Evaluating effects of mitochondrial percentage</a></li>
+  <li><a href="#evaluating-effects-of-mitochondrial-percentage-optional" id="toc-evaluating-effects-of-mitochondrial-percentage-optional" class="nav-link" data-scroll-target="#evaluating-effects-of-mitochondrial-percentage-optional">2. Evaluating effects of mitochondrial percentage (optional)</a></li>
   <li><a href="#save" id="toc-save" class="nav-link" data-scroll-target="#save">3. Save</a></li>
   </ul></nav>
     </div>
@@ -240,7 +240,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">ExperimentHub</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="load-rdata" class="level1"><h1>Load RData</h1>
-<p>Load the RData which contain all files from previous chapter.</p>
+<p>Load the RData which contains all files from previous chapter.</p>
 <div class="cell" data-hash="03_normalization_cache/html/unnamed-chunk-2_e6efc49f7ebad2bd517f564ff43e40f6">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/intermediate_data/chapter2.RData"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -293,10 +293,10 @@ A2ML1-AS1  .   .   .    .    .</code></pre>
 </div>
 </div>
 </div>
-</section><section id="evaluating-effects-of-mitochondrial-percentage" class="level1"><h1>2. Evaluating effects of mitochondrial percentage</h1>
-<p>The unwanted variation, such as the difference in mitochondrial percentage, could affect the downstream analysis.</p>
+</section><section id="evaluating-effects-of-mitochondrial-percentage-optional" class="level1"><h1>2. Evaluating effects of mitochondrial percentage (optional)</h1>
+<p>The unwanted variation, such as the difference in mitochondrial percentage, could bias the downstream analysis.</p>
 <p>For example, we don’t want the cells clustered based on the difference in mitochondrial percentage.</p>
-<p>Let’s first look at if the mitochondrial percentage introduces unwanted variation. We take the normalized counts and see if we have unwanted variation from the mitochondrial percentage.</p>
+<p>Let’s first has a look if the mitochondrial percentage introduces unwanted variation in the dataset or not. We take the normalized counts and follow the below steps to check.</p>
 <ol type="1">
 <li>The mitochondrial percentage is a series of numbers. We can turn the mitochondrial percentage variable into a categorical variable based on quartiles.</li>
 </ol>
@@ -307,26 +307,28 @@ A2ML1-AS1  .   .   .    .    .</code></pre>
  0.2155 10.1004 12.4155 12.6649 15.1489 24.9487 </code></pre>
 </div>
 </div>
-<p>Below 1st quartile: Low.</p>
-<p>Between 1st and Median: Median.</p>
-<p>Between Median and 3rd quartile: Median high.</p>
-<p>beyond 3rd quartile (15.4158%): High.</p>
-<p>Next, we create a new variable based on the cutoff.</p>
+<p>The cells can be grouped into 4 categories.</p>
+<p>MT% &lt; 1st quartile: Low.</p>
+<p>MT% between 1st quartile and Median: Median.</p>
+<p>MT% between Median and 3rd quartile: Median high.</p>
+<p>MT% &gt; 3rd quartile (15.4158%): High.</p>
+<p>Next, we create a new variable based on the thretholds.</p>
 <div class="cell" data-hash="03_normalization_cache/html/unnamed-chunk-6_7b76edd8ca312f3b720767c71c07f1a2">
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">filtered.rna</span><span class="op">$</span><span class="va">quartile.mt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html">cut</a></span><span class="op">(</span><span class="va">filtered.rna</span><span class="op">$</span><span class="va">percent.mt</span>, </span>
 <span>                                breaks<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">10.1004</span>, <span class="fl">12.4155</span>, <span class="fl">15.1489</span>, <span class="cn">Inf</span><span class="op">)</span>,</span>
 <span>                                labels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Low"</span>,<span class="st">"Medium"</span>,<span class="st">"Medium high"</span>, <span class="st">"High"</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>We want to check whether the mitochondrial percentage is a source of variation using PCA. We plot the first two principal components to visualize the data.</p>
-<div class="cell" data-hash="03_normalization_cache/html/unnamed-chunk-7_ebb47baee457a9db85db1e147a9f8c1a">
+<p>We use PCA to check whether the mitochondrial percentage is a source of variation. We plot the first two principal components and visualize the data.</p>
+<div class="cell" data-hash="03_normalization_cache/html/unnamed-chunk-7_e42c74b82136230e4c8c3f3a4fb7b188">
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Identify the most variable genes</span></span>
 <span><span class="va">filtered.rna</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindVariableFeatures.html">FindVariableFeatures</a></span><span class="op">(</span><span class="va">filtered.rna</span>,</span>
-<span>                                           selection.method <span class="op">=</span> <span class="st">"vst"</span>,</span>
-<span>                                           nfeatures <span class="op">=</span> <span class="fl">2000</span>, </span>
-<span>                                           verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>                                     selection.method <span class="op">=</span> <span class="st">"vst"</span>,</span>
+<span>                                     nfeatures <span class="op">=</span> <span class="fl">2000</span>, </span>
+<span>                                     verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span>             </span>
 <span><span class="co"># Scale the data</span></span>
-<span><span class="va">filtered.rna</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/ScaleData.html">ScaleData</a></span><span class="op">(</span><span class="va">filtered.rna</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html">rownames</a></span><span class="op">(</span><span class="va">filtered.rna</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">filtered.rna</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/ScaleData.html">ScaleData</a></span><span class="op">(</span><span class="va">filtered.rna</span>, </span>
+<span>                          features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html">rownames</a></span><span class="op">(</span><span class="va">filtered.rna</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># perform PCA</span></span>
 <span><span class="va">filtered.rna</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/RunPCA.html">RunPCA</a></span><span class="op">(</span><span class="va">filtered.rna</span><span class="op">)</span></span>
@@ -341,7 +343,7 @@ A2ML1-AS1  .   .   .    .    .</code></pre>
 </div>
 </div>
 <p>Based on the above plot, we can see a different scatter pattern in cells with “Low” mitochondrial percentage.</p>
-<p>We observe that the lobe of cells in the left middle side of the plot is in the category “Low”. For all other levels of mitochondrial percentage, we see a more even distribution of cells across the PCA plot.</p>
+<p>We observe that the lobe of cells on the right middle side of the plot is only in the category “Low”. For all other levels of mitochondrial percentage, we see a more even distribution of cells across the PCA plot.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -352,7 +354,7 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Oftentimes, it is helpful to regress out variation due to mitochondrial percentage. However, if the differences in mitochondrial gene expression represent a biological phenomenon that might help to distinguish cell clusters, then we do not regress it out.</p>
+<p>Oftentimes, it is helpful to regress out variation due to mitochondrial percentage. However, if the differences in mitochondrial percentation has the biological meaning that might help to distinguish cell clusters, then we do not regress it out.</p>
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -365,17 +367,17 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Cell cycle is another common variation. For instructions, please refer to <a href="https://satijalab.org/seurat/articles/cell_cycle_vignette.html" class="uri">https://satijalab.org/seurat/articles/cell_cycle_vignette.html</a></p>
+<p>Cell cycle is another common source of bias. For instructions on how to remove cell cycle bias, please refer to <a href="https://satijalab.org/seurat/articles/cell_cycle_vignette.html" class="uri">https://satijalab.org/seurat/articles/cell_cycle_vignette.html</a></p>
 </div>
 </div>
-<p>To regress out the effect mitochondrial percentage, add the argument <code>vars.to.regress = "percent.mt"</code> to the <code>ScaleData</code>.</p>
-<div class="cell" data-hash="03_normalization_cache/html/unnamed-chunk-8_3d95bc0e0a94df736b1bb3e966d840ad">
+<p>To regress out the effect of mitochondrial percentage, add the argument <code>vars.to.regress = "percent.mt"</code> to the <code>ScaleData</code>.</p>
+<div class="cell" data-hash="03_normalization_cache/html/unnamed-chunk-8_819ff283fcbdd38eda0905c9ddb22cbe">
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Scale the data</span></span>
 <span><span class="va">filtered.rna</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/ScaleData.html">ScaleData</a></span><span class="op">(</span><span class="va">filtered.rna</span>, </span>
-<span>                                features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html">rownames</a></span><span class="op">(</span><span class="va">filtered.rna</span><span class="op">)</span>, </span>
-<span>                                vars.to.regress <span class="op">=</span> <span class="st">"percent.mt"</span><span class="op">)</span></span>
+<span>                          features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html">rownames</a></span><span class="op">(</span><span class="va">filtered.rna</span><span class="op">)</span>, </span>
+<span>                          vars.to.regress <span class="op">=</span> <span class="st">"percent.mt"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># perform PCA</span></span>
+<span><span class="co"># Recalculate PCA</span></span>
 <span><span class="va">filtered.rna</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/RunPCA.html">RunPCA</a></span><span class="op">(</span><span class="va">filtered.rna</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="save" class="level1"><h1>3. Save</h1>

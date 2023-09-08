@@ -217,7 +217,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><a href="#ncount_rna-umi-counts-per-cell" id="toc-ncount_rna-umi-counts-per-cell" class="nav-link" data-scroll-target="#ncount_rna-umi-counts-per-cell">3.1 <code>nCount_RNA</code> UMI counts per cell</a></li>
   <li><a href="#nfeature_rna-gene-counts-per-cell" id="toc-nfeature_rna-gene-counts-per-cell" class="nav-link" data-scroll-target="#nfeature_rna-gene-counts-per-cell">3.2 <code>nFeature_RNA</code> Gene counts per cell</a></li>
   <li><a href="#percent.mt-mitochondrial-percentage-per-cell" id="toc-percent.mt-mitochondrial-percentage-per-cell" class="nav-link" data-scroll-target="#percent.mt-mitochondrial-percentage-per-cell">3.3 <code>percent.mt</code> Mitochondrial percentage per cell</a></li>
-  <li><a href="#combine-metrics-to-come-up-filtering-threshold" id="toc-combine-metrics-to-come-up-filtering-threshold" class="nav-link" data-scroll-target="#combine-metrics-to-come-up-filtering-threshold">3.4 Combine metrics to come up filtering threshold</a></li>
+  <li><a href="#combine-metrics-to-come-up-the-filtering-threshold" id="toc-combine-metrics-to-come-up-the-filtering-threshold" class="nav-link" data-scroll-target="#combine-metrics-to-come-up-the-filtering-threshold">3.4 Combine metrics to come up the filtering threshold</a></li>
   </ul>
 </li>
   <li>
@@ -228,7 +228,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul>
 </li>
   <li><a href="#re-assess-metrics" id="toc-re-assess-metrics" class="nav-link" data-scroll-target="#re-assess-metrics">5. Re-assess metrics</a></li>
-  <li><a href="#save" id="toc-save" class="nav-link" data-scroll-target="#save">5. Save</a></li>
+  <li><a href="#save" id="toc-save" class="nav-link" data-scroll-target="#save">6. Save</a></li>
   </ul></nav>
     </div>
 <!-- main -->
@@ -256,7 +256,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">ExperimentHub</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="load-rdata" class="level1"><h1>Load RData</h1>
-<p>Load the RData which contain all files from previous chapter.</p>
+<p>Load the RData which contains all files from previous chapter.</p>
 <div class="cell" data-hash="02_quality_control_cache/html/unnamed-chunk-2_153dbc3b96f673d82cdd9ab008bc011c">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/intermediate_data/chapter1.RData"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -298,8 +298,8 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The targeted assay profiles a subset of genes, which are usually the genes of interest. Mitochondrial genes are often not included in the gene panel of targeted assay.</p>
-<p>So, the quality control of targeted assays will not look at mitochondrial percentage, but look at <code>nCount_RNA</code> and <code>nFeature_RNA</code>.</p>
+<p>The targeted assay profiles a subset of genes, which are usually the genes of interest. Mitochondrial genes are often not included in the gene panel of the targeted assay.</p>
+<p>So, the quality control of targeted assays will not look at mitochondrial percentage, and focus on <code>nCount_RNA</code> and <code>nFeature_RNA</code> only.</p>
 </div>
 </div>
 </section><section id="calculate-mitochondrial-percentage-per-cell" class="level1"><h1>2. Calculate mitochondrial percentage per cell</h1>
@@ -317,11 +317,11 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The mitochondrial genes typically include “MT” in their gene symbol. However, the pattern could be different, MT. or MT- or mt-. You may need to adjust the pattern to correctly calculate the percentage.</p>
+<p>The mitochondrial genes typically include “MT” in their gene symbol. However, the pattern could be different, such as MT. or MT- or mt-. You may need to adjust the pattern to correctly calculate the percentage.</p>
 </div>
 </div>
 <p>The <code>PercentageFeatureSet</code> takes in a <code>pattern</code> argument and searches through all feature names in the dataset for that pattern.</p>
-<p>Since we are looking for mitochondrial genes, we are searching for any gene names that begin with the pattern <code>^MT.</code>. For each cell, the function takes the sum of counts across all genes belonging to “^MT.”, and then divides it by the total counts for all genes. The result is stored in the <code>percent.mt</code> of <code>meta.data</code> .</p>
+<p>Since we are looking for mitochondrial genes, we are searching for any gene names that begin with the pattern <code>^MT.</code>. For each cell, the function takes the sum of counts across all genes belonging to <code>^MT.</code>, and then divides it by the total counts for all genes. The result is stored in the <code>percent.mt</code> of <code>meta.data</code> .</p>
 <div class="cell" data-hash="02_quality_control_cache/html/unnamed-chunk-5_7e795d42ee827908d94c3ac32badea7e">
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rna</span><span class="op">@</span><span class="va">meta.data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="va">head</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -383,7 +383,7 @@ Tip
 <p><img src="02_quality_control_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-</section><section id="combine-metrics-to-come-up-filtering-threshold" class="level2"><h2 class="anchored" data-anchor-id="combine-metrics-to-come-up-filtering-threshold">3.4 Combine metrics to come up filtering threshold</h2>
+</section><section id="combine-metrics-to-come-up-the-filtering-threshold" class="level2"><h2 class="anchored" data-anchor-id="combine-metrics-to-come-up-the-filtering-threshold">3.4 Combine metrics to come up the filtering threshold</h2>
 <p>We can combine the metrics to decide the filtering threshold.</p>
 <div class="cell" data-hash="02_quality_control_cache/html/unnamed-chunk-9_17e8d76b53c10421a3c41345cd9937b3">
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rna</span><span class="op">@</span><span class="va">meta.data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
@@ -403,9 +403,9 @@ Tip
 </div>
 </div>
 <p>The data is fitted with a linear regression line. We expect when UMI counts increase, gene counts also increase.</p>
-<p>Upper right quadrant: Cells with high number of genes and UMI counts. We generally consider these cells to be good-quality cells.</p>
-<p>Bottom right quadrant: Cells with low number of genes and UMI counts. We generally consider these cells are low-quality cells.</p>
-<p>Darker cells: Cells with high mitochondrial percentage. Many of these cells have low gene counts. This could indicate damaged/dying cells whose cytoplasmic mRNA leaked out through a broken membrane, so only mRNA located in the mitochondria is still conserved.</p>
+<p>Upper right quadrant: Cells with high gene counts and UMI counts. We generally consider these cells to be good-quality cells.</p>
+<p>Bottom right quadrant: Cells with low gene counts and UMI counts. We generally consider these cells are low-quality cells.</p>
+<p>Darker cells: Cells with high mitochondrial percentage. Many of these cells have low gene counts at the same time. This may indicate damaged/dying cells whose cytoplasmic mRNA leaks out through a broken membrane, so only mRNA located in the mitochondria is still conserved.</p>
 </section></section><section id="filter" class="level1"><h1>4. Filter</h1>
 <section id="filter-on-cells" class="level2"><h2 class="anchored" data-anchor-id="filter-on-cells">4.1 Filter on cells</h2>
 <p>Based on the quality metrics, we use the following thresholds to filter out low quality cells:</p>
@@ -420,17 +420,32 @@ Tip
 <span>                         <span class="op">(</span><span class="va">nFeature_RNA</span> <span class="op">&lt;=</span> <span class="fl">5000</span><span class="op">)</span> <span class="op">&amp;</span></span>
 <span>                         <span class="op">(</span><span class="va">percent.mt</span> <span class="op">&lt;</span> <span class="fl">25</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The filtering thresholds should be decided based on assessing the quality metrics. They may change depending on the sample types, sequencing depth and other factors.</p>
+</div>
+</div>
 </section><section id="filter-on-genes" class="level2"><h2 class="anchored" data-anchor-id="filter-on-genes">4.2 Filter on genes</h2>
-<p>Some of the genes have zero counts or are only expressed in a handful of cells. These genes don’t bring much information, and they reduce the average expression of a cell.</p>
+<p>After filtering on cells, some genes may have zero counts or are only expressed in few cells. These genes do not bring much information, and they reduce the average expression of a cell.</p>
 <p>We keep only genes that are expressed in <strong>five or more cells</strong>. <code>GetAssayData</code> is a convenient command to get information from the Seurat object. We use <code>GetAssayData</code> to extract the UMI counts.</p>
-<div class="cell" data-hash="02_quality_control_cache/html/unnamed-chunk-11_687d07f5a766fab380db170be81888a9">
+<div class="cell" data-hash="02_quality_control_cache/html/unnamed-chunk-11_98a8625437a739bfe6b36b8f8b2c72c1">
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Extract counts</span></span>
 <span><span class="va">counts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/AssayData.html">GetAssayData</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">filtered.rna</span>, slot <span class="op">=</span> <span class="st">"counts"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Output a logical matrix specifying for each gene whether or not there are more than zero counts per cell</span></span>
+<span><span class="co"># Output a logical matrix specifying for each gene whether or not </span></span>
+<span><span class="co"># there are more than zero counts per cell</span></span>
 <span><span class="va">nonzero</span> <span class="op">&lt;-</span> <span class="va">counts</span> <span class="op">&gt;</span> <span class="fl">0</span></span>
 <span></span>
-<span><span class="co"># Sum all TRUE values and return TRUE if equal or more than 5 TRUE values per gene</span></span>
+<span><span class="co"># Sum all TRUE values and return TRUE </span></span>
+<span><span class="co"># if equal or more than 5 TRUE values per gene</span></span>
 <span><span class="va">keep_genes</span> <span class="op">&lt;-</span> <span class="fu">Matrix</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/colSums.html">rowSums</a></span><span class="op">(</span><span class="va">nonzero</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="fl">5</span></span>
 <span></span>
 <span><span class="co"># Only keep those genes</span></span>
@@ -450,6 +465,19 @@ Tip
 </div>
 <div class="callout-body-container callout-body">
 <p>Targeted assay contains genes expressing in the profiling cells, so “Filter on genes” is usually not performed on targeted assays.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In this example, we keep only genes that are expressed in five or more cells. One may need to adjust the threshold.</p>
 </div>
 </div>
 </section></section><section id="re-assess-metrics" class="level1"><h1>5. Re-assess metrics</h1>
@@ -504,7 +532,7 @@ Tip
 <p><img src="02_quality_control_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>Cells that are considered in low quality in the bottom right quadrant are removed. We can also compare the cell number before and after filtering. The majority of cells are kept.</p>
+<p>Cells that are considered of low quality in the bottom right quadrant are removed. We can also compare the cell number before and after filtering. The majority of cells are kept after filtering.</p>
 <p>Before filtering:</p>
 <div class="cell" data-hash="02_quality_control_cache/html/unnamed-chunk-16_92a45e45cdc1a98b053899fbe9d81fda">
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rna</span><span class="op">@</span><span class="va">meta.data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
@@ -531,8 +559,8 @@ Tip
 2 treated            2310</code></pre>
 </div>
 </div>
-</section><section id="save" class="level1"><h1>5. Save</h1>
-<p>Save the files into RData for documentation. We do not need all files to continue the workshop, so we use <code>save</code> to save part of the files in RData.</p>
+</section><section id="save" class="level1"><h1>6. Save</h1>
+<p>Save the files into RData for documentation. We do not need all files to continue the course, so we use <code>save</code> to save part of the files in RData.</p>
 <div class="cell" data-hash="02_quality_control_cache/html/unnamed-chunk-18_c5fe76e91e6fda469508aaccd8d1f4ac">
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># save(filtered.rna, expMat, file = "data/intermediate_data/chapter2.RData")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>

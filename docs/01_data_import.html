@@ -95,7 +95,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_data_import.html">Chapter 1 Data Import</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./02_quality_control.html">Chapter 2 Quality Control</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -211,7 +211,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><a href="#demo-data" id="toc-demo-data" class="nav-link active" data-scroll-target="#demo-data">Demo data</a></li>
   <li><a href="#data-import" id="toc-data-import" class="nav-link" data-scroll-target="#data-import">1. Data import</a></li>
   <li><a href="#create-a-seurat-object-to-store-gene-expression" id="toc-create-a-seurat-object-to-store-gene-expression" class="nav-link" data-scroll-target="#create-a-seurat-object-to-store-gene-expression">2. Create a Seurat object to store Gene Expression</a></li>
-  <li><a href="#add-cell-assignment-into-meta.data" id="toc-add-cell-assignment-into-meta.data" class="nav-link" data-scroll-target="#add-cell-assignment-into-meta.data">3. Add cell assignment into <code>meta.data</code></a></li>
+  <li><a href="#add-sample-multiplexing-kit-into-meta.data" id="toc-add-sample-multiplexing-kit-into-meta.data" class="nav-link" data-scroll-target="#add-sample-multiplexing-kit-into-meta.data">3. Add sample multiplexing kit into <code>meta.data</code></a></li>
   <li><a href="#remove-multiplet-and-undetermined" id="toc-remove-multiplet-and-undetermined" class="nav-link" data-scroll-target="#remove-multiplet-and-undetermined">4. Remove Multiplet and Undetermined</a></li>
   <li><a href="#save" id="toc-save" class="nav-link" data-scroll-target="#save">5. Save</a></li>
   </ul></nav>
@@ -283,8 +283,8 @@ Note
 <p>A window will pop up and you should be able to see the structure of <code>expMat</code>.</p>
 <p><img src="pics/1-2-expMat.png" class="img-fluid"></p>
 <p><code>expMat</code> contains two matrices: <strong>Gene Expression</strong> and <strong>Antibody Capture</strong>. You may recall that the demo dataset has two assays: WTA, whole transcriptome analysis, to capture <strong>Gene Expression</strong>; and AbSeq for <strong>Antibody Capture</strong>.</p>
-<p>We will first focus on <strong>Gene Expression, the scRNA-seq</strong>.</p>
-<p>Take a look on the first 5 row x first 5 column of <strong>Gene Expression</strong> matrix. It is organized as feature x cell.</p>
+<p>We will first focus on <strong>Gene Expression</strong>.</p>
+<p>Take a look at the first 5 rows X first 5 columns of <strong>Gene Expression</strong> matrix. It is organized as <strong>feature X cell</strong>. The <strong>row names</strong> are <strong>gene names</strong>. The <strong>column names</strong> are <strong>cell labels</strong>.</p>
 <div class="cell" data-hash="01_data_import_cache/html/unnamed-chunk-3_effd23606f9076dd8dd10e33363f6baa">
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">expMat</span><span class="op">$</span><span class="va">`Gene Expression`</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -323,24 +323,24 @@ Answer
 <div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>The “.” corresponds to 0.</p>
-<p>scRNA-seq usually contains many zeros. The zeros can come from</p>
+<p>scRNA-seq usually contains many zeros. The zeros can come from:</p>
 <ul>
-<li><p>Stochastic gene expression</p></li>
-<li><p>Limitation of single cell technology: On average, 5-8% of mRNA transcripts can be captured by the machine.</p></li>
+<li><p>Stochastic gene expression.</p></li>
+<li><p>Limitation of single cell technology: On average, 5 - 8% of mRNA transcripts can be captured by the technology.</p></li>
 </ul>
 </div>
 </div>
 </div>
 </section><section id="create-a-seurat-object-to-store-gene-expression" class="level1"><h1>2. Create a Seurat object to store Gene Expression</h1>
-<p>Let’s create a Seurat object to store Gene Expression.</p>
+<p>Let’s create a Seurat object to store Gene Expression and assign “rna” as the object name.</p>
 <div class="cell" data-hash="01_data_import_cache/html/unnamed-chunk-4_43440ab02bd861b0fa120a2b23155365">
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rna</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/CreateSeuratObject.html">CreateSeuratObject</a></span><span class="op">(</span>counts <span class="op">=</span> <span class="va">expMat</span><span class="op">$</span><span class="va">`Gene Expression`</span>, </span>
 <span>                                min.cells <span class="op">=</span> <span class="fl">1</span>, </span>
 <span>                                min.features <span class="op">=</span> <span class="fl">100</span>, </span>
 <span>                                assay <span class="op">=</span> <span class="st">"RNA"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><code>min.cells</code> Specify the minimum number of cells that need to be detected per feature. Setting this argument will filter out zero or lowly expressed features.</p>
-<p><code>min.features</code> Specify the minimum number of features that need to be detected per cell. Setting this argument will filter out cell indexes with random counts but without any cell present.</p>
+<p><code>min.cells</code> Specify the minimum number of cells that needs to be detected per feature. Setting this argument will filter out zero or lowly expressed features.</p>
+<p><code>min.features</code> Specify the minimum number of features that need to be detected per cell. Setting this argument will filter out cell labels with low feature counts.</p>
 <p><code>assay</code> Specify the name of the created assay. By default, it is “RNA”.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -348,7 +348,7 @@ Answer
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Question
+Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -370,19 +370,21 @@ Question
 </div>
 </div>
 <p><code>meta.data</code> stores information related to each cell. We will add more information into the <code>meta.data</code> later. For now, it contains three columns:</p>
-<p><code>orig.ident</code> Sample identity or sample name. By default, it is <code>SeuratProject</code>.</p>
-<p><code>nCount_RNA</code> UMI counts per gene per cell.</p>
-<p><code>nFeature_RNA</code> Genes counts per cell.</p>
-</section><section id="add-cell-assignment-into-meta.data" class="level1"><h1>3. Add cell assignment into <code>meta.data</code>
+<ul>
+<li><p><code>orig.ident</code> Sample identity or sample name. By default, it is “SeuratProject”.</p></li>
+<li><p><code>nCount_RNA</code> UMI counts per gene per cell.</p></li>
+<li><p><code>nFeature_RNA</code> Genes counts per cell.</p></li>
+</ul></section><section id="add-sample-multiplexing-kit-into-meta.data" class="level1"><h1>3. Add sample multiplexing kit into <code>meta.data</code>
 </h1>
-<p>The demo dataset has <strong>Sample Multiplexing Kit (SMK)</strong> to pool two samples in one cartridge.</p>
-<p>To demultiplex the samples, we need to use Demo-WTA-AbSeq-SMK_Sample_Tag_Calls.csv.</p>
+<p>The demo dataset has <strong>Sample Multiplexing Kit (SMK)</strong> to pool two samples on one cartridge.</p>
+<p>To demultiplex the samples, one can use the table “Demo-WTA-AbSeq-SMK_Sample_Tag_Calls.csv”.</p>
 <div class="cell" data-hash="01_data_import_cache/html/unnamed-chunk-6_63c549bb01a7f6571f5ad9df5cb779ee">
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">smk</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fread.html">fread</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"data/raw_data/WTA-AB-SMK-v2-0_Sample_Tag_Calls.csv"</span>, </span>
 <span>                     sep <span class="op">=</span> <span class="st">","</span>, </span>
 <span>                     header<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>row.names <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>Let’s look at the first 5 rows of the created object <code>smk</code>.</p>
 <div class="cell" data-hash="01_data_import_cache/html/unnamed-chunk-7_5f598dae7940d3e17d31a5d815af10d5">
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">smk</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="op">]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -395,9 +397,11 @@ Question
 </div>
 </div>
 <p><code>smk</code> is a matrix with two columns. The row names are the cell labels.</p>
-<p><code>Sample_Tag</code>: Which tag the cell belongs to.</p>
-<p><code>Sample_Name</code>: Which sample the cell belongs to.</p>
-<p>We can add the cell assignment into the <code>meta.data</code> of Seurat object by <code>AddMetaData</code>.</p>
+<ul>
+<li><p><code>Sample_Tag</code>: Which tag the cell belongs to.</p></li>
+<li><p><code>Sample_Name</code>: Which sample the cell belongs to.</p></li>
+</ul>
+<p>We can add the cell assignment into the <code>meta.data</code> of the Seurat object by <code>AddMetaData</code>.</p>
 <div class="cell" data-hash="01_data_import_cache/html/unnamed-chunk-8_b83114bb43c4a44ce3d47afba890b01d">
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rna</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/AddMetaData.html">AddMetaData</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">rna</span>, metadata <span class="op">=</span> <span class="va">smk</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>

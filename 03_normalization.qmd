@@ -17,7 +17,7 @@ library(ExperimentHub)
 
 # Load RData
 
-Load the RData which contain all files from previous chapter.
+Load the RData which contains all files from previous chapter.
 
 ```{r}
 load("data/intermediate_data/chapter2.RData")
@@ -52,13 +52,13 @@ filtered.rna@assays[["RNA"]]@data[1:5, 1:5]
 ```
 :::
 
-# 2. Evaluating effects of mitochondrial percentage
+# 2. Evaluating effects of mitochondrial percentage (optional)
 
-The unwanted variation, such as the difference in mitochondrial percentage, could affect the downstream analysis.
+The unwanted variation, such as the difference in mitochondrial percentage, could bias the downstream analysis.
 
 For example, we don't want the cells clustered based on the difference in mitochondrial percentage.
 
-Let's first look at if the mitochondrial percentage introduces unwanted variation. We take the normalized counts and see if we have unwanted variation from the mitochondrial percentage.
+Let's first has a look if the mitochondrial percentage introduces unwanted variation in the dataset or not. We take the normalized counts and follow the below steps to check.
 
 1.  The mitochondrial percentage is a series of numbers. We can turn the mitochondrial percentage variable into a categorical variable based on quartiles.
 
@@ -66,15 +66,17 @@ Let's first look at if the mitochondrial percentage introduces unwanted variatio
 summary(filtered.rna$percent.mt)
 ```
 
-Below 1st quartile: Low.
+The cells can be grouped into 4 categories.
 
-Between 1st and Median: Median.
+MT% \< 1st quartile: Low.
 
-Between Median and 3rd quartile: Median high.
+MT% between 1st quartile and Median: Median.
 
-beyond 3rd quartile (15.4158%): High.
+MT% between Median and 3rd quartile: Median high.
 
-Next, we create a new variable based on the cutoff.
+MT% \> 3rd quartile (15.4158%): High.
+
+Next, we create a new variable based on the thretholds.
 
 ```{r}
 filtered.rna$quartile.mt <- cut(filtered.rna$percent.mt, 
@@ -82,17 +84,18 @@ filtered.rna$quartile.mt <- cut(filtered.rna$percent.mt,
                                 labels=c("Low","Medium","Medium high", "High"))
 ```
 
-We want to check whether the mitochondrial percentage is a source of variation using PCA. We plot the first two principal components to visualize the data.
+We use PCA to check whether the mitochondrial percentage is a source of variation. We plot the first two principal components and visualize the data.
 
 ```{r}
 # Identify the most variable genes
 filtered.rna <- FindVariableFeatures(filtered.rna,
-                                           selection.method = "vst",
-                                           nfeatures = 2000, 
-                                           verbose = FALSE)
+                                     selection.method = "vst",
+                                     nfeatures = 2000, 
+                                     verbose = FALSE)
 		     
 # Scale the data
-filtered.rna <- ScaleData(filtered.rna, features = rownames(filtered.rna))
+filtered.rna <- ScaleData(filtered.rna, 
+                          features = rownames(filtered.rna))
 
 # perform PCA
 filtered.rna <- RunPCA(filtered.rna)
@@ -106,25 +109,25 @@ DimPlot(filtered.rna,
 
 Based on the above plot, we can see a different scatter pattern in cells with "Low" mitochondrial percentage.
 
-We observe that the lobe of cells in the left middle side of the plot is in the category "Low". For all other levels of mitochondrial percentage, we see a more even distribution of cells across the PCA plot.
+We observe that the lobe of cells on the right middle side of the plot is only in the category "Low". For all other levels of mitochondrial percentage, we see a more even distribution of cells across the PCA plot.
 
 ::: callout-tip
-Oftentimes, it is helpful to regress out variation due to mitochondrial percentage. However, if the differences in mitochondrial gene expression represent a biological phenomenon that might help to distinguish cell clusters, then we do not regress it out.
+Oftentimes, it is helpful to regress out variation due to mitochondrial percentage. However, if the differences in mitochondrial percentation has the biological meaning that might help to distinguish cell clusters, then we do not regress it out.
 :::
 
 ::: callout-tip
-Cell cycle is another common variation. For instructions, please refer to <https://satijalab.org/seurat/articles/cell_cycle_vignette.html>
+Cell cycle is another common source of bias. For instructions on how to remove cell cycle bias, please refer to <https://satijalab.org/seurat/articles/cell_cycle_vignette.html>
 :::
 
-To regress out the effect mitochondrial percentage, add the argument `vars.to.regress = "percent.mt"` to the `ScaleData`.
+To regress out the effect of mitochondrial percentage, add the argument `vars.to.regress = "percent.mt"` to the `ScaleData`.
 
 ```{r}
 # Scale the data
 filtered.rna <- ScaleData(filtered.rna, 
-                                features = rownames(filtered.rna), 
-                                vars.to.regress = "percent.mt")
+                          features = rownames(filtered.rna), 
+                          vars.to.regress = "percent.mt")
 
-# perform PCA
+# Recalculate PCA
 filtered.rna <- RunPCA(filtered.rna)
 ```
 

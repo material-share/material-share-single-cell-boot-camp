@@ -18,7 +18,7 @@ library(muscat)
 
 # Load RData
 
-Load the RData which contain all files from previous chapter.
+Load the RData which contains all files from the previous chapter.
 
 ```{r}
 load("data/intermediate_data/chapter6.RData")
@@ -49,13 +49,13 @@ We can compare the gene expression between two groups by specifying `ident.1` an
 head(treated_naive)
 ```
 
-`gene` Gene symbol.
+-   `gene` Gene symbol.
 
-`p_val` p-value without multiple testing.
+-   `p_val` P-value without multiple testing.
 
-`avg_log2FC` log2 fold-change of the average expression between the two groups.
+-   `avg_log2FC` log2 fold-change of the average expression between the two groups.
 
-We can also find genes deferentially expressed in CD4 T cells between the two samples. We start by subsetting the cells being annotated as "CD4 T".
+We can also find genes deferentially expressed in CD4 T cells between the two samples. We start by subsetting the cells annotated as "CD4 T".
 
 ```{r}
 # subset CD4 T cells
@@ -63,25 +63,28 @@ cd4t <- subset(integrate.filtered.rna, subset = predicted.celltype.l1 == "CD4 T"
 
 # Find genes differentially expressed between activated vs. naive samples in CD4 T cells
 treated_naive_cd4t <- 
-  FindMarkers(cd4t, ident.1 = "treated", ident.2 = "naive", assay = "RNA", recorrect_umi = FALSE) %>% 
+  FindMarkers(cd4t, ident.1 = "treated", ident.2 = "naive", 
+              assay = "RNA", recorrect_umi = FALSE) %>% 
   rownames_to_column("gene") %>% 
   dplyr::filter(p_val_adj < 0.05)
 ```
 
-# 2. Muscat for Differential State analysis (DS)
+# 2. `muscat` for Differential State analysis (DS)
 
-Pseudo-bulk aggregation transforms scRNA-seq data into bulk-like data by aggregating gene counts within each cell type and subject. We use the package `Muscat` (Multi-sample multi-group scRNA-seq data analysis tools) to perform pseudo-bulk analysis.
+Pseudo-bulk aggregation transforms scRNA-seq data into bulk-like data by aggregating gene counts within each cell type and subject. We use the package `muscat` (Multi-sample multi-group scRNA-seq data analysis tools) to perform pseudo-bulk analysis.
 
 ## 2.1 Setup
 
-Let's assume we have three biological replicates in each condition (we made them up for illustration).
+Let's assume we have three biological replicates in each condition (we make them up for the purpose of illustration).
 
 ```{r}
 # read in dummy group
 dummy <- read_csv("data/dummy.csv")
 
 # add the dummy meta into the seurat object
-integrate.filtered.rna <- AddMetaData(integrate.filtered.rna, dummy$dummy_group, col.name = "dummy_group")
+integrate.filtered.rna <- AddMetaData(integrate.filtered.rna, 
+                                      dummy$dummy_group, 
+                                      col.name = "dummy_group")
 ```
 
 ## 2.2 Select cell groups
@@ -111,7 +114,7 @@ FetchData(integrate.filtered.rna,
   tidyr::spread(predicted.celltype.l1, n)
 ```
 
-Dendritic cells, other T cells, and other don't have sufficient cells per dummy group. For demonstration, we will not include these cells for pseudo-bulk analysis. We will focus on "CD4 T", "Mono", and "NK".
+Dendritic cells, other T cells, and the group of other don't have sufficient cells per dummy group. For demonstration, we will not include these cell types for pseudo-bulk analysis. We will focus on "CD4 T", "Mono", and "NK".
 
 ```{r}
 subset.rna <- subset(integrate.filtered.rna, 
@@ -174,10 +177,10 @@ Next, we can run DS analysis by specifying `method` as `DESeq2`.
 
 ```{r}
 # change group_id into a factor
-subset.pb$group_id <- subset.pb$group_id %>% as.factor()
+subset.pb$group_id <- subset.pb$group_id %>% factor(levels = c("treated", "naive"))
 
 # run DS analysis with DESeq2
-res <- pbDS(subset.pb, method = "DESeq2", verbose = T)
+res <- pbDS(subset.pb, method = "DESeq2", verbose = F)
 ```
 
 The result is stored in the `table` slot of `res`.
@@ -185,14 +188,18 @@ The result is stored in the `table` slot of `res`.
 We will focus on the deferentially expressed genes in CD4 T cells.
 
 ```{r}
-cd4t <- res$table$treated$`CD4 T`
+cd4t <- res$table$naive$`CD4 T`
 
 # Filter the results with p_adj.loc < 0.05, abs(logFC) > 1
 cd4t.sig <- dplyr::filter(cd4t, p_adj.loc < 0.05, abs(logFC) > 1) %>% 
   arrange(p_adj.loc)
+
+head(cd4t.sig)
 ```
 
-`p_adj.loc` is produced by correcting for multiple testing across all genes tested within a cluster. `p_adj.glb` is produced by correcting for multiple testing across all genes tested in all clusters.
+-   `p_adj.loc` is produced by correcting for multiple testing across all genes tested within a cluster.
+
+-   `p_adj.glb` is produced by correcting for multiple testing across all genes tested in all clusters.
 
 We can plot the DEGs from CD4+ T cells in a heatmap.
 
