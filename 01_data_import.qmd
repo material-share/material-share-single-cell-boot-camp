@@ -52,9 +52,9 @@ A window will pop up and you should be able to see the structure of `expMat`.
 
 `expMat` contains two matrices: **Gene Expression** and **Antibody Capture**. You may recall that the demo dataset has two assays: WTA, whole transcriptome analysis, to capture **Gene Expression**; and AbSeq for **Antibody Capture**.
 
-We will first focus on **Gene Expression, the scRNA-seq**.
+We will first focus on **Gene Expression**.
 
-Take a look on the first 5 row x first 5 column of **Gene Expression** matrix. It is organized as feature x cell.
+Take a look at the first 5 rows X first 5 columns of **Gene Expression** matrix. It is organized as **feature X cell**. The **row names** are **gene names**. The **column names** are **cell labels**.
 
 ```{r}
 expMat$`Gene Expression`[1:5, 1:5]
@@ -71,16 +71,16 @@ What are the dots "." in the matrix?
 
 The "." corresponds to 0.
 
-scRNA-seq usually contains many zeros. The zeros can come from
+scRNA-seq usually contains many zeros. The zeros can come from:
 
--   Stochastic gene expression
+-   Stochastic gene expression.
 
--   Limitation of single cell technology: On average, 5-8% of mRNA transcripts can be captured by the machine.
+-   Limitation of single cell technology: On average, 5 - 8% of mRNA transcripts can be captured by the technology.
 :::
 
 # 2. Create a Seurat object to store Gene Expression
 
-Let's create a Seurat object to store Gene Expression.
+Let's create a Seurat object to store Gene Expression and assign "rna" as the object name.
 
 ```{r}
 rna <- CreateSeuratObject(counts = expMat$`Gene Expression`, 
@@ -89,15 +89,13 @@ rna <- CreateSeuratObject(counts = expMat$`Gene Expression`,
                                 assay = "RNA")
 ```
 
-`min.cells` Specify the minimum number of cells that need to be detected per feature. Setting this argument will filter out zero or lowly expressed features.
+`min.cells` Specify the minimum number of cells that needs to be detected per feature. Setting this argument will filter out zero or lowly expressed features.
 
-`min.features` Specify the minimum number of features that need to be detected per cell. Setting this argument will filter out cell indexes with random counts but without any cell present.
+`min.features` Specify the minimum number of features that need to be detected per cell. Setting this argument will filter out cell labels with low feature counts.
 
 `assay` Specify the name of the created assay. By default, it is "RNA".
 
 ::: callout-note
-## Question
-
 `CreateSeuratObject` has many arguments in the function. These arguments allow users to control the behavior of the function. One can look at the Help tab to see the arguments and their default settings.
 
 ![](pics/1-3-helpDesk.png)
@@ -111,17 +109,17 @@ rna@meta.data %>% head
 
 `meta.data` stores information related to each cell. We will add more information into the `meta.data` later. For now, it contains three columns:
 
-`orig.ident` Sample identity or sample name. By default, it is `SeuratProject`.
+-   `orig.ident` Sample identity or sample name. By default, it is "SeuratProject".
 
-`nCount_RNA` UMI counts per gene per cell.
+-   `nCount_RNA` UMI counts per gene per cell.
 
-`nFeature_RNA` Genes counts per cell.
+-   `nFeature_RNA` Genes counts per cell.
 
-# 3. Add cell assignment into `meta.data`
+# 3. Add sample multiplexing kit into `meta.data`
 
-The demo dataset has **Sample Multiplexing Kit (SMK)** to pool two samples in one cartridge.
+The demo dataset has **Sample Multiplexing Kit (SMK)** to pool two samples on one cartridge.
 
-To demultiplex the samples, we need to use Demo-WTA-AbSeq-SMK_Sample_Tag_Calls.csv.
+To demultiplex the samples, one can use the table "Demo-WTA-AbSeq-SMK_Sample_Tag_Calls.csv".
 
 ```{r}
 smk <- fread(file = "data/raw_data/WTA-AB-SMK-v2-0_Sample_Tag_Calls.csv", 
@@ -131,17 +129,19 @@ smk <- fread(file = "data/raw_data/WTA-AB-SMK-v2-0_Sample_Tag_Calls.csv",
 
 ```
 
+Let's look at the first 5 rows of the created object `smk`.
+
 ```{r}
 smk[1:5, ]
 ```
 
 `smk` is a matrix with two columns. The row names are the cell labels.
 
-`Sample_Tag`: Which tag the cell belongs to.
+-   `Sample_Tag`: Which tag the cell belongs to.
 
-`Sample_Name`: Which sample the cell belongs to.
+-   `Sample_Name`: Which sample the cell belongs to.
 
-We can add the cell assignment into the `meta.data` of Seurat object by `AddMetaData`.
+We can add the cell assignment into the `meta.data` of the Seurat object by `AddMetaData`.
 
 ```{r}
 rna <- AddMetaData(object = rna, metadata = smk)

@@ -211,7 +211,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><a href="#load-rdata" id="toc-load-rdata" class="nav-link active" data-scroll-target="#load-rdata">Load RData</a></li>
   <li><a href="#to-integrate-or-not-to-integrate" id="toc-to-integrate-or-not-to-integrate" class="nav-link" data-scroll-target="#to-integrate-or-not-to-integrate">1. To integrate or not to integrate?</a></li>
   <li><a href="#perform-integration" id="toc-perform-integration" class="nav-link" data-scroll-target="#perform-integration">2. Perform integration</a></li>
-  <li><a href="#visualize-in-umap" id="toc-visualize-in-umap" class="nav-link" data-scroll-target="#visualize-in-umap">3. Visualize in UMAP</a></li>
+  <li><a href="#umap-visualization" id="toc-umap-visualization" class="nav-link" data-scroll-target="#umap-visualization">3. UMAP visualization</a></li>
   <li><a href="#save" id="toc-save" class="nav-link" data-scroll-target="#save">4. Save</a></li>
   </ul></nav>
     </div>
@@ -240,13 +240,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">ExperimentHub</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="load-rdata" class="level1"><h1>Load RData</h1>
-<p>Load the RData which contain all files from previous chapter.</p>
+<p>Load the RData which contains all files from previous chapter.</p>
 <div class="cell" data-hash="04_integration_cache/html/unnamed-chunk-2_d292a6b1a12c21c02389c830ad451787">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/intermediate_data/chapter3.RData"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="to-integrate-or-not-to-integrate" class="level1"><h1>1. To integrate or not to integrate?</h1>
 <p>The goal of integration is to find corresponding cell states across conditions (or experiments). We want to identify cell types which are present in all samples/conditions/modalities within our dataset. We expect to observe a representation of cells from samples/conditions/modalities in every cluster.</p>
-<p>We first look at how cells cluster <strong>without integration</strong> to determine whether integration is necessary. Integration is considered if cells cluster separately on samples, conditions, modalities, etc.</p>
+<p>We first look at how cells cluster <strong>without integration</strong> to determine whether integration is necessary. Integration is considered if cells cluster separately on samples/conditions/modalities, etc.</p>
 <div class="cell" data-hash="04_integration_cache/html/unnamed-chunk-3_8e027df76f81fb2f5edd59b38e02174e">
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Run the standard workflow for visualization</span></span>
 <span><span class="va">filtered.rna</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/RunUMAP.html">RunUMAP</a></span><span class="op">(</span><span class="va">filtered.rna</span>, dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">15</span><span class="op">)</span></span>
@@ -266,7 +266,7 @@ Question
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Judging on the UMAP, do the two samples need to be integrated?</p>
+<p>Judging by the UMAP, do the two samples need to be integrated?</p>
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -281,14 +281,14 @@ Answer
 </div>
 <div id="callout-2" class="callout-2-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
-<p>The same cell types from the two samples are not aligned. We can perform integration.</p>
+<p>The same cell types from the two samples are not aligned. One may consider to perform integration.</p>
 </div>
 </div>
 </div>
 </section><section id="perform-integration" class="level1"><h1>2. Perform integration</h1>
-<p>First, we select the features for the integration. The features should be selected in each dataset.</p>
-<div class="cell" data-hash="04_integration_cache/html/unnamed-chunk-4_ee886f70836ce5b668410f539e2a5b03">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># split the dataset into a list of two seurat objects (activated and naive)</span></span>
+<p>First, we select the variable features. The features should be selected in each dataset.</p>
+<div class="cell" data-hash="04_integration_cache/html/unnamed-chunk-4_bb60157bb7fb8e79a5220462b007f3e4">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># split the dataset into a list of two seurat objects (treated and naive)</span></span>
 <span><span class="va">split.filtered.rna</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/SplitObject.html">SplitObject</a></span><span class="op">(</span><span class="va">filtered.rna</span>, split.by <span class="op">=</span> <span class="st">"Sample_Name"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># normalize and identify variable features for each dataset independently</span></span>
@@ -310,28 +310,29 @@ Answer
 <div class="cell" data-hash="04_integration_cache/html/unnamed-chunk-6_a21cef78f94fee13ccff051f1a008e6a">
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">integrate.filtered.rna</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/IntegrateData.html">IntegrateData</a></span><span class="op">(</span>anchorset <span class="op">=</span> <span class="va">anchors</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section><section id="visualize-in-umap" class="level1"><h1>3. Visualize in UMAP</h1>
-<p>After integration, we look at the integrated data with UMAP. To calculate UMAP, we need to first calculate PCA and select top PCs.</p>
+</section><section id="umap-visualization" class="level1"><h1>3. UMAP visualization</h1>
+<p>After integration, we look at the integrated data on UMAP. To calculate UMAP, we need to first calculate PCA and select top PCs.</p>
 <p>Methods to select top PCs were used a lot more often when the data was normalized with <code>LogNormalize</code>.</p>
 <div class="cell" data-hash="04_integration_cache/html/unnamed-chunk-7_d1e238f559966071a4b48c4b8af5d7dc">
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">integrate.filtered.rna</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/ScaleData.html">ScaleData</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">integrate.filtered.rna</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/RunPCA.html">RunPCA</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, npcs <span class="op">=</span> <span class="fl">30</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Elbow plot can help to select top PCs. The PC number where the elbow is is used to calculate UMAP.</p>
+<p>Elbow plot can help to select top PCs. The PC number, where the elbow is, is used to calculate UMAP.</p>
 <div class="cell" data-hash="04_integration_cache/html/unnamed-chunk-8_5c0ed709ec6bab032990e607fa7e5528">
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.org/seurat/reference/ElbowPlot.html">ElbowPlot</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="04_integration_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<div class="cell" data-hash="04_integration_cache/html/unnamed-chunk-9_f3808291dd9b7e78014c91ff5f24b1d2">
+<p>For this dataset, we use the first top 10 PCs. For other datasets, one may need to adjust the PCs according to the elbow plot.</p>
+<div class="cell" data-hash="04_integration_cache/html/unnamed-chunk-9_8552676f4d9ae956f02489bb0c022b35">
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">integrate.filtered.rna</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/RunUMAP.html">RunUMAP</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, </span>
-<span>                                        reduction <span class="op">=</span> <span class="st">"pca"</span>, </span>
-<span>                                        dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span>
+<span>                                  reduction <span class="op">=</span> <span class="st">"pca"</span>, </span>
+<span>                                  dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">integrate.filtered.rna</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindNeighbors.html">FindNeighbors</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, </span>
-<span>                                              reduction <span class="op">=</span> <span class="st">"pca"</span>, </span>
-<span>                                              dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span>
+<span>                                        reduction <span class="op">=</span> <span class="st">"pca"</span>, </span>
+<span>                                        dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span>
 <span></span>
 <span></span>
 <span><span class="co"># Plot UMAP                             </span></span>
@@ -351,7 +352,7 @@ Exercise 1
 </div>
 <div class="callout-body-container callout-body">
 <p>Change the number of PCs and see how the UMAP changes.</p>
-<p>You can change the PC numbers by <code>dims</code> argument in <code>RunUMAP</code>.</p>
+<p>Tips: You can change the PC numbers by <code>dims</code> argument in <code>RunUMAP</code>.</p>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -366,12 +367,12 @@ Exercise 2
 <div class="callout-body-container callout-body">
 <p><code>Dimplot</code> has many arguments to control the plots.</p>
 <ol type="1">
-<li>Search <code>Dimplot</code> in the “Help” section and read the documentation.</li>
+<li>Search <code>Dimplot</code> in the “Help” tab and read the documentation.</li>
 <li>Change <code>group.by</code> to <code>split.by</code>. What is the difference?</li>
 </ol>
 </div>
 </div>
-<p>When we compare the similarity between the naive and activated clusters in the below plot with what we see using the integrated dataset, it is clear that this dataset benefited from the integration.</p>
+<p>When we compare the similarity between the naive and treated clusters in the plots with or without integration, it is clear that this dataset benefits from the integration.</p>
 <div class="cell" data-hash="04_integration_cache/html/unnamed-chunk-10_c65b1ac4963e161332f11159b1b3610b">
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html">DimPlot</a></span><span class="op">(</span><span class="va">filtered.rna</span>, group.by <span class="op">=</span> <span class="st">"Sample_Name"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/SeuratTheme.html">NoLegend</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html">DimPlot</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, group.by <span class="op">=</span> <span class="st">"Sample_Name"</span><span class="op">)</span>  <span class="op">+</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/SeuratTheme.html">NoLegend</a></span><span class="op">(</span><span class="op">)</span></span>

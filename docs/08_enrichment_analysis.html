@@ -211,7 +211,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><a href="#load-rdata" id="toc-load-rdata" class="nav-link active" data-scroll-target="#load-rdata">Load RData</a></li>
   <li><a href="#get-entrez-id" id="toc-get-entrez-id" class="nav-link" data-scroll-target="#get-entrez-id">1. Get Entrez ID</a></li>
   <li><a href="#go-over-representation-analysis" id="toc-go-over-representation-analysis" class="nav-link" data-scroll-target="#go-over-representation-analysis">2. GO over-representation analysis</a></li>
-  <li><a href="#gsea" id="toc-gsea" class="nav-link" data-scroll-target="#gsea">3. GSEA</a></li>
+  <li><a href="#gene-set-enrichment-analysis" id="toc-gene-set-enrichment-analysis" class="nav-link" data-scroll-target="#gene-set-enrichment-analysis">3. Gene set enrichment analysis</a></li>
   <li><a href="#save" id="toc-save" class="nav-link" data-scroll-target="#save">4. Save</a></li>
   </ul></nav>
     </div>
@@ -245,15 +245,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/grimbough/biomaRt">biomaRt</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="load-rdata" class="level1"><h1>Load RData</h1>
-<p>Load the RData which contain all files from previous chapter.</p>
+<p>Load the RData which contains all files from the previous chapter.</p>
 <div class="cell" data-hash="08_enrichment_analysis_cache/html/unnamed-chunk-2_0795e94269fc78f11bc84464e6b2c17e">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/intermediate_data/chapter7.RData"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Oftentimes, enrichment analysis takes in the differentially expressed genes and looks at which gene ontology (GO) terms are enriched.</p>
-<p>GO terms defines concepts/classes used to describe gene function and relationships between these concepts. <code>clusterProfiler</code> is an R package implementing many methods to analyze and visualize functional profiles from a group of features. It classifies functions along three aspects.</p>
-<p>MF: Molecular Function: molecular activities of gene products</p>
-<p>CC: Cellular Component: where gene products are active</p>
-<p>BP: Biological Process: pathways and larger processes made up of the activities of multiple gene products</p>
+<p>Oftentimes, enrichment analysis takes the differentially expressed genes and looks at which gene ontology (GO) terms are enriched.</p>
+<p>GO terms defines concepts/classes used to describe gene function and relationships between these concepts. <code>clusterProfiler</code> is an R package implementing many methods to analyze and visualize functional profiles from a group of features. It classifies functions in three aspects.</p>
+<ul>
+<li><p>MF: <strong>M</strong>olecular <strong>F</strong>unction: molecular activities of gene products.</p></li>
+<li><p>CC: <strong>C</strong>ellular <strong>C</strong>omponent: where gene products are active.</p></li>
+<li><p>BP: <strong>B</strong>iological <strong>P</strong>rocess: pathways and larger processes made up of the activities of multiple gene products.</p></li>
+</ul>
 <p>This chapter uses the differentially expressed genes in CD4+ T cells from last chapter as an example.</p>
 </section><section id="get-entrez-id" class="level1"><h1>1. Get Entrez ID</h1>
 <p><code>clusterProfiler</code> prefers the input of Entrez ID. We use <code>biomaRt</code> package to convert the gene symbol into Entrez ID.</p>
@@ -267,29 +269,34 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><code>biomaRt</code> is handy for getting information about a group of features. You can use it to get gene symbols, genomic coordinates, transcripts, etc. You can explore what data is stored in <code>biomaRt</code> with <code>listAttributes</code>.</p>
+<p><code>biomaRt</code> is handy to get information about features. You can use it to get gene symbols, genomic coordinates, transcript sequences, etc. You can explore what data is stored in <code>biomaRt</code> with <code>listAttributes</code>.</p>
 </div>
 </div>
-<p>The differentially expressed genes in CD4+ T cells between naïve and activated PBMCs are stored in <code>cd4t</code>. The gene symbol in this list can be converted into Entrez ID by <code>biomaRt</code>.</p>
+<p>The differentially expressed genes in CD4+ T cells between naïve and treated PBMCs are stored in the matrix <code>cd4t</code>. The gene symbol in this list can be converted into Entrez ID by <code>biomaRt</code>.</p>
 <p>Firstly, connect to the Ensembl database and specify we want to retrieve information from the dataset of Homo Sapien.</p>
 <div class="cell" data-hash="08_enrichment_analysis_cache/html/unnamed-chunk-3_adb3a62d296658750c3a7f59dbd4f8d4">
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mart</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/biomaRt/man/useMart.html">useMart</a></span><span class="op">(</span>biomart <span class="op">=</span> <span class="st">"ensembl"</span>, dataset <span class="op">=</span> <span class="st">"hsapiens_gene_ensembl"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><code>biomart</code> BioMart database connect to. Here, we want to connect to <code>ensembl</code> database.</p>
-<p><code>dataset</code> Dataset to use. Here specify <code>hsapiens_gene_ensembl</code>.</p>
+<ul>
+<li><p><code>biomart</code> BioMart database connect to. Here, we want to connect to <code>ensembl</code> database.</p></li>
+<li><p><code>dataset</code> Dataset to use. Here specify <code>hsapiens_gene_ensembl</code>.</p></li>
+</ul>
 <p>Next, we can give a list of gene symbols and retrieve the Entrez ID through <code>getBM</code>.</p>
-<div class="cell" data-hash="08_enrichment_analysis_cache/html/unnamed-chunk-4_3f38ccc885825e36d7134549c7e96d3d">
+<div class="cell" data-hash="08_enrichment_analysis_cache/html/unnamed-chunk-4_8cfc1cc3e5777a9a18a113129189e99b">
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/biomaRt/man/getBM.html">getBM</a></span><span class="op">(</span>attributes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"entrezgene_id"</span>, <span class="st">"external_gene_name"</span><span class="op">)</span>,</span>
-<span>                 filters <span class="op">=</span> <span class="st">"external_gene_name"</span>, values <span class="op">=</span> <span class="va">cd4t</span><span class="op">$</span><span class="va">gene</span>,</span>
+<span>                 filters <span class="op">=</span> <span class="st">"external_gene_name"</span>, </span>
+<span>                 values <span class="op">=</span> <span class="va">cd4t</span><span class="op">$</span><span class="va">gene</span>,</span>
 <span>                 mart <span class="op">=</span> <span class="va">mart</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><code>attributes</code> Attributes to retrieve. We want to have the gene symbols and Entrez ID in the results.</p>
-<p><code>filters</code> Which filter to use to filter the dataset.</p>
-<p><code>values</code> A list of features as a query.</p>
-<p><code>mart</code> Object of class Mart, created with the <code>useMart</code> function.</p>
-<p>A table of two columns is created and stored in <code>results</code>.</p>
-<div class="cell" data-hash="08_enrichment_analysis_cache/html/unnamed-chunk-5_cad68dcb9c21d1d8a9b7266bcd538ccf">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li><p><code>attributes</code> Attributes to retrieve. We want to have the gene symbols and Entrez ID in the results.</p></li>
+<li><p><code>filters</code> Which filter to use to filter the dataset.</p></li>
+<li><p><code>values</code> A list of features as a query.</p></li>
+<li><p><code>mart</code> Object of class Mart, created with the <code>useMart</code> function.</p></li>
+</ul>
+<p>A table of two columns is created and stored in the matrix of <code>results</code>.</p>
+<div class="cell" data-hash="08_enrichment_analysis_cache/html/unnamed-chunk-5_ace11ab712132bd5a2cd1018f9a6ba8a">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">results</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="va">head</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  entrezgene_id external_gene_name
 1         81532               MOB2
@@ -307,7 +314,7 @@ Note
 </div>
 </section><section id="go-over-representation-analysis" class="level1"><h1>2. GO over-representation analysis</h1>
 <p>Over Representation Analysis (ORA) is a widely used approach to determine whether known biological functions or processes are over-represented (= enriched) in an experimentally-derived gene list, e.g.&nbsp;a list of differentially expressed genes (DEGs).</p>
-<p>We use the <code>enrichGO</code> to get the enriched GO terms in the list of features.</p>
+<p>We use the <code>enrichGO</code> to get the enriched GO terms in the list of DEGs.</p>
 <div class="cell" data-hash="08_enrichment_analysis_cache/html/unnamed-chunk-7_88fa70da0395c4d683b0ce61a7361a1b">
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">cd4t.sig</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">cd4t</span>, <span class="va">p_adj.loc</span> <span class="op">&lt;</span> <span class="fl">0.05</span>, <span class="va">logFC</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">p_adj.loc</span><span class="op">)</span></span>
@@ -322,31 +329,67 @@ Note
 <span>                qvalueCutoff <span class="op">=</span> <span class="fl">0.05</span>,</span>
 <span>                readable <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><code>gene</code> A list of Entrez gene id.</p>
-<p><code>keyType</code> The keytype of input gene.</p>
-<p><code>OrgDb</code> The database with detailed information about the species.</p>
-<p><code>org.Hs.eg.db</code> Specify the database of Homo Sapien.</p>
-<p><code>ont</code> One of “BP” (biological process), “MF” (molecular function), and “CC” (cellular component) subontologies, or “ALL” for all three.</p>
-<p><code>pAdjustMethod</code> Multiple testing method for p-value.</p>
-<p><code>pvalueCutoff</code> Adjusted pvalue cutoff on enrichment tests to report.</p>
-<p><code>qvalueCutoff</code> Tge qvalue cutoff on enrichment tests to report as significant.</p>
-<p><code>readable</code> Whether mapping gene ID to gene Name.</p>
+<ul>
+<li><p><code>gene</code> A list of Entrez gene id.</p></li>
+<li><p><code>keyType</code> The keytype of input gene.</p></li>
+<li><p><code>OrgDb</code> The database with detailed information about the species.</p></li>
+<li><p><code>org.Hs.eg.db</code> Specify the database of Homo Sapien.</p></li>
+<li><p><code>ont</code> One of “BP” (biological process), “MF” (molecular function), and “CC” (cellular component) subontologies, or “ALL” for all three.</p></li>
+<li><p><code>pAdjustMethod</code> Multiple testing method for p-value.</p></li>
+<li><p><code>pvalueCutoff</code> Adjusted pvalue cutoff on enrichment tests to report.</p></li>
+<li><p><code>qvalueCutoff</code> Tge qvalue cutoff on enrichment tests to report as significant.</p></li>
+<li><p><code>readable</code> Whether mapping gene ID to gene Name.</p></li>
+</ul>
 <p>Let’s convert the <code>ego</code> object into a data frame and visualize the results in a bar plot.</p>
-<div class="cell" data-hash="08_enrichment_analysis_cache/html/unnamed-chunk-8_4d256ac0c66efa59fca4772658c7eac7">
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ego.table</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">ego</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="08_enrichment_analysis_cache/html/unnamed-chunk-8_1c1bc948bb3c8ea14ef2aa427d7a44ab">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ego.table</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">ego</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">ego.table</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                   ID                          Description GeneRatio   BgRatio
+GO:0022613 GO:0022613 ribonucleoprotein complex biogenesis  199/2156 475/18614
+GO:0042254 GO:0042254                  ribosome biogenesis  150/2156 298/18614
+GO:0034470 GO:0034470                     ncRNA processing  175/2156 432/18614
+GO:0016072 GO:0016072               rRNA metabolic process  126/2156 257/18614
+GO:0006364 GO:0006364                      rRNA processing  114/2156 218/18614
+GO:0140053 GO:0140053        mitochondrial gene expression   93/2156 164/18614
+                 pvalue     p.adjust       qvalue
+GO:0022613 2.530905e-65 1.439832e-61 1.170610e-61
+GO:0042254 3.374691e-62 9.599309e-59 7.804418e-59
+GO:0034470 8.159081e-55 1.547234e-51 1.257930e-51
+GO:0016072 1.158166e-50 1.647201e-47 1.339205e-47
+GO:0006364 1.303603e-49 1.483240e-46 1.205901e-46
+GO:0140053 1.197696e-44 1.135615e-41 9.232765e-42
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          geneID
+GO:0022613 HSP90AA1/HSP90AB1/NPM1/RAN/PA2G4/DDX21/SNRPG/XRCC5/RPLP0/SNRPD1/SNRPF/NOLC1/DKC1/NOP56/EIF2S2/PTGES3/NOP58/SNU13/SNRPB/ABCE1/C1QBP/SNRPE/MRPL20/EIF3I/NOP10/EBNA1BP2/TRMT112/SNRPC/NHP2/RPL7L1/SNRPB2/WDR43/MRTO4/NIFK/UTP4/SNRPA1/EIF3J/LYAR/PRKDC/SRSF9/GTPBP4/NOP14/DHX9/NPM3/SF3B4/GTF3A/NOL11/UTP11/EIF4A3/LSM2/NOP16/PAK1IP1/RPF2/FBL/RRP15/SF3B3/RPL26L1/BRIX1/TXNL4A/EIF6/MRPS7/EIF3B/GAR1/DDX18/TMA16/DDX1/DENR/NAT10/SRSF10/RUVBL1/TSR1/PUF60/GNL2/LTV1/RRP7A/IMP4/MPHOSPH10/BMS1/SF3B5/RRS1/EXOSC8/DCAF13/POP4/METTL5/BOP1/NIP7/NOL10/KRR1/RPP30/NOC2L/RRP9/PWP1/EXOSC9/NOB1/ZNF593/STRAP/MPHOSPH6/GRWD1/RIOK1/LSM4/UTP6/PDCD11/WDR12/RPF1/ESF1/WDR75/TSR3/PRPF19/MRPS2/EXOSC5/MRPL22/POP7/PRMT5/RUVBL2/HEATR1/DIMT1/LSM6/ERAL1/SRSF1/PHF5A/UTP14A/NOL6/SF3A3/DIS3/MAK16/POLR2D/MCTS1/FCF1/DDX10/SF3B6/BUD23/FTSJ3/WDR46/SRFBP1/GEMIN7/GNL3L/ERI3/WDR36/MRPL36/TARBP2/MALSU1/AATF/C1D/RCL1/PES1/NUP88/EXOSC3/WDR3/NCBP1/BYSL/MYBBP1A/USP39/WDR18/EXOSC2/PWP2/ERI1/FASTKD2/ZNHIT6/GEMIN6/UTP20/TRAF7/WDR77/EMG1/RRP12/PELP1/DDX54/UTP15/DDX56/MTERF3/RBFA/TBL3/EXOSC7/URB2/PRPF31/MPV17L2/SLX9/SUV39H1/NOC4L/TFB2M/GEMIN5/MRPS11/RPP40/URB1/PPAN/NUFIP1/EXOSC1/SMN1/SMN2/MRM1/NOP9/FDXACB1/NLE1/WDR74/DDX28/GEMIN4/DHX37/HEATR3/SHQ1/RPUSD1
+GO:0042254                                                                                                                                                                                                                                                                                                                       NPM1/RAN/PA2G4/DDX21/XRCC5/RPLP0/NOLC1/DKC1/NOP56/NOP58/SNU13/ABCE1/C1QBP/MRPL20/NOP10/EBNA1BP2/TRMT112/NHP2/RPL7L1/WDR43/MRTO4/NIFK/UTP4/LYAR/PRKDC/GTPBP4/NOP14/NPM3/GTF3A/NOL11/UTP11/EIF4A3/NOP16/PAK1IP1/RPF2/FBL/RRP15/RPL26L1/BRIX1/EIF6/MRPS7/GAR1/DDX18/TMA16/NAT10/TSR1/GNL2/LTV1/RRP7A/IMP4/MPHOSPH10/BMS1/RRS1/EXOSC8/DCAF13/POP4/METTL5/BOP1/NIP7/NOL10/KRR1/RPP30/NOC2L/RRP9/PWP1/EXOSC9/NOB1/ZNF593/MPHOSPH6/GRWD1/RIOK1/UTP6/PDCD11/WDR12/RPF1/ESF1/WDR75/TSR3/MRPS2/EXOSC5/MRPL22/POP7/HEATR1/DIMT1/LSM6/ERAL1/UTP14A/NOL6/DIS3/MAK16/FCF1/DDX10/BUD23/FTSJ3/WDR46/SRFBP1/GNL3L/ERI3/WDR36/MRPL36/MALSU1/AATF/C1D/RCL1/PES1/NUP88/EXOSC3/WDR3/BYSL/MYBBP1A/WDR18/EXOSC2/PWP2/ERI1/FASTKD2/ZNHIT6/UTP20/TRAF7/EMG1/RRP12/PELP1/DDX54/UTP15/DDX56/MTERF3/RBFA/TBL3/EXOSC7/URB2/MPV17L2/SLX9/SUV39H1/NOC4L/TFB2M/MRPS11/RPP40/URB1/PPAN/EXOSC1/MRM1/NOP9/FDXACB1/NLE1/WDR74/DDX28/GEMIN4/DHX37/HEATR3/SHQ1/RPUSD1
+GO:0034470                                                                                                                                                                  HNRNPA2B1/PA2G4/DDX21/NOLC1/DKC1/NOP56/SRSF3/NOP58/SNU13/NOP10/EBNA1BP2/TRMT112/NHP2/RPL7L1/WDR43/MRTO4/NIFK/UTP4/LYAR/POLR3K/PRKDC/KARS1/GTPBP4/NOP14/NPM3/NOL11/UTP11/EIF4A3/RPF2/FBL/RRP15/BRIX1/EIF6/GAR1/DDX18/DDX1/NAT10/TSR1/URM1/YRDC/HSD17B10/RRP7A/IMP4/MPHOSPH10/BMS1/RRS1/EXOSC8/DCAF13/POP4/METTL5/BOP1/NCBP2/WDR4/RTRAF/NOL10/KRR1/RPP30/RRP9/PWP1/EXOSC9/NOB1/NSUN2/MPHOSPH6/RIOK1/UTP6/PDCD11/WDR12/RPF1/ESF1/WDR75/TSR3/TYW3/SRRT/EXOSC5/POP7/HEATR1/DIMT1/LSM6/GRSF1/FAM98B/UTP14A/NOL6/DIS3/MAK16/PUS7/FCF1/ELP5/DDX10/BUD23/FTSJ3/WDR46/SRFBP1/FAM98A/TRMT6/ZMPSTE24/TRMT10C/LAGE3/ERI3/WDR36/TARBP2/TOE1/TRUB2/C1D/RCL1/PES1/EXOSC3/TPRKB/WDR3/NCBP1/BYSL/PUS1/WDR18/EXOSC2/DUS1L/RTCB/PWP2/INTS13/ERI1/ZNHIT6/UTP20/FTSJ1/POP1/EMG1/RRP12/PELP1/DDX54/METTL1/INTS7/UTP15/DDX56/RBFA/TBL3/ELAC2/EXOSC7/DPH3/PUS3/NUP155/THUMPD3/SLX9/SUV39H1/IL6/NOC4L/QTRT1/TFB2M/TRMT1/USB1/MRPS11/ELP6/METTL2B/OSGEP/RPP40/METTL2A/INTS11/URB1/PPAN/DUS2/TRMT61A/EXOSC1/METTL6/MRM1/CTU2/NOP9/FDXACB1/QNG1/POP5/PUSL1/RPUSD4/WDR74/DGCR8/GEMIN4/DHX37/SHQ1/TSEN2/PLD6/RPUSD1
+GO:0016072                                                                                                                                                                                                                                                                                                                                                                                                                                                                          NCL/PA2G4/DDX21/NOLC1/DKC1/NOP56/NOP58/SNU13/NOP10/EBNA1BP2/TRMT112/NHP2/RPL7L1/MACROH2A1/WDR43/MRTO4/NIFK/UTP4/LYAR/PRKDC/GTPBP4/NOP14/NPM3/GTF3A/NOL11/UTP11/EIF4A3/RPF2/GTF3C6/FBL/RRP15/BRIX1/EIF6/GAR1/DDX18/NAT10/TSR1/RRP7A/IMP4/MPHOSPH10/BMS1/RRS1/EXOSC8/DCAF13/POP4/TCOF1/METTL5/BOP1/NOL10/KRR1/RPP30/RRP9/PWP1/EXOSC9/NOB1/MPHOSPH6/RIOK1/UTP6/PDCD11/WDR12/RPF1/ESF1/WDR75/TSR3/POLR1G/EXOSC5/POP7/HEATR1/DIMT1/LSM6/UTP14A/NOL6/DIS3/MAK16/FCF1/DDX10/BUD23/FTSJ3/WDR46/SRFBP1/ERI3/WDR36/MARS1/SMARCB1/C1D/RCL1/PES1/EXOSC3/WDR3/BYSL/WDR18/EXOSC2/PWP2/ERI1/ZNHIT6/UTP20/EMG1/RRP12/PELP1/DDX54/UTP15/DDX56/RBFA/TBL3/EXOSC7/DDX11/SLX9/SUV39H1/NOC4L/TFB2M/POLR1B/MRPS11/RPP40/URB1/PPAN/EXOSC1/MRM1/NOP9/FDXACB1/WDR74/GEMIN4/DHX37/SHQ1/PELO/IPPK/RPUSD1
+GO:0006364                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       PA2G4/DDX21/NOLC1/DKC1/NOP56/NOP58/SNU13/NOP10/EBNA1BP2/TRMT112/NHP2/RPL7L1/WDR43/MRTO4/NIFK/UTP4/LYAR/PRKDC/GTPBP4/NOP14/NPM3/NOL11/UTP11/EIF4A3/RPF2/FBL/RRP15/BRIX1/EIF6/GAR1/DDX18/NAT10/TSR1/RRP7A/IMP4/MPHOSPH10/BMS1/RRS1/EXOSC8/DCAF13/POP4/METTL5/BOP1/NOL10/KRR1/RPP30/RRP9/PWP1/EXOSC9/NOB1/MPHOSPH6/RIOK1/UTP6/PDCD11/WDR12/RPF1/ESF1/WDR75/TSR3/EXOSC5/POP7/HEATR1/DIMT1/LSM6/UTP14A/NOL6/DIS3/MAK16/FCF1/DDX10/BUD23/FTSJ3/WDR46/SRFBP1/ERI3/WDR36/C1D/RCL1/PES1/EXOSC3/WDR3/BYSL/WDR18/EXOSC2/PWP2/ERI1/ZNHIT6/UTP20/EMG1/RRP12/PELP1/DDX54/UTP15/DDX56/RBFA/TBL3/EXOSC7/SLX9/SUV39H1/NOC4L/TFB2M/MRPS11/RPP40/URB1/PPAN/EXOSC1/MRM1/NOP9/FDXACB1/WDR74/GEMIN4/DHX37/SHQ1/RPUSD1
+GO:0140053                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 TUFM/C1QBP/MRPL20/MRPL52/MRPL3/MRPL37/CHCHD10/MRPL1/TFAM/MRPS23/GARS1/MRPL51/MRPS34/SHMT2/LRPPRC/MRPS7/PNPT1/MRPL4/MRPL18/MRPL13/MRPS12/MRPS15/HSD17B10/MRPL21/MRPS16/MRPL17/MRPL15/MRPS18C/MRPL12/MRPS33/MRPS35/MRPL35/MRPL27/AURKAIP1/MRPS18B/MRPL28/MRPL14/GFM1/MRPL57/MRPL11/MRPS2/MRPL22/MRPL45/MRPL9/MRPS6/MRPS27/MRPL47/MRPL19/GADD45GIP1/MRPL16/MRPS26/COA3/TRMT10C/CHCHD1/MRPL36/MALSU1/MRPS10/TRUB2/TBRG4/MRPL24/SLC25A33/UQCC2/MRPL54/RPUSD3/IARS2/MRPL58/MRPS9/MTIF2/PUS1/DARS2/MRPL32/FASTKD2/MTERF3/MRPS22/ELAC2/MRPL49/MRPL39/MPV17L2/EARS2/TFB2M/MRPS11/QRSL1/TWNK/MRPS28/MRPL40/MRPS18A/RCC1L/MRPL55/MRPS17/MTG1/RPUSD4/MRPL48/MRPL2
+           Count
+GO:0022613   199
+GO:0042254   150
+GO:0034470   175
+GO:0016072   126
+GO:0006364   114
+GO:0140053    93</code></pre>
 </div>
-<p><code>GeneRatio</code> The gene counts from the input list found in the gene set of a GO term / gene counts of input list.</p>
-<p><code>BgRatio</code> The gene counts of a geneset / size of all of the unique genes in the collection of genesets.</p>
+</div>
+<ul>
+<li><p><code>GeneRatio</code> The gene counts from the input list found in the gene set of a GO term / gene counts of input list.</p></li>
+<li><p><code>BgRatio</code> The gene counts of a geneset / size of all of the unique genes in the collection of genesets.</p></li>
+</ul>
 <div class="cell" data-hash="08_enrichment_analysis_cache/html/unnamed-chunk-9_9b8dca033d0b8ae4a79852318409ee52">
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/barplot.html">barplot</a></span><span class="op">(</span><span class="va">ego</span>, showCategory <span class="op">=</span> <span class="fl">18</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/barplot.html">barplot</a></span><span class="op">(</span><span class="va">ego</span>, showCategory <span class="op">=</span> <span class="fl">18</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="08_enrichment_analysis_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-</section><section id="gsea" class="level1"><h1>3. GSEA</h1>
-<p>All genes can be used as input of GSEA (Gene set enrichment analysis). We first rank the genes based on <code>stat</code>.</p>
+</section><section id="gene-set-enrichment-analysis" class="level1"><h1>3. Gene set enrichment analysis</h1>
+<p>All genes can be used as input of gene set enrichment analysis (GSEA). We first rank the genes based on <code>stat</code>.</p>
 <div class="cell" data-hash="08_enrichment_analysis_cache/html/unnamed-chunk-10_24297f670a373da659068eb98ee8a3e6">
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># order genes based on stat</span></span>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># order genes based on stat</span></span>
 <span><span class="va">cd4t</span> <span class="op">&lt;-</span> <span class="va">cd4t</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/order.html">order</a></span><span class="op">(</span><span class="op">-</span><span class="va">cd4t</span><span class="op">$</span><span class="va">stat</span><span class="op">)</span>, <span class="op">]</span></span>
 <span></span>
 <span><span class="va">gene_list</span> <span class="op">&lt;-</span> <span class="va">cd4t</span><span class="op">$</span><span class="va">stat</span></span>
@@ -354,7 +397,7 @@ Note
 </div>
 <p>We use <code>gseGO</code> to perform GSEA and convert the results into a dataframe.</p>
 <div class="cell" data-hash="08_enrichment_analysis_cache/html/unnamed-chunk-11_c3ddcf5746ac5f8e593dca3b324db615">
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># perform GSEA</span></span>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># perform GSEA</span></span>
 <span><span class="va">gse</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/clusterProfiler/man/gseGO.html">gseGO</a></span><span class="op">(</span><span class="va">gene_list</span>,</span>
 <span>             keyType <span class="op">=</span> <span class="st">"ENTREZID"</span>,</span>
 <span>             ont <span class="op">=</span> <span class="st">"BP"</span>,</span>
@@ -366,8 +409,8 @@ Note
 </div>
 <p><code>enrichmentScore</code> The enrichment score (ES) represents the degree to which a set S is over-represented at the top or bottom of the ranked list L.</p>
 <p>We can look at the enrichment of some GO terms in GSEA plot.</p>
-<div class="cell" data-hash="08_enrichment_analysis_cache/html/unnamed-chunk-12_23dfc33f6e541815cd56776c8685e3f6">
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/enrichplot/man/gseaplot2.html">gseaplot2</a></span><span class="op">(</span><span class="va">gse</span>, geneSetID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">158</span>, <span class="fl">163</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="08_enrichment_analysis_cache/html/unnamed-chunk-12_1ac557def210949341287433144b0bf6">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/enrichplot/man/gseaplot2.html">gseaplot2</a></span><span class="op">(</span><span class="va">gse</span>, geneSetID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">188</span>, <span class="fl">194</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="08_enrichment_analysis_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -375,8 +418,8 @@ Note
 <p>We have significant enriched term in the unregulated genes. Along the x axis is the ranked genes. Each of the vertical line is one of those genes that are found in this gene set. Along the running line, you can see a lot of genes running together and it falls out when the gene becomes more sparse in the list.</p>
 </section><section id="save" class="level1"><h1>4. Save</h1>
 <p>Save the files into RData for documentation.</p>
-<div class="cell" data-hash="08_enrichment_analysis_cache/html/unnamed-chunk-13_7a84f4e79d067f2476b14a2853f1fa5a">
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># save(integrate.filtered.rna, expMat, cd4t, ego.table, gse.table, file = "data/intermediate_data/chapter8.RData")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="08_enrichment_analysis_cache/html/unnamed-chunk-13_5cba32a790402e450be62f70327a76bf">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, <span class="va">expMat</span>, <span class="va">cd4t</span>, <span class="va">ego.table</span>, <span class="va">gse.table</span>, file <span class="op">=</span> <span class="st">"data/intermediate_data/chapter8.RData"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 

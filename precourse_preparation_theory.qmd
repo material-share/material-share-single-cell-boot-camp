@@ -13,47 +13,47 @@ Single-cell RNA sequencing (scRNAseq) can help to understand the cell types and 
 
 This technique can be applied to:
 
--   Investigating different types of cells in a specific tissue. Example**:** Understanding the various cell types in the brain.
+-   Investigating different types of cells in a specific tissue. Example: Understanding the various cell types in the brain.
 
--   Discovering noval cell types or states. Example**:** Identifying unique cell types in the immune system.
+-   Discovering noval cell types or states. Example: Identifying unique cell types in the immune system.
 
--   Figuring out how genes change their activity as cells differentiate over time. Example**:** Tracking gene expression dynamics such as stem cells differentiation.
+-   Figuring out how genes change their activity as cells differentiate over time. Example: Tracking gene expression dynamics such as stem cells differentiation.
 
--   Finding genes that are active in certain cell types under certain conditions. Example**:** Finding genes that switch on in lung cells in asthma.
+-   Finding genes that are active in certain cell types under certain conditions. Example: Finding genes that switch on and off in lung cells in asthma.
 
--   Examining how gene activity changes within a cell type under certain conditions. Example**:** Studying how nerve cells in the spinal cord change their gene activity in response to injury.
+-   Examining how gene activity changes within a cell type under certain conditions. Example: Studying how nerve cells in the spinal cord change their gene activity in response to injury.
 
 # 2. BD Rhapsody^™^ Single Cell Workflow
 
-The BD Rhapsody^™^ Express System enables single-cell capture and barcoding of hundreds to thousands of single cells for analysis of genomic and proteomic information.
+The BD Rhapsody^™^ Single Cell System enables capturing and barcoding of hundreds to thousands of single cells for the analysis of genomic and proteomic information.
 
-Before proceeding with Rhapsody workflow, sample of interest is processed to have **live** **single cells in cell suspension**. It is optional to sort cells to concentrate on cell type of interest.
+Before proceeding with Rhapsody workflow, samples of interest are processed to have **live** **single cells in cell suspension**. It is optional to sort cells to concentrate on cell type of interest.
 
 The sample preparation and experimental setup are crucial and have big impacts on data quality and the following analysis. We expect live single cells in cell suspension (avoid clumps or dead cells).
 
 ![](prerequisite_figures/BD_single_cell_workflow.png)
 
-Once we obtain single cell suspension, the cells are captured and barcoded by the BD Rhapsody^™^ Single-Cell Analysis System. Each cell is assigned with a unique cell barcode and mRNA molecules of a cell are tagged with that barcode. This helps to associate the RNA molecules with the cell in downstream analysis.
+Once we obtain single cell suspension, the cells are captured and barcoded by the BD Rhapsody^™^ Single-Cell Analysis System. Each cell is assigned with a unique cell barcode and mRNA molecules of a cell are tagged with that barcode. This helps to associate the RNA molecules with the corresponding cell in downstream analysis.
 
 The data analysis and interpretation come as the last piece of the workflow. The upstream steps, including experimental design and sample processing, will define the analysis process: how we approach quality control, data integration or cell annotation, etc.
 
-In the next chapter, you will learn what can be measured on the single cell level with BD Rhapsody^™^ System.
+In the next chapter, you will learn which modality can be measured on the single cell level with BD Rhapsody^™^ System.
 
 ## 2.1 BD Rhapsody^™^ Single Cell System
 
 ![](prerequisite_figures/BD_Rhapsody_assays_summary.png)
 
-The BD Rhapsody™ Single Cell System enables simultaneous measurement of multiple cell parameters in thousands of individual cells. By combining available assays, researchers can generate robust and intricate datasets to unlock powerful insights.
+The BD Rhapsody™ Single Cell System enables simultaneous measurement of multiple parameters in thousands of individual cells. By combining available assays, researchers can generate robust and intricate datasets to unlock powerful insights.
 
 **Gene Expression (scRNAseq):** The primary purpose of scRNAseq is to measure the gene expression in individual cells. This allows to understand which genes are active or inactive and to identify different cell types based on their gene expression profiles.
 
 **Antibody-Based Protein Analysis (AbSeq):** You can use antibodies conjugated with unique barcodes to measure protein expression alongside with gene expression in individual cells.
 
-**Sample multiplexing with antibody-based techniques (SMK):** Sample multiplexing kit (SMK) use generic antibody conjugated with unique barcodes to label cells from different samples. This enables pooling of multiple samples in one cartridge.
+**Sample multiplexing with antibody-based techniques (SMK):** **S**ample **m**ultiplexing **k**it (SMK) uses generic antibody conjugated with unique barcodes to label cells from different samples. This enables pooling of multiple samples on one cartridge.
 
-**Immune Repertoire Profiling:** Full length V(D)J assay profiles the diversity of T cell and/or B cell receptor repertoires. This is valuable for studying the immune response and identifying antigen-specific cells.
+**Immune Repertoire Profiling (Full length V(D)J TCR/BCR):** Full length V(D)J assay profiles the diversity of T cell and/or B cell receptor repertoires. This is valuable for studying the immune response and identifying antigen-specific cells.
 
-**Antigen-Specific T-cell Analysis:** Immudex's technology enables the profiling of T cells that recognize specific antigens such as viral epitopes or tumor-related antigens. This expands the offering of immune profiling, aiding vaccine development and immunotherapy research.
+**Antigen-Specific T-cell Analysis (DCode):** Immudex's DCode technology enables the profiling of T cells that recognize specific antigens such as viral epitopes or tumor-related antigens. This expands the offering of immune profiling, aiding vaccine development and immunotherapy research.
 
 From gene expression profiling to antibody-based protein analysis, all assays can be combined or performed standalone to explore cellular functions and molecular dynamics in single cell resolution.
 
@@ -75,7 +75,7 @@ The raw sequencing data is usually handled by the software, BD Rhapsody^™^ Pri
 
 The BD Rhapsody^™^ Sequencing Analysis Pipeline contains a series of computational steps to process and extract meaningful information from the raw sequencing data generated by the BD Rhapsody^™^ Sinlge Cell System.
 
-The goal of sequencing analysis is to transform text-based genomic data into numerical data, and we achieve this through a series of steps in the pipeline. The steps of the pipeline are listed in simplified graphics below.
+The goal of the primary analysis is to transform text-based genomic data into numerical data, and we achieve this through a series of steps in the pipeline. The steps of the pipeline are listed in simplified graphics below.
 
 ![](prerequisite_figures/sequencing_pipeline.png){width="1000"}
 
@@ -83,9 +83,9 @@ The main steps include decoding the unique barcodes and feature molecules associ
 
 ### 2.3.2 Quantify feature expression with UMIs
 
-**U**nique **m**olecular **i**dentifiers (UMIs) are used to quantify molecules expressed in a cell. Here's how it works:
+**U**nique **m**olecular **i**dentifiers (UMIs) are used to quantify featuer molecules in a cell. Here's how it works:
 
--   **Bead structure:** UMIs are small, unique sequences of DNA that are added to the capture sequence of beads. Each bead contains tens of thousands of unique UMIs followed by the polyA capture sequence. Each UMI is specific to the molecule it attaches to and becomes its unique tag.
+-   **Bead structure:** UMIs are small, unique sequences of nucleotides that are added to the capture sequence of beads. Each bead contains tens of thousands of unique UMIs followed by the polyA capture sequence. Each UMI is specific to the molecule it attaches to and becomes its unique tag.
 
     ![](prerequisite_figures/Umis_after_capture.png)
 
@@ -93,29 +93,29 @@ The main steps include decoding the unique barcodes and feature molecules associ
 
 -   The RNA molecule copies, including the attached UMIs, are then sequenced.
 
-UMIs can help to differentiate PCR copies and we can quantify correctly the feature expression. After sequencing, we count the number of unique UMIs rather than the number of reads of a transcript as feature expression. UMIs help to:
+UMIs can help to differentiate PCR copies and we can quantify correctly the feature expression. After sequencing, we count the number of unique UMIs rather than the number of reads of a transcript as the feature expression. UMIs help to:
 
--   **Remove PCR duplicates:** Because UMIs are unique to each original RNA molecule, any duplicates (multiple copies of the same RNA molecule) with the same UMI are likely the result of PCR amplification during library preparation.
+-   **Remove PCR copies:** Because UMIs are unique to each original RNA molecule, any duplicates (multiple copies of the same RNA molecule) with the same UMI are likely the result of PCR amplification rather than a true molecule.
 
 -   **Count unique molecules:** By looking at the UMIs, one can count how many unique RNA molecules are originally present in the cell.
 
--   **Quantify gene expression:** By counting the unique UMIs associated with each gene, one can measure the expression level of features in a cell. Genes with more UMIs are more active, while genes with fewer UMIs are less active.
+-   **Quantify gene expression:** By counting the unique UMIs associated with each gene, one can measure the expression level of that gene in a cell. Genes with more UMIs are more active, while genes with fewer UMIs are less active.
 
-In summary, UMIs are used to distinguish real feature molecules from PCR copy by providing a unique identifier for each original molecule.
+In summary, UMIs are used to distinguish real feature molecules from PCR copies by providing a unique identifier for each original molecule.
 
-### 2.3.3 Output Files from Primary Pipeline
+### 2.3.3 Output Files from the Primary Pipeline
 
 The primary pipeline produces many output files. Below you can find a summary of output files relating to different assays.
 
 ![](prerequisite_figures/output_files_cell.png)
 
-The primary analysis output files are the input of secondary analysis. During the course, we will work with demo data that include mRNA, protein and sample tag information. You will get to know how to load the expression matrix in MEX format, how to perform quality control and other common steps in Chapter 1 - 9.
+The output files from the primary analysis are the input of the secondary analysis. In the course, we will work with demo data that includes WTA, AbSeq and SMK. You will get to know how to load the expression matrix (in MEX format), how to perform quality control and other steps that are commonly included in single cell analysis in Chapter 1 - 9.
 
 ::: callout-important
 The course will ONLY cover the secondary analysis.
 :::
 
-# Additional Information on Running Primary Pipeline
+# 3. Additional Information on Running Primary Pipeline
 
 Here is how to set up and run the BD Rhapsody™ Analysis pipelines: BD® Single-Cell Multiomics Analysis Setup User Guide.  (<https://scomix.bd.com/hc/article_attachments/16954103767949>)\
 \

@@ -17,7 +17,7 @@ library(ExperimentHub)
 
 # Load RData
 
-Load the RData which contain all files from previous chapter.
+Load the RData which contains all files from previous chapter.
 
 ```{r}
 load("data/intermediate_data/chapter1.RData")
@@ -54,9 +54,9 @@ Low quality cells have the below characteristics:
 In practice, we look at the distribution of quality metrics in cell population and set appropriate cutoff to filter out low quality cells.
 
 ::: callout-tip
-The targeted assay profiles a subset of genes, which are usually the genes of interest. Mitochondrial genes are often not included in the gene panel of targeted assay.
+The targeted assay profiles a subset of genes, which are usually the genes of interest. Mitochondrial genes are often not included in the gene panel of the targeted assay.
 
-So, the quality control of targeted assays will not look at mitochondrial percentage, but look at `nCount_RNA` and `nFeature_RNA`.
+So, the quality control of targeted assays will not look at mitochondrial percentage, and focus on `nCount_RNA` and `nFeature_RNA` only.
 :::
 
 # 2. Calculate mitochondrial percentage per cell
@@ -68,12 +68,12 @@ rna[["percent.mt"]] <- PercentageFeatureSet(rna, pattern = "^MT.")
 ```
 
 ::: callout-tip
-The mitochondrial genes typically include "MT" in their gene symbol. However, the pattern could be different, MT. or MT- or mt-. You may need to adjust the pattern to correctly calculate the percentage.
+The mitochondrial genes typically include "MT" in their gene symbol. However, the pattern could be different, such as MT. or MT- or mt-. You may need to adjust the pattern to correctly calculate the percentage.
 :::
 
 The `PercentageFeatureSet` takes in a `pattern` argument and searches through all feature names in the dataset for that pattern.
 
-Since we are looking for mitochondrial genes, we are searching for any gene names that begin with the pattern `^MT.`. For each cell, the function takes the sum of counts across all genes belonging to "\^MT.", and then divides it by the total counts for all genes. The result is stored in the `percent.mt` of `meta.data` .
+Since we are looking for mitochondrial genes, we are searching for any gene names that begin with the pattern `^MT.`. For each cell, the function takes the sum of counts across all genes belonging to `^MT.`, and then divides it by the total counts for all genes. The result is stored in the `percent.mt` of `meta.data` .
 
 ```{r}
 rna@meta.data %>% head
@@ -123,7 +123,7 @@ rna@meta.data %>%
   ggtitle("percent.mt")
 ```
 
-## 3.4 Combine metrics to come up filtering threshold
+## 3.4 Combine metrics to come up the filtering threshold
 
 We can combine the metrics to decide the filtering threshold.
 
@@ -144,11 +144,11 @@ rna@meta.data %>%
 
 The data is fitted with a linear regression line. We expect when UMI counts increase, gene counts also increase.
 
-Upper right quadrant: Cells with high number of genes and UMI counts. We generally consider these cells to be good-quality cells.
+Upper right quadrant: Cells with high gene counts and UMI counts. We generally consider these cells to be good-quality cells.
 
-Bottom right quadrant: Cells with low number of genes and UMI counts. We generally consider these cells are low-quality cells.
+Bottom right quadrant: Cells with low gene counts and UMI counts. We generally consider these cells are low-quality cells.
 
-Darker cells: Cells with high mitochondrial percentage. Many of these cells have low gene counts. This could indicate damaged/dying cells whose cytoplasmic mRNA leaked out through a broken membrane, so only mRNA located in the mitochondria is still conserved.
+Darker cells: Cells with high mitochondrial percentage. Many of these cells have low gene counts at the same time. This may indicate damaged/dying cells whose cytoplasmic mRNA leaks out through a broken membrane, so only mRNA located in the mitochondria is still conserved.
 
 # 4. Filter
 
@@ -172,9 +172,13 @@ filtered.rna <- subset(x = rna,
                          (percent.mt < 25))
 ```
 
+::: callout-important
+The filtering thresholds should be decided based on assessing the quality metrics. They may change depending on the sample types, sequencing depth and other factors.
+:::
+
 ## 4.2 Filter on genes
 
-Some of the genes have zero counts or are only expressed in a handful of cells. These genes don't bring much information, and they reduce the average expression of a cell.
+After filtering on cells, some genes may have zero counts or are only expressed in few cells. These genes do not bring much information, and they reduce the average expression of a cell.
 
 We keep only genes that are expressed in **five or more cells**. `GetAssayData` is a convenient command to get information from the Seurat object. We use `GetAssayData` to extract the UMI counts.
 
@@ -182,10 +186,12 @@ We keep only genes that are expressed in **five or more cells**. `GetAssayData` 
 # Extract counts
 counts <- GetAssayData(object = filtered.rna, slot = "counts")
 
-# Output a logical matrix specifying for each gene whether or not there are more than zero counts per cell
+# Output a logical matrix specifying for each gene whether or not 
+# there are more than zero counts per cell
 nonzero <- counts > 0
 
-# Sum all TRUE values and return TRUE if equal or more than 5 TRUE values per gene
+# Sum all TRUE values and return TRUE 
+# if equal or more than 5 TRUE values per gene
 keep_genes <- Matrix::rowSums(nonzero) >= 5
 
 # Only keep those genes
@@ -197,6 +203,10 @@ filtered.rna <- CreateSeuratObject(filtered_counts, meta.data = filtered.rna@met
 
 ::: callout-tip
 Targeted assay contains genes expressing in the profiling cells, so "Filter on genes" is usually not performed on targeted assays.
+:::
+
+::: callout-important
+In this example, we keep only genes that are expressed in five or more cells. One may need to adjust the threshold.
 :::
 
 # 5. Re-assess metrics
@@ -245,7 +255,7 @@ filtered.rna@meta.data %>%
   facet_wrap(~Sample_Name)
 ```
 
-Cells that are considered in low quality in the bottom right quadrant are removed. We can also compare the cell number before and after filtering. The majority of cells are kept.
+Cells that are considered of low quality in the bottom right quadrant are removed. We can also compare the cell number before and after filtering. The majority of cells are kept after filtering.
 
 Before filtering:
 
@@ -263,9 +273,9 @@ filtered.rna@meta.data %>%
   dplyr::summarise(cell_number = length(Sample_Name))
 ```
 
-# 5. Save
+# 6. Save
 
-Save the files into RData for documentation. We do not need all files to continue the workshop, so we use `save` to save part of the files in RData.
+Save the files into RData for documentation. We do not need all files to continue the course, so we use `save` to save part of the files in RData.
 
 ```{r}
 # save(filtered.rna, expMat, file = "data/intermediate_data/chapter2.RData")

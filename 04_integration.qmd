@@ -17,7 +17,7 @@ library(ExperimentHub)
 
 # Load RData
 
-Load the RData which contain all files from previous chapter.
+Load the RData which contains all files from previous chapter.
 
 ```{r}
 load("data/intermediate_data/chapter3.RData")
@@ -27,7 +27,7 @@ load("data/intermediate_data/chapter3.RData")
 
 The goal of integration is to find corresponding cell states across conditions (or experiments). We want to identify cell types which are present in all samples/conditions/modalities within our dataset. We expect to observe a representation of cells from samples/conditions/modalities in every cluster.
 
-We first look at how cells cluster **without integration** to determine whether integration is necessary. Integration is considered if cells cluster separately on samples, conditions, modalities, etc.
+We first look at how cells cluster **without integration** to determine whether integration is necessary. Integration is considered if cells cluster separately on samples/conditions/modalities, etc.
 
 ```{r}
 # Run the standard workflow for visualization
@@ -39,21 +39,21 @@ DimPlot(filtered.rna, group.by = "Sample_Name")
 ::: callout-important
 ## Question
 
-Judging on the UMAP, do the two samples need to be integrated?
+Judging by the UMAP, do the two samples need to be integrated?
 :::
 
 ::: {.callout-tip collapse="T"}
 ## Answer
 
-The same cell types from the two samples are not aligned. We can perform integration.
+The same cell types from the two samples are not aligned. One may consider to perform integration.
 :::
 
 # 2. Perform integration
 
-First, we select the features for the integration. The features should be selected in each dataset.
+First, we select the variable features. The features should be selected in each dataset.
 
 ```{r}
-# split the dataset into a list of two seurat objects (activated and naive)
+# split the dataset into a list of two seurat objects (treated and naive)
 split.filtered.rna <- SplitObject(filtered.rna, split.by = "Sample_Name")
 
 # normalize and identify variable features for each dataset independently
@@ -80,9 +80,9 @@ Finally, we can integrate across samples. By default, `normalization.method` is 
 integrate.filtered.rna <- IntegrateData(anchorset = anchors)
 ```
 
-# 3. Visualize in UMAP
+# 3. UMAP visualization
 
-After integration, we look at the integrated data with UMAP. To calculate UMAP, we need to first calculate PCA and select top PCs.
+After integration, we look at the integrated data on UMAP. To calculate UMAP, we need to first calculate PCA and select top PCs.
 
 Methods to select top PCs were used a lot more often when the data was normalized with `LogNormalize`.
 
@@ -91,20 +91,22 @@ integrate.filtered.rna <- ScaleData(integrate.filtered.rna, verbose = FALSE)
 integrate.filtered.rna <- RunPCA(integrate.filtered.rna, npcs = 30, verbose = FALSE)
 ```
 
-Elbow plot can help to select top PCs. The PC number where the elbow is is used to calculate UMAP.
+Elbow plot can help to select top PCs. The PC number, where the elbow is, is used to calculate UMAP.
 
 ```{r}
 ElbowPlot(integrate.filtered.rna)
 ```
 
+For this dataset, we use the first top 10 PCs. For other datasets, one may need to adjust the PCs according to the elbow plot.
+
 ```{r}
 integrate.filtered.rna <- RunUMAP(integrate.filtered.rna, 
-                                        reduction = "pca", 
-                                        dims = 1:10)
+                                  reduction = "pca", 
+                                  dims = 1:10)
 
 integrate.filtered.rna <- FindNeighbors(integrate.filtered.rna, 
-                                              reduction = "pca", 
-                                              dims = 1:10)
+                                        reduction = "pca", 
+                                        dims = 1:10)
 
 
 # Plot UMAP                             
@@ -116,7 +118,7 @@ DimPlot(integrate.filtered.rna, group.by = "Sample_Name")
 
 Change the number of PCs and see how the UMAP changes.
 
-You can change the PC numbers by `dims` argument in `RunUMAP`.
+Tips: You can change the PC numbers by `dims` argument in `RunUMAP`.
 :::
 
 ::: callout-note
@@ -124,11 +126,11 @@ You can change the PC numbers by `dims` argument in `RunUMAP`.
 
 `Dimplot` has many arguments to control the plots.
 
-1.  Search `Dimplot` in the "Help" section and read the documentation.
+1.  Search `Dimplot` in the "Help" tab and read the documentation.
 2.  Change `group.by` to `split.by`. What is the difference?
 :::
 
-When we compare the similarity between the naive and activated clusters in the below plot with what we see using the integrated dataset, it is clear that this dataset benefited from the integration.
+When we compare the similarity between the naive and treated clusters in the plots with or without integration, it is clear that this dataset benefits from the integration.
 
 ```{r}
 p1 <- DimPlot(filtered.rna, group.by = "Sample_Name") + NoLegend()

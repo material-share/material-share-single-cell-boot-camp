@@ -22,21 +22,21 @@ library(biomaRt)
 
 # Load RData
 
-Load the RData which contain all files from previous chapter.
+Load the RData which contains all files from the previous chapter.
 
 ```{r}
 load("data/intermediate_data/chapter7.RData")
 ```
 
-Oftentimes, enrichment analysis takes in the differentially expressed genes and looks at which gene ontology (GO) terms are enriched.
+Oftentimes, enrichment analysis takes the differentially expressed genes and looks at which gene ontology (GO) terms are enriched.
 
-GO terms defines concepts/classes used to describe gene function and relationships between these concepts. `clusterProfiler` is an R package implementing many methods to analyze and visualize functional profiles from a group of features. It classifies functions along three aspects.
+GO terms defines concepts/classes used to describe gene function and relationships between these concepts. `clusterProfiler` is an R package implementing many methods to analyze and visualize functional profiles from a group of features. It classifies functions in three aspects.
 
-MF: Molecular Function: molecular activities of gene products
+-   MF: **M**olecular **F**unction: molecular activities of gene products.
 
-CC: Cellular Component: where gene products are active
+-   CC: **C**ellular **C**omponent: where gene products are active.
 
-BP: Biological Process: pathways and larger processes made up of the activities of multiple gene products
+-   BP: **B**iological **P**rocess: pathways and larger processes made up of the activities of multiple gene products.
 
 This chapter uses the differentially expressed genes in CD4+ T cells from last chapter as an example.
 
@@ -45,10 +45,10 @@ This chapter uses the differentially expressed genes in CD4+ T cells from last c
 `clusterProfiler` prefers the input of Entrez ID. We use `biomaRt` package to convert the gene symbol into Entrez ID.
 
 ::: callout-note
-`biomaRt` is handy for getting information about a group of features. You can use it to get gene symbols, genomic coordinates, transcripts, etc. You can explore what data is stored in `biomaRt` with `listAttributes`.
+`biomaRt` is handy to get information about features. You can use it to get gene symbols, genomic coordinates, transcript sequences, etc. You can explore what data is stored in `biomaRt` with `listAttributes`.
 :::
 
-The differentially expressed genes in CD4+ T cells between naïve and activated PBMCs are stored in `cd4t`. The gene symbol in this list can be converted into Entrez ID by `biomaRt`.
+The differentially expressed genes in CD4+ T cells between naïve and treated PBMCs are stored in the matrix `cd4t`. The gene symbol in this list can be converted into Entrez ID by `biomaRt`.
 
 Firstly, connect to the Ensembl database and specify we want to retrieve information from the dataset of Homo Sapien.
 
@@ -56,30 +56,31 @@ Firstly, connect to the Ensembl database and specify we want to retrieve informa
 mart <- useMart(biomart = "ensembl", dataset = "hsapiens_gene_ensembl")
 ```
 
-`biomart` BioMart database connect to. Here, we want to connect to `ensembl` database.
+-   `biomart` BioMart database connect to. Here, we want to connect to `ensembl` database.
 
-`dataset` Dataset to use. Here specify `hsapiens_gene_ensembl`.
+-   `dataset` Dataset to use. Here specify `hsapiens_gene_ensembl`.
 
 Next, we can give a list of gene symbols and retrieve the Entrez ID through `getBM`.
 
 ```{r}
 results <- getBM(attributes = c("entrezgene_id", "external_gene_name"),
-                 filters = "external_gene_name", values = cd4t$gene,
+                 filters = "external_gene_name", 
+                 values = cd4t$gene,
                  mart = mart)
 ```
 
-`attributes` Attributes to retrieve. We want to have the gene symbols and Entrez ID in the results.
+-   `attributes` Attributes to retrieve. We want to have the gene symbols and Entrez ID in the results.
 
-`filters` Which filter to use to filter the dataset.
+-   `filters` Which filter to use to filter the dataset.
 
-`values` A list of features as a query.
+-   `values` A list of features as a query.
 
-`mart` Object of class Mart, created with the `useMart` function.
+-   `mart` Object of class Mart, created with the `useMart` function.
 
-A table of two columns is created and stored in `results`.
+A table of two columns is created and stored in the matrix of `results`.
 
 ```{r}
-head(results)
+results %>% head
 ```
 
 Not every gene has the Entrez ID. We keep only genes that have a matched Entrez ID.
@@ -93,7 +94,7 @@ cd4t <- left_join(cd4t, results, by = c("gene" = "external_gene_name")) %>%
 
 Over Representation Analysis (ORA) is a widely used approach to determine whether known biological functions or processes are over-represented (= enriched) in an experimentally-derived gene list, e.g. a list of differentially expressed genes (DEGs).
 
-We use the `enrichGO` to get the enriched GO terms in the list of features.
+We use the `enrichGO` to get the enriched GO terms in the list of DEGs.
 
 ```{r}
 cd4t.sig <- dplyr::filter(cd4t, p_adj.loc < 0.05, logFC > 1) %>% 
@@ -110,41 +111,43 @@ ego <- enrichGO(gene = cd4t.sig$entrezgene_id,
                 readable = TRUE)
 ```
 
-`gene` A list of Entrez gene id.
+-   `gene` A list of Entrez gene id.
 
-`keyType` The keytype of input gene.
+-   `keyType` The keytype of input gene.
 
-`OrgDb` The database with detailed information about the species.
+-   `OrgDb` The database with detailed information about the species.
 
-`org.Hs.eg.db` Specify the database of Homo Sapien.
+-   `org.Hs.eg.db` Specify the database of Homo Sapien.
 
-`ont` One of "BP" (biological process), "MF" (molecular function), and "CC" (cellular component) subontologies, or "ALL" for all three.
+-   `ont` One of "BP" (biological process), "MF" (molecular function), and "CC" (cellular component) subontologies, or "ALL" for all three.
 
-`pAdjustMethod` Multiple testing method for p-value.
+-   `pAdjustMethod` Multiple testing method for p-value.
 
-`pvalueCutoff` Adjusted pvalue cutoff on enrichment tests to report.
+-   `pvalueCutoff` Adjusted pvalue cutoff on enrichment tests to report.
 
-`qvalueCutoff` Tge qvalue cutoff on enrichment tests to report as significant.
+-   `qvalueCutoff` Tge qvalue cutoff on enrichment tests to report as significant.
 
-`readable` Whether mapping gene ID to gene Name.
+-   `readable` Whether mapping gene ID to gene Name.
 
 Let's convert the `ego` object into a data frame and visualize the results in a bar plot.
 
 ```{r}
 ego.table <- as.data.frame(ego)
+
+head(ego.table)
 ```
 
-`GeneRatio` The gene counts from the input list found in the gene set of a GO term / gene counts of input list.
+-   `GeneRatio` The gene counts from the input list found in the gene set of a GO term / gene counts of input list.
 
-`BgRatio` The gene counts of a geneset / size of all of the unique genes in the collection of genesets.
+-   `BgRatio` The gene counts of a geneset / size of all of the unique genes in the collection of genesets.
 
 ```{r}
 barplot(ego, showCategory = 18)
 ```
 
-# 3. GSEA
+# 3. Gene set enrichment analysis
 
-All genes can be used as input of GSEA (Gene set enrichment analysis). We first rank the genes based on `stat`.
+All genes can be used as input of gene set enrichment analysis (GSEA). We first rank the genes based on `stat`.
 
 ```{r}
 # order genes based on stat
@@ -173,7 +176,7 @@ gse.table <- as.data.frame(gse) %>%
 We can look at the enrichment of some GO terms in GSEA plot.
 
 ```{r}
-gseaplot2(gse, geneSetID = c(158, 163))
+gseaplot2(gse, geneSetID = c(188, 194))
 ```
 
 We have significant enriched term in the unregulated genes. Along the x axis is the ranked genes. Each of the vertical line is one of those genes that are found in this gene set. Along the running line, you can see a lot of genes running together and it falls out when the gene becomes more sparse in the list.
@@ -183,5 +186,6 @@ We have significant enriched term in the unregulated genes. Along the x axis is 
 Save the files into RData for documentation.
 
 ```{r}
-# save(integrate.filtered.rna, expMat, cd4t, ego.table, gse.table, file = "data/intermediate_data/chapter8.RData")
+save(integrate.filtered.rna, expMat, cd4t, ego.table, gse.table, 
+     file = "data/intermediate_data/chapter8.RData")
 ```
