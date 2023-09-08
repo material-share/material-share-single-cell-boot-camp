@@ -13,16 +13,18 @@ This repository contains the materials for the Single Cell Boot Camp.
 It has two chapters of precourse preparation and nine chapters of the course.
 
 ::: callout-important
-For those who are new or need a refresher to R, please review **Precourse Preparation - R**. If you are familiar with the functions listed in this chapter, you can skip it.
+For those who are new or need a refresher to R, please review **Precourse Preparation - R**. *If you are familiar with the functions listed in that chapter, you can skip it.*
 
 For all participants, please review **Precourse Preparation - Theory.**
 :::
 
-We will focus on **Chapters 1 to 9** in the course. Welcome to review them before the course if you have time (thought the learning outcome is better if you go through the materials before attending the course - feedback from previous students).
+We will focus on **Chapters 1 to 9** in the course. Welcome to review them before the course if you have time (though the learning outcome is better if you go through the materials before attending the course - from previous students).
+
+**For further information, suggestions and bug report, please contact: [biox_support_emea\@bd.com](biox_support_emea@bd.com)**
 
 # Next occurrence
 
-Sept 19 - 20, 2023 \| 10 am - 2:30 \~ 3:00 pm \| Online
+Sept 19 - 20, 2023 \| 10 am - 2:30 \~ 3:00 pm CET \| Online
 
 # Description
 
@@ -46,13 +48,23 @@ Each participant are expected to have:
 
 # Expected outcome
 
-By the end of the workshop, participants will be familiar with the following topics: - Common workflow of single cell analysis (pre-processing, quality control, filtering, normalization, Clustering, Cell type annotation) - Combining AbSeq and scRNA-seq for downstream analysis
+By the end of the workshop, participants will be familiar with the following topics: Common workflow of single cell analysis (pre-processing, quality control, filtering, normalization, Clustering, Cell type annotation).
 
-For further information, please contact: [biox_support_emea\@bd.com](biox_support_emea@bd.com)
+# Reference
+
+The building of materials for the course references and relies on many excellent and well written public avaialbe materials.
+
+-   Seurat <https://satijalab.org/seurat/>
+
+-   Single Cell Best Practices: <https://www.sc-best-practices.org/preamble.html>
+
+-   Orchestrating Single-Cell Analysis with Bioconductor: <https://bioconductor.org/books/release/OSCA/>
+
+-   Mary Piper, Meeta Mistry, Jihe Liu, William Gammerdinger, & Radhika Khetani. (2022, January 6). hbctraining/scRNA-seq_online: scRNA-seq Lessons from HCBC (first release). Zenodo. <https://doi.org/10.5281/zenodo.5826256>
 
 # Disclaimer
 
-Recommendations given by representatives of BD in the context of the creation and setup of customer-specific applications and assays, the composition of antibody panels and suggestions for data analysis are provided in a diligent manner. However, the Customer acknowledges that (i) such recommendations should not be treated as a substitute for the Customer\'s own examination, (ii) BD does not make any promises nor guarantees that recommendations are accurate and complete and will meet the Customer\'s present or future needs or will produce positive or specific results and (iii) Customer remains solely responsible for validating and deciding on any such recommendations.
+Recommendations given by representatives of BD in the context of the creation and setup of customer-specific applications and assays, the composition of antibody panels and suggestions for data analysis are provided in a diligent manner. However, the Customer acknowledges that (i) such recommendations should not be treated as a substitute for the Customer's own examination, (ii) BD does not make any promises nor guarantees that recommendations are accurate and complete and will meet the Customer's present or future needs or will produce positive or specific results and (iii) Customer remains solely responsible for validating and deciding on any such recommendations.
 
 BD therefore accepts no liability whatsoever in connection with any such recommendation and/or any results generated on the basis of such recommendations and, to the fullest extent permitted by law, expressly disclaims any and all warranties and any liability in this respect. In particular, the Customer assumes sole responsibility for the validation, use, selection, and suitability of the recommendations for its needs and objectives.
 
