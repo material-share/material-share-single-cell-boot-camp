@@ -7,7 +7,6 @@ data/
 _freeze/
 *_cache/
 *_files/
-*pics/
 *prerequisite_figures/
 
 /.quarto/
