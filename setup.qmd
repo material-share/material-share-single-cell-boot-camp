@@ -91,7 +91,7 @@ library(muscat)
 
 # 3. Data to run the materials
 
-Please access the folder [Data](https://bd1-my.sharepoint.com/:f:/r/personal/yujuan_gui_bd_com/Documents/demo_data/data_for_boot_camp?csf=1&web=1&e=Q0QMU5) to download data to run the prerequisites and course chapters.
+Please access the folder [Data](https://bd1-my.sharepoint.com/:u:/g/personal/yujuan_gui_bd_com/EYjhv7OoboRBlFrbrWLzdbwBYd8nPyuoGF9nuuG6xO31Fg?e=3Ce4LE) to download data to run the prerequisites and course chapters.
 
 You will also need to download the entire repository as a .zip from <https://github.com/material-share/material-share-single-cell-boot-camp/tree/master>.
 
