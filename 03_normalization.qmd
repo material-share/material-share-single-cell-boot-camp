@@ -23,8 +23,6 @@ Load the RData which contains all files from previous chapter.
 load("data/intermediate_data/chapter2.RData")
 ```
 
-# 
-
 # 1. Normalization
 
 We will perform normalization on UMI counts using `LogNormalize`.
@@ -45,7 +43,7 @@ Where are the normalized counts stored?
 ::: {.callout-tip collapse="T"}
 ## Answer
 
-The normalizaed counts are stored in the slot `RNA`.
+The normalized counts are stored in the slot `RNA`.
 
 ```{r}
 filtered.rna@assays[["RNA"]]@data[1:5, 1:5]

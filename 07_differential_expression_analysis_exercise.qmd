@@ -6,6 +6,7 @@ execute:
 ---
 
 ```{r}
+#| message: false
 # libraries for this chapter
 library(tidyverse)
 library(Seurat)
@@ -24,50 +25,90 @@ Load the RData which contains all files from the previous chapter.
 load("data/intermediate_data/chapter6.RData")
 ```
 
-# 1. FindMarkers
+::: callout-note
+# @QUESTION1
 
-In the last chapter, we used `FindMarkers` to find the marker genes between two clusters by specifying `ident.1` and `ident.2`.
+What's the default assay of `integrate.filtered.rna`?
 
-Changing the `ident.1` and `ident.2` arguments, we can perform differential expression analysis between two groups.
-
-For instance, we want to find genes deferentially expressed between naïve and treated PBMC.
-
-```{r}
-# assign the sample identity that we want to work on different sample groups
-Idents(integrate.filtered.rna) <- "Sample_Name"
-
-# Find genes differentially expressed
-treated_naive <- 
-  FindMarkers(integrate.filtered.rna, ident.1 = "treated", ident.2 = "naive") %>% 
-  rownames_to_column("gene") %>% 
-  dplyr::filter(p_val_adj < 0.05)
-```
-
-We can compare the gene expression between two groups by specifying `ident.1` and `ident.2`.
+::: callout-note
+## Tip
 
 ```{r}
-head(treated_naive)
+DefaultAssay(integrate.filtered.rna)
 ```
-
--   `gene` Gene symbol.
-
--   `p_val` P-value without multiple testing.
-
--   `avg_log2FC` log2 fold-change of the average expression between the two groups.
-
-We can also find genes deferentially expressed in CD4 T cells between the two samples. We start by subsetting the cells annotated as "CD4 T".
 
 ```{r}
-# subset CD4 T cells
-cd4t <- subset(integrate.filtered.rna, subset = predicted.celltype.l1 == "CD4 T")
-
-# Find genes differentially expressed between activated vs. naive samples in CD4 T cells
-treated_naive_cd4t <- 
-  FindMarkers(cd4t, ident.1 = "treated", ident.2 = "naive", 
-              assay = "RNA", recorrect_umi = FALSE) %>% 
-  rownames_to_column("gene") %>% 
-  dplyr::filter(p_val_adj < 0.05)
+# If the default assay is not "RNA", change it to "RNA"
+DefaultAssay(integrate.filtered.rna) <- "RNA"
 ```
+
+Differential gene expression should be performed on assay "RNA".
+:::
+:::
+
+# 1. Find marker genes
+
+## 1.1 `FindAllMarkers`
+
+The function `FindAllMarkers` performs a Wilcoxon plot to determine the genes differentially expressed between each cluster and the rest of the cells.
+
+```{r}
+# FindAllMarkers
+treated.markers <- FindAllMarkers(subset(integrate.filtered.rna, subset = Sample_Name == "treated"), 
+                                  assay = "RNA",
+                                  only.pos = TRUE, 
+                                  min.pct = 0.25, 
+                                  logfc.threshold = 0.25)
+```
+
+Let's look at the top 2 significant marker genes in each cluster.
+
+```{r}
+top2 <- treated.markers %>%
+    group_by(cluster) %>%
+    slice_max(n = 2, order_by = avg_log2FC)
+```
+
+And generate a dotplot:
+
+```{r}
+dittoDotPlot(integrate.filtered.rna,
+                       vars = unique(top2$gene), 
+                       group.by = "integrated_snn_res.0.4")
+```
+
+## 1.2 `FindMarkers`
+
+We can use the `FindMarkers` to determine the differentially expressed genes between two groups of cells, such as CD8 T cells vs. CD4 T cells.
+
+First we can set the default cell identity to the cell types defined by `Azimuth`:
+
+```{r}
+integrate.filtered.rna <- Seurat::SetIdent(integrate.filtered.rna, value = "predicted.celltype.l1")
+```
+
+```{r}
+example_findmarkers <- FindMarkers(integrate.filtered.rna,
+                          assay = "RNA",
+                          ident.1 = "CD8 T",
+                          ident.2 = "CD4 T",
+                          group.by = "predicted.celltype.l1") %>% 
+  rownames_to_column("gene")
+
+
+```
+
+::: callout-note
+# @QUESTION2
+
+Look at `example_findmarkers`. What does a positive avg_log2FC mean?
+
+::: callout-note
+## Tip
+
+The differential expression is done by comparing `ident.1` / `ident.2`.
+:::
+:::
 
 # 2. `muscat` for Differential State analysis (DS)
 
@@ -78,6 +119,7 @@ Pseudo-bulk aggregation transforms scRNA-seq data into bulk-like data by aggrega
 Let's assume we have three biological replicates in each condition (we make them up for the purpose of illustration).
 
 ```{r}
+#| message: false
 # read in dummy group
 dummy <- read_csv("data/dummy.csv")
 
@@ -87,39 +129,13 @@ integrate.filtered.rna <- AddMetaData(integrate.filtered.rna,
                                       col.name = "dummy_group")
 ```
 
-## 2.2 Select cell groups
-
-Let's take a look at the cell type annotation in UMAP.
+We will focus on "CD4 T" and "NK" .
 
 ```{r}
-# visualize cell types in UMAP
-DimPlot(integrate.filtered.rna, 
-        reduction = "umap", 
-        group.by = "predicted.celltype.l1", 
-        label = TRUE, 
-        label.size = 3,
-        repel = TRUE, 
-        split.by = "Sample_Name") + NoLegend()
-```
-
-We see some of the cell types have only a few cells.
-
-Let's look at how many cells are in each cell type per dummy group.
-
-```{r}
-# Cell counts in per cell type per group
-FetchData(integrate.filtered.rna, 
-                     vars = c("predicted.celltype.l1", "dummy_group", "Sample_Name")) %>%
-  dplyr::count(predicted.celltype.l1, Sample_Name, dummy_group) %>%
-  tidyr::spread(predicted.celltype.l1, n)
-```
-
-Dendritic cells, other T cells, and the group of other don't have sufficient cells per dummy group. For demonstration, we will not include these cell types for pseudo-bulk analysis. We will focus on "CD4 T", "Mono", and "NK".
-
-```{r}
+#| warning: false
 subset.rna <- subset(integrate.filtered.rna, 
                      subset = predicted.celltype.l1 %in% 
-                       c("CD4 T", "Mono", "NK"))
+                       c("CD4 T", "NK"))
 ```
 
 ## 2.3 Setup `SingleCellExperiment`
@@ -210,5 +226,5 @@ integrate.filtered.rna <- ScaleData(integrate.filtered.rna, features = rownames(
 # plot heatmap
 integrate.filtered.rna %>%
   subset(., subset = predicted.celltype.l1 == "CD4 T") %>% 
-  DoHeatmap(features = cd4t.sig$gene[1:40])
+  DoHeatmap(features = cd4t.sig$gene[1:30], group.by = "Sample_Name")
 ```
