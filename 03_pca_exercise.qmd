@@ -1,0 +1,77 @@
+---
+title: "03_dimentionality_reduction"
+execute:
+  warning: false
+  message: false
+---
+
+```{r}
+#| message: false
+# libraries for this chapter
+library(tidyverse)
+library(Seurat)
+library(data.table)
+library(celldex)
+library(SingleR)
+library(ExperimentHub)
+```
+
+# Load RData
+
+Load the RData which contains all files from previous chapter.
+
+```{r}
+load("data/intermediate_data/chapter3.RData")
+```
+
+# 1. PCA
+
+```{r}
+# perform PCA
+filtered.rna <- RunPCA(filtered.rna, verbose = F)
+```
+
+# 2. Elbow plot
+
+```{r}
+# Elbow plot
+ElbowPlot(filtered.rna, ndims = 50)
+```
+
+::: callout-note
+::: callout-important
+# @QUESTION1
+
+How many PCs to include to calculate UMAP?
+:::
+:::
+
+# 3. Run UMAP
+
+```{r}
+# run UMAP with 20 PCs
+filtered.rna <- RunUMAP(filtered.rna, dims = 1:20, verbose = F)
+
+# plot UMAP
+DimPlot(filtered.rna, group.by = "Sample_Name")
+```
+
+::: callout-important
+# @QUESTION2
+
+Change to different PCs, 5, 50, etc. and rerun the UMAP. What's the difference?
+
+::: callout-tip
+## TIP
+
+Change the values in `dims` argument.
+
+```{r}
+# run UMAP with xx PCs
+filtered.rna <- RunUMAP(filtered.rna, dims = 1:50)
+
+# plot UMAP
+DimPlot(filtered.rna, group.by = "Sample_Name")
+```
+:::
+:::

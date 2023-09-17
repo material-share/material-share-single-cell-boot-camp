@@ -32,7 +32,7 @@ Rhapsody single cell platform outputs expression matrix in two formats: MEX and 
 We import MEX using the function from Seurat, `Read10x`. We assign a name to the created object, `expMat` (**exp**ression **Mat**rix).
 
 ::: callout-note
-The expression matrix in Rhapsody v1 pipeline is in CSV format. If you run Rhapsody v2 pipeline, the expression matrix is available in MEX format.
+The expression matrix in Rhapsody v1 pipeline is in CSV format. If you run Rhapsody v2.0 pipeline, the expression matrix is available in MEX format.
 :::
 
 ```{r}
@@ -83,7 +83,7 @@ scRNA-seq usually contains many zeros. The zeros can come from:
 Let's create a Seurat object to store Gene Expression and assign "rna" as the object name.
 
 ```{r}
-rna <- CreateSeuratObject(counts = expMat$`Gene Expression`, 
+rna <- Seurat::CreateSeuratObject(counts = expMat$`Gene Expression`, 
                                 min.cells = 1, 
                                 min.features = 100, 
                                 assay = "RNA")
@@ -99,6 +99,12 @@ rna <- CreateSeuratObject(counts = expMat$`Gene Expression`,
 `CreateSeuratObject` has many arguments in the function. These arguments allow users to control the behavior of the function. One can look at the Help tab to see the arguments and their default settings.
 
 ![](pics/1-3-helpDesk.png)
+:::
+
+::: callout-note
+## Function notation with `::`
+
+Here, we define the function together with its associated package. We do that by the syntax `package::function`. Of course, you can also call `library(package)`, and only type the function name. Since we use many different packages in this course, it can be confusing which function comes from which package. Therefore, we associate the package with the called function.
 :::
 
 When creating a Seurat object, Seurat automatically creates some metadata for each cell. This information is stored in the `meta.data` slot.

@@ -1,0 +1,91 @@
+---
+title: "Chapter 3 Normalization and PCA"
+execute:
+  warning: false
+  message: false
+---
+
+```{r}
+#| message: false
+# libraries for this chapter
+library(tidyverse)
+library(Seurat)
+library(data.table)
+library(celldex)
+library(SingleR)
+library(ExperimentHub)
+```
+
+# Load RData
+
+Load the RData which contains all files from previous chapter.
+
+```{r}
+load("data/intermediate_data/chapter2.RData")
+```
+
+# 1. Normalization
+
+We will perform normalization on UMI counts using `LogNormalize`.
+
+```{r}
+filtered.rna <- NormalizeData(filtered.rna, 
+                              normalization.method = "LogNormalize")
+```
+
+::: callout-important
+# @QUESTION1
+
+Where are the normalized counts stored? And how to extract the normalized counts?
+
+::: callout-tip
+## TIP
+
+Click on the Seurat object `filtered.rna` in the top right window. What's the difference between `counts` and `data`?
+
+![](pics/Screenshot%202023-09-17%20at%2008.47.16.png)
+:::
+
+```{r}
+# extract normalized counts
+norm_counts <- Seurat::GetAssayData(filtered.rna, slot = "data")
+```
+:::
+
+# 2. Scaling and find the most variable genes
+
+```{r}
+# Identify the most variable genes
+filtered.rna <- FindVariableFeatures(filtered.rna,
+                                     selection.method = "vst",
+                                     nfeatures = 2000, 
+                                     verbose = F)
+
+# Identify the 10 most highly variable genes
+top10 <- head(Seurat::VariableFeatures(filtered.rna), 10)
+
+# plot them in a nicely labeled scatterplot
+vf_plot <- Seurat::VariableFeaturePlot(filtered.rna)
+Seurat::LabelPoints(plot = vf_plot,
+            points = top10, repel = TRUE)
+```
+
+Next, we apply scaling, a linear transformation that is a standard pre-processing step prior to dimensional reduction techniques like PCA.
+
+```{r}
+# Scale the data
+filtered.rna <- ScaleData(filtered.rna, 
+                          features = rownames(filtered.rna))
+```
+
+::: callout-important
+# @QUESTION2
+
+Where are the scaled data stored?
+
+::: callout-tip
+## TIP
+
+Click on the Seurat object `filtered.rna` in the top right window.
+:::
+:::
