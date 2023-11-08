@@ -14,6 +14,7 @@ library(celldex)
 library(SingleR)
 library(ExperimentHub)
 library(muscat)
+library(dittoSeq)
 ```
 
 # Load RData
@@ -93,12 +94,12 @@ Let's take a look at the cell type annotation in UMAP.
 
 ```{r}
 # visualize cell types in UMAP
-DimPlot(integrate.filtered.rna, 
-        reduction = "umap", 
-        group.by = "predicted.celltype.l1", 
-        label = TRUE, 
+DimPlot(integrate.filtered.rna,
+        reduction = "umap",
+        group.by = "predicted.celltype.l1",
+        label = TRUE,
         label.size = 3,
-        repel = TRUE, 
+        repel = TRUE,
         split.by = "Sample_Name") + NoLegend()
 ```
 

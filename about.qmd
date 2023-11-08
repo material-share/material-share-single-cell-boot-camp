@@ -22,10 +22,6 @@ We will focus on **Chapters 1 to 9** in the course. Welcome to review them befor
 
 **For further information, suggestions and bug report, please contact: [biox_support_emea\@bd.com](biox_support_emea@bd.com)**
 
-# Next occurrence
-
-Sept 19 - 20, 2023 \| 10 am - 2:30 \~ 3:00 pm CET \| Online
-
 # Description
 
 The Single Cell Boot Camp: Analysis of scRNA-seq with R is to provide an overview of the analysis of single-cell RNA-seq using R. It is designed for early-stage researchers who want to adopt single-cell analysis in their toolbox. The workshop consists of theory in presentation and application in hands-on practice.
