@@ -219,7 +219,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#aggregation" id="toc-aggregation" class="nav-link" data-scroll-target="#aggregation">2.4 Aggregation</a></li>
   </ul>
 </li>
-  <li><a href="#save" id="toc-save" class="nav-link" data-scroll-target="#save">3. Save</a></li>
   </ul></nav>
     </div>
 <!-- main -->
@@ -237,7 +236,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   
 
-</header><div class="cell" data-hash="07_differential_expression_analysis_cache/html/unnamed-chunk-1_05ee03ed5acafd1b250ca65b4cabbda8">
+</header><div class="cell" data-hash="07_differential_expression_analysis_cache/html/unnamed-chunk-1_9c6d023296a30413c908c1452550a5a9">
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># libraries for this chapter</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat">Seurat</a></span><span class="op">)</span></span>
@@ -245,7 +244,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/LTLA/celldex">celldex</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/LTLA/SingleR">SingleR</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">ExperimentHub</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/HelenaLC/muscat">muscat</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/HelenaLC/muscat">muscat</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">dittoSeq</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="load-rdata" class="level1"><h1>Load RData</h1>
 <p>Load the RData which contains all files from the previous chapter.</p>
@@ -311,18 +311,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section><section id="select-cell-groups" class="level2"><h2 class="anchored" data-anchor-id="select-cell-groups">2.2 Select cell groups</h2>
 <p>Let’s take a look at the cell type annotation in UMAP.</p>
-<div class="cell" data-hash="07_differential_expression_analysis_cache/html/unnamed-chunk-7_6b8041b3278417cab0769ec5198f8b07">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># visualize cell types in UMAP</span></span>
-<span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html">DimPlot</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, </span>
-<span>        reduction <span class="op">=</span> <span class="st">"umap"</span>, </span>
-<span>        group.by <span class="op">=</span> <span class="st">"predicted.celltype.l1"</span>, </span>
-<span>        label <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span>        label.size <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>        repel <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span>        split.by <span class="op">=</span> <span class="st">"Sample_Name"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/SeuratTheme.html">NoLegend</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="07_differential_expression_analysis_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
-</div>
+<div class="cell" data-hash="07_differential_expression_analysis_cache/html/unnamed-chunk-7_80d45cf78491cbf0158603855d0de746">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># # visualize cell types in UMAP</span></span>
+<span><span class="co"># DimPlot(integrate.filtered.rna, </span></span>
+<span><span class="co">#         reduction = "umap", </span></span>
+<span><span class="co">#         group.by = "predicted.celltype.l1", </span></span>
+<span><span class="co">#         label = TRUE, </span></span>
+<span><span class="co">#         label.size = 3,</span></span>
+<span><span class="co">#         repel = TRUE, </span></span>
+<span><span class="co">#         split.by = "Sample_Name") + NoLegend()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We see some of the cell types have only a few cells.</p>
 <p>Let’s look at how many cells are in each cell type per dummy group.</p>
@@ -441,14 +438,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><img src="07_differential_expression_analysis_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-</section></section><section id="save" class="level1"><h1>3. Save</h1>
-<p>Save the files into RData for documentation.</p>
-<div class="cell" data-hash="07_differential_expression_analysis_cache/html/unnamed-chunk-18_eba885ce79fa1ce589685e16bbb14ed7">
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># save(integrate.filtered.rna, expMat, cd4t, file = "data/intermediate_data/chapter7.RData")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 
 
-</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");

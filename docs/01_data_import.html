@@ -95,7 +95,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./02_quality_control.html">Chapter 2 Quality Control</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_data_import.html">Chapter 1 Data Import</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -269,7 +269,7 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The expression matrix in Rhapsody v1 pipeline is in CSV format. If you run Rhapsody v2 pipeline, the expression matrix is available in MEX format.</p>
+<p>The expression matrix in Rhapsody v1 pipeline is in CSV format. If you run Rhapsody v2.0 pipeline, the expression matrix is available in MEX format.</p>
 </div>
 </div>
 <div class="cell" data-hash="01_data_import_cache/html/unnamed-chunk-2_1f4c30234e193fac937deb1d4188a53c">
@@ -333,8 +333,8 @@ Answer
 </div>
 </section><section id="create-a-seurat-object-to-store-gene-expression" class="level1"><h1>2. Create a Seurat object to store Gene Expression</h1>
 <p>Let’s create a Seurat object to store Gene Expression and assign “rna” as the object name.</p>
-<div class="cell" data-hash="01_data_import_cache/html/unnamed-chunk-4_43440ab02bd861b0fa120a2b23155365">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rna</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/CreateSeuratObject.html">CreateSeuratObject</a></span><span class="op">(</span>counts <span class="op">=</span> <span class="va">expMat</span><span class="op">$</span><span class="va">`Gene Expression`</span>, </span>
+<div class="cell" data-hash="01_data_import_cache/html/unnamed-chunk-4_ded8ab7e5b5516dcb8e67afe9a271984">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rna</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/CreateSeuratObject.html">CreateSeuratObject</a></span><span class="op">(</span>counts <span class="op">=</span> <span class="va">expMat</span><span class="op">$</span><span class="va">`Gene Expression`</span>, </span>
 <span>                                min.cells <span class="op">=</span> <span class="fl">1</span>, </span>
 <span>                                min.features <span class="op">=</span> <span class="fl">100</span>, </span>
 <span>                                assay <span class="op">=</span> <span class="st">"RNA"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -354,6 +354,19 @@ Note
 <div class="callout-body-container callout-body">
 <p><code>CreateSeuratObject</code> has many arguments in the function. These arguments allow users to control the behavior of the function. One can look at the Help tab to see the arguments and their default settings.</p>
 <p><img src="pics/1-3-helpDesk.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Function notation with <code>::</code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Here, we define the function together with its associated package. We do that by the syntax <code>package::function</code>. Of course, you can also call <code><a href="https://rdrr.io/r/base/library.html">library(package)</a></code>, and only type the function name. Since we use many different packages in this course, it can be confusing which function comes from which package. Therefore, we associate the package with the called function.</p>
 </div>
 </div>
 <p>When creating a Seurat object, Seurat automatically creates some metadata for each cell. This information is stored in the <code>meta.data</code> slot.</p>

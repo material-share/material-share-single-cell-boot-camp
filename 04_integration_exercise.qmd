@@ -76,7 +76,7 @@ integrate.filtered.rna <- IntegrateData(anchorset = anchors, verbose = F)
 ```
 
 ::: callout-note
-@QUESTION1
+# @QUESTION2
 
 Where is the integrated value stored?
 
