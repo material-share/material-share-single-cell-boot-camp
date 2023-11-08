@@ -311,15 +311,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section><section id="select-cell-groups" class="level2"><h2 class="anchored" data-anchor-id="select-cell-groups">2.2 Select cell groups</h2>
 <p>Let’s take a look at the cell type annotation in UMAP.</p>
-<div class="cell" data-hash="07_differential_expression_analysis_cache/html/unnamed-chunk-7_80d45cf78491cbf0158603855d0de746">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># # visualize cell types in UMAP</span></span>
-<span><span class="co"># DimPlot(integrate.filtered.rna, </span></span>
-<span><span class="co">#         reduction = "umap", </span></span>
-<span><span class="co">#         group.by = "predicted.celltype.l1", </span></span>
-<span><span class="co">#         label = TRUE, </span></span>
-<span><span class="co">#         label.size = 3,</span></span>
-<span><span class="co">#         repel = TRUE, </span></span>
-<span><span class="co">#         split.by = "Sample_Name") + NoLegend()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="07_differential_expression_analysis_cache/html/unnamed-chunk-7_e4cfdcffb1b6b950ab2caf7af790829b">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># visualize cell types in UMAP</span></span>
+<span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html">DimPlot</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>,</span>
+<span>        reduction <span class="op">=</span> <span class="st">"umap"</span>,</span>
+<span>        group.by <span class="op">=</span> <span class="st">"predicted.celltype.l1"</span>,</span>
+<span>        label <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>        label.size <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>        repel <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>        split.by <span class="op">=</span> <span class="st">"Sample_Name"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/SeuratTheme.html">NoLegend</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="07_differential_expression_analysis_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
 </div>
 <p>We see some of the cell types have only a few cells.</p>
 <p>Let’s look at how many cells are in each cell type per dummy group.</p>
