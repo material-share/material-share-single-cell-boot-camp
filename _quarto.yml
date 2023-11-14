@@ -10,7 +10,7 @@ website:
     search: true
     page-navigation: true
     contents: 
-      - about.qmd
+      - index.qmd
       - setup.qmd
       - precourse_preparation_R.qmd
       - precourse_preparation_theory.qmd
