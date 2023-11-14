@@ -1,13 +1,10 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.3.340">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-
-
-<title>Introduction</title>
+<title>Chapter 3 Normalization and PCA</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,8 +17,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
-
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
@@ -38,8 +68,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
-<script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -57,35 +86,27 @@ ul.task-list li input[type="checkbox"] {
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit"
   }
-}</script>
-
-
-<link rel="stylesheet" href="styles.css">
+}</script><link rel="stylesheet" href="styles.css">
 </head>
-
 <body class="nav-sidebar docked">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav">
-    <div class="container-fluid d-flex">
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./about.html">Introduction</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">
+      Single Cell Boot Camp: Analyzing Single Cell RNA-seq with R
+      </li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
     </div>
-  </nav>
-</header>
-<!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Single Cell Boot Camp: Analyzing Single Cell RNA-seq with R</a> 
     </div>
@@ -97,9 +118,9 @@ ul.task-list li input[type="checkbox"] {
         </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-        <li class="sidebar-item">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./about.html" class="sidebar-item-text sidebar-link active">
+  <a href="./about.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Introduction</span></a>
   </div>
 </li>
@@ -179,31 +200,21 @@ ul.task-list li input[type="checkbox"] {
   </div>
 </li>
     </ul>
-    </div>
-</nav>
-<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+</div>
+</nav><div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#how-to-use-the-materials" id="toc-how-to-use-the-materials" class="nav-link active" data-scroll-target="#how-to-use-the-materials">How to use the materials?</a></li>
-  <li><a href="#description" id="toc-description" class="nav-link" data-scroll-target="#description">Description</a></li>
-  <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link" data-scroll-target="#prerequisites">Prerequisites</a></li>
-  <li><a href="#expected-outcome" id="toc-expected-outcome" class="nav-link" data-scroll-target="#expected-outcome">Expected outcome</a></li>
-  <li><a href="#reference" id="toc-reference" class="nav-link" data-scroll-target="#reference">Reference</a></li>
-  <li><a href="#disclaimer" id="toc-disclaimer" class="nav-link" data-scroll-target="#disclaimer">Disclaimer</a></li>
-  <li><a href="#license" id="toc-license" class="nav-link" data-scroll-target="#license">License</a></li>
-  </ul>
-</nav>
+<li><a href="#load-rdata" id="toc-load-rdata" class="nav-link active" data-scroll-target="#load-rdata">Load RData</a></li>
+  <li><a href="#normalization" id="toc-normalization" class="nav-link" data-scroll-target="#normalization">1. Normalization</a></li>
+  <li><a href="#scaling-and-find-the-most-variable-genes" id="toc-scaling-and-find-the-most-variable-genes" class="nav-link" data-scroll-target="#scaling-and-find-the-most-variable-genes">2. Scaling and find the most variable genes</a></li>
+  </ul></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Introduction</h1>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<h1 class="title">Chapter 3 Normalization and PCA</h1>
 </div>
 
 
@@ -216,75 +227,111 @@ ul.task-list li input[type="checkbox"] {
   </div>
   
 
-</header>
-
-<section id="how-to-use-the-materials" class="level1">
-<h1>How to use the materials?</h1>
-<p>This repository contains the teaching materials for the Single Cell Boot Camp - Analyzing scRNA-seq with R.</p>
-<p>It has:</p>
-<p>Two chapters of precourse preparation: Precourse Preparation - R / Theory</p>
-<p>Nine chapters of the analysis workflow: Chapter 1 - 9.</p>
+</header><div class="cell" data-hash="03_normalization_exercise_cache/html/unnamed-chunk-1_851171660dd776ce05638e60fc5da7f0">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># libraries for this chapter</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat">Seurat</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com">data.table</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/LTLA/celldex">celldex</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/LTLA/SingleR">SingleR</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">ExperimentHub</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="load-rdata" class="level1"><h1>Load RData</h1>
+<p>Load the RData which contains all files from previous chapter.</p>
+<div class="cell" data-hash="03_normalization_exercise_cache/html/unnamed-chunk-2_70774a73c0c5b53b10b3d10feb01b1de">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/intermediate_data/chapter2.RData"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section><section id="normalization" class="level1"><h1>1. Normalization</h1>
+<p>We will perform normalization on UMI counts using <code>LogNormalize</code>.</p>
+<div class="cell" data-hash="03_normalization_exercise_cache/html/unnamed-chunk-3_98d9dad03aedcfe7603245d6fcd9baaf">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">filtered.rna</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/NormalizeData.html">NormalizeData</a></span><span class="op">(</span><span class="va">filtered.rna</span>, </span>
+<span>                              normalization.method <span class="op">=</span> <span class="st">"LogNormalize"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Important
+<span class="citation" data-cites="QUESTION1">@QUESTION1</span>
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Students who go through the teaching materials and run the code on their local desktops will have a much better learning outcome.</p>
-<p>As we are NOT going to cover the R programming and SOLELY focusing on the analysis workflow, this is particularly important for students who are not familiar with R. So, <strong>please do block some time and try to digest the materials before attending the Boot Camp</strong>.</p>
-<p>If you are familiar with R, you can skip the <strong>Precourse Preparation</strong> and jump to <strong>Chapter 1 - 9</strong>.</p>
+<p>Where are the normalized counts stored? And how to extract the normalized counts?</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+TIP
 </div>
 </div>
-<p><strong>For further information, suggestions and bug report, please contact: <a href="biox_support_emea@bd.com">biox_support_emea@bd.com</a></strong></p>
-</section>
-<section id="description" class="level1">
-<h1>Description</h1>
-<p>The Single Cell Boot Camp: Analysis of scRNA-seq with R is to provide an overview of the analysis of single-cell RNA-seq using R. It is designed for early-stage researchers who want to adopt single-cell analysis in their toolbox. The workshop consists of theory in presentation and application in hands-on practice.</p>
-<p>The workshop starts with a fast-paced training session on the common workflow of single-cell RNA-seq analysis, then continues with sessions on the common workflow of scRNA-seq using bioinformatics packages like Seurat.</p>
-</section>
-<section id="prerequisites" class="level1">
-<h1>Prerequisites</h1>
-<p>Each participant are expected to have:</p>
-<p>1. An introductory background in statistics, specifically in the below concepts: Median, log2 fold change, p-value, adjusted p-value, variance, PCA.</p>
-<p>2. Basic familiarity with R and tidyr package, specifically in the below functions: %&gt;% (pipe), filter, mutate, pivot_longer, pivot_wider, map, pmap, select, left_join.</p>
-<p><em>If you would like to learn on your own with publicly available resources:</em><br>
-<a href="https://moderndive.com/index.html">Chapter 1 - 4</a> from MordernDive.<br>
-<br>
-<em>If you would like to participate in an instructor-led R course:</em><br>
-<a href="https://genomics.ed.ac.uk/services/r-biologists">R for Biologist</a> from Edinburgh Genomics. For details, please contact Edinburgh Genomics.</p>
-</section>
-<section id="expected-outcome" class="level1">
-<h1>Expected outcome</h1>
-<p>By the end of the workshop, participants will be familiar with the following topics: Common workflow of single cell analysis (pre-processing, quality control, filtering, normalization, Clustering, Cell type annotation).</p>
-</section>
-<section id="reference" class="level1">
-<h1>Reference</h1>
-<p>The building of materials for the course references and relies on many excellent and well written public avaialbe materials.</p>
-<ul>
-<li><p>Seurat <a href="https://satijalab.org/seurat/" class="uri">https://satijalab.org/seurat/</a></p></li>
-<li><p>Single Cell Best Practices: <a href="https://www.sc-best-practices.org/preamble.html" class="uri">https://www.sc-best-practices.org/preamble.html</a></p></li>
-<li><p>Orchestrating Single-Cell Analysis with Bioconductor: <a href="https://bioconductor.org/books/release/OSCA/" class="uri">https://bioconductor.org/books/release/OSCA/</a></p></li>
-<li><p>Mary Piper, Meeta Mistry, Jihe Liu, William Gammerdinger, &amp; Radhika Khetani. (2022, January 6). hbctraining/scRNA-seq_online: scRNA-seq Lessons from HCBC (first release). Zenodo. <a href="https://doi.org/10.5281/zenodo.5826256" class="uri">https://doi.org/10.5281/zenodo.5826256</a></p></li>
-</ul>
-</section>
-<section id="disclaimer" class="level1">
-<h1>Disclaimer</h1>
-<p>Recommendations given by representatives of BD in the context of the creation and setup of customer-specific applications and assays, the composition of antibody panels and suggestions for data analysis are provided in a diligent manner. However, the Customer acknowledges that (i) such recommendations should not be treated as a substitute for the Customer’s own examination, (ii) BD does not make any promises nor guarantees that recommendations are accurate and complete and will meet the Customer’s present or future needs or will produce positive or specific results and (iii) Customer remains solely responsible for validating and deciding on any such recommendations.</p>
-<p>BD therefore accepts no liability whatsoever in connection with any such recommendation and/or any results generated on the basis of such recommendations and, to the fullest extent permitted by law, expressly disclaims any and all warranties and any liability in this respect. In particular, the Customer assumes sole responsibility for the validation, use, selection, and suitability of the recommendations for its needs and objectives.</p>
-</section>
-<section id="license" class="level1">
-<h1>License</h1>
-<p>See the <a href="LICENSE.html">LICENSE</a> file for license rights and limitations (MIT).</p>
+<div class="callout-body-container callout-body">
+<p>Click on the Seurat object <code>filtered.rna</code> in the top right window. What’s the difference between <code>counts</code> and <code>data</code>?</p>
+<p><img src="pics/Screenshot 2023-09-17 at 08.47.16.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-hash="03_normalization_exercise_cache/html/unnamed-chunk-4_2768902f72a9554f6e9aff710885a797">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># extract normalized counts</span></span>
+<span><span class="va">norm_counts</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/AssayData.html">GetAssayData</a></span><span class="op">(</span><span class="va">filtered.rna</span>, slot <span class="op">=</span> <span class="st">"data"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section><section id="scaling-and-find-the-most-variable-genes" class="level1"><h1>2. Scaling and find the most variable genes</h1>
+<div class="cell" data-hash="03_normalization_exercise_cache/html/unnamed-chunk-5_6fdb5a49435e02c312d0b01361150538">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Identify the most variable genes</span></span>
+<span><span class="va">filtered.rna</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindVariableFeatures.html">FindVariableFeatures</a></span><span class="op">(</span><span class="va">filtered.rna</span>,</span>
+<span>                                     selection.method <span class="op">=</span> <span class="st">"vst"</span>,</span>
+<span>                                     nfeatures <span class="op">=</span> <span class="fl">2000</span>, </span>
+<span>                                     verbose <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Identify the 10 most highly variable genes</span></span>
+<span><span class="va">top10</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/VariableFeatures.html">VariableFeatures</a></span><span class="op">(</span><span class="va">filtered.rna</span><span class="op">)</span>, <span class="fl">10</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># plot them in a nicely labeled scatterplot</span></span>
+<span><span class="va">vf_plot</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/VariableFeaturePlot.html">VariableFeaturePlot</a></span><span class="op">(</span><span class="va">filtered.rna</span><span class="op">)</span></span>
+<span><span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/LabelPoints.html">LabelPoints</a></span><span class="op">(</span>plot <span class="op">=</span> <span class="va">vf_plot</span>,</span>
+<span>            points <span class="op">=</span> <span class="va">top10</span>, repel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="03_normalization_exercise_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Next, we apply scaling, a linear transformation that is a standard pre-processing step prior to dimensional reduction techniques like PCA.</p>
+<div class="cell" data-hash="03_normalization_exercise_cache/html/unnamed-chunk-6_d6e89d3ed4549cbc66068bf1e2859328">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Scale the data</span></span>
+<span><span class="va">filtered.rna</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/ScaleData.html">ScaleData</a></span><span class="op">(</span><span class="va">filtered.rna</span>, </span>
+<span>                          features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html">rownames</a></span><span class="op">(</span><span class="va">filtered.rna</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="citation" data-cites="QUESTION2">@QUESTION2</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Where are the scaled data stored?</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+TIP
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Click on the Seurat object <code>filtered.rna</code> in the top right window.</p>
+</div>
+</div>
+</div>
+</div>
 
 
-</section>
-
-</main> <!-- /main -->
-<script id="quarto-html-after-body" type="application/javascript">
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");

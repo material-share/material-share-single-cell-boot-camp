@@ -14,12 +14,12 @@ It has:
 
 Two chapters of precourse preparation: Precourse Preparation - R / Theory
 
-Nine chapters of the analysis workflow: Chapter 1 - 9
+Nine chapters of the analysis workflow: Chapter 1 - 9.
 
 ::: callout-important
-We notice that students who go through the teaching materials and run the code on their local desktops will have a much better learning outcome.
+Students who go through the teaching materials and run the code on their local desktops will have a much better learning outcome.
 
-As we are NOT going to cover the R programming but SOLELY focusing on the analysis workflow, this is particularly important for students who are not familiar with R. So, **please do block some time and try to digest the materials before attending the Boot Camp**.
+As we are NOT going to cover the R programming and SOLELY focusing on the analysis workflow, this is particularly important for students who are not familiar with R. So, **please do block some time and try to digest the materials before attending the Boot Camp**.
 
 If you are familiar with R, you can skip the **Precourse Preparation** and jump to **Chapter 1 - 9**.
 :::
