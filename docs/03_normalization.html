@@ -177,11 +177,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
 </li>
         <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./07_differential_expression_analysis.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Chapter 7 Differential Expression Analysis</span></a>
-  </div>
-</li>
+ <span class="menu-text">07_differential_expression_analysis.qmd</span>
+  </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./08_enrichment_analysis.html" class="sidebar-item-text sidebar-link">
@@ -209,7 +206,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
 <li><a href="#load-rdata" id="toc-load-rdata" class="nav-link active" data-scroll-target="#load-rdata">Load RData</a></li>
-  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
   <li><a href="#normalization" id="toc-normalization" class="nav-link" data-scroll-target="#normalization">1. Normalization</a></li>
   <li><a href="#evaluating-effects-of-mitochondrial-percentage-optional" id="toc-evaluating-effects-of-mitochondrial-percentage-optional" class="nav-link" data-scroll-target="#evaluating-effects-of-mitochondrial-percentage-optional">2. Evaluating effects of mitochondrial percentage (optional)</a></li>
   <li><a href="#save" id="toc-save" class="nav-link" data-scroll-target="#save">3. Save</a></li>
@@ -244,7 +240,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell" data-hash="03_normalization_cache/html/unnamed-chunk-2_e6efc49f7ebad2bd517f564ff43e40f6">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/intermediate_data/chapter2.RData"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section><section id="section" class="level1"><h1></h1>
 </section><section id="normalization" class="level1"><h1>1. Normalization</h1>
 <p>We will perform normalization on UMI counts using <code>LogNormalize</code>.</p>
 <p><code>LogNormalize</code> divides the UMI counts of a gene in a cell into the total UMI counts in that cell. After division, we take the natural log.</p>
@@ -277,7 +272,7 @@ Answer
 </div>
 <div id="callout-2" class="callout-2-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
-<p>The normalizaed counts are stored in the slot <code>RNA</code>.</p>
+<p>The normalized counts are stored in the slot <code>RNA</code>.</p>
 <div class="cell" data-hash="03_normalization_cache/html/unnamed-chunk-4_106076b7b01b939c3e43e7afad3163db">
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">filtered.rna</span><span class="op">@</span><span class="va">assays</span><span class="op">[[</span><span class="st">"RNA"</span><span class="op">]</span><span class="op">]</span><span class="op">@</span><span class="va">data</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">

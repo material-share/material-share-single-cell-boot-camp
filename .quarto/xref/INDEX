@@ -52,5 +52,32 @@
   },
   "setup.qmd": {
     "setup.html": "6876d3a1"
+  },
+  "04_integration_exercise.qmd": {
+    "04_integration_exercise.html": "45cda5bf"
+  },
+  "03_pca_exercise.qmd": {
+    "03_pca_exercise.html": "cf5a3eab"
+  },
+  "05_clustering_exercise.qmd": {
+    "05_clustering_exercise.html": "2d778e08"
+  },
+  "06_annotation_exercise.qmd": {
+    "06_annotation_exercise.html": "17c8db5b"
+  },
+  "08_enrichment_analysis_exercise.qmd": {
+    "08_enrichment_analysis_exercise.html": "6fd315b9"
+  },
+  "09_combining_exercise.qmd": {
+    "09_combining_exercise.html": "e537c030"
+  },
+  "02_quality_control_exercise.qmd": {
+    "02_quality_control_exercise.html": "e277a046"
+  },
+  "03_normalization_exercise.qmd": {
+    "03_normalization_exercise.html": "c89d3558"
+  },
+  "01_data_import_exercise.qmd": {
+    "01_data_import_exercise.html": "feeaf55d"
   }
 }
