@@ -8,23 +8,23 @@ execute:
 
 # How to use the materials?
 
-This repository contains the materials for the Single Cell Boot Camp.
+This repository contains the teaching materials for the Single Cell Boot Camp - Analyzing scRNA-seq with R.
 
-It has two chapters of precourse preparation and nine chapters of the course.
+It has:
+
+Two chapters of precourse preparation: Precourse Preparation - R / Theory
+
+Nine chapters of the analysis workflow: Chapter 1 - 9.
 
 ::: callout-important
-For those who are new or need a refresher to R, please review **Precourse Preparation - R**. *If you are familiar with the functions listed in that chapter, you can skip it.*
+Students who go through the teaching materials and run the code on their local desktops will have a much better learning outcome.
 
-For all participants, please review **Precourse Preparation - Theory.**
+As we are NOT going to cover the R programming and SOLELY focusing on the analysis workflow, this is particularly important for students who are not familiar with R. So, **please do block some time and try to digest the materials before attending the Boot Camp**.
+
+If you are familiar with R, you can skip the **Precourse Preparation** and jump to **Chapter 1 - 9**.
 :::
 
-We will focus on **Chapters 1 to 9** in the course. Welcome to review them before the course if you have time (though the learning outcome is better if you go through the materials before attending the course - from previous students).
-
 **For further information, suggestions and bug report, please contact: [biox_support_emea\@bd.com](biox_support_emea@bd.com)**
-
-# Next occurrence
-
-Sept 19 - 20, 2023 \| 10 am - 2:30 \~ 3:00 pm CET \| Online
 
 # Description
 
