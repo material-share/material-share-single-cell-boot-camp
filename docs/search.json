@@ -397,5 +397,61 @@
     "title": "Chapter 1 Data Import",
     "section": "",
     "text": "# libraries for this chapter\nlibrary(tidyverse)\nlibrary(Seurat)\nlibrary(data.table)\n\n1. Loading single cell data\n\nexpMat &lt;- Read10X(\"data/raw_data/WTA-AB-SMK-v2-0_DBEC_MolsPerCell_MEX/\",\n                  gene.column = 2,\n                  cell.column = 1,\n                  unique.features = TRUE)\n\nClick on the expMat on the right.\n\nA window will pop up and you should be able to see the structure of expMat.\n\nWe will first focus on Gene Expression.\n\nexpMat$`Gene Expression`[1:5, 1:5]\n\n5 x 5 sparse Matrix of class \"dgCMatrix\"\n         74 391 440 1222 2690\nA1BG      .   .   .    .    .\nA1BG-AS1  .   .   .    .    .\nA1CF      .   .   .    .    .\nA2M       .   .   .    .    .\nA2M-AS1   .   .   .    .    .\n\n\n\n\n\n\n\n\n@QUESTION1\n\n\n\nWhat are the dots “.” in the matrix?\n\n\n2. Create a Seurat object to store Gene Expression\n\nrna &lt;- Seurat::CreateSeuratObject(counts = expMat$`Gene Expression`, \n                                min.cells = 1, \n                                min.features = 100, \n                                assay = \"RNA\")\n\n\n\n\n\n\n\n@QUESTION2\n\n\n\nHow many genes and cells are stored in the Seurat object rna?\n\n\n\n\n\n\nTip\n\n\n\nClick on the Seurat object rna in the top right window. What is 28127 x 4948?\n\n\n\n\n\n3. Add sample tag information into meta.data\n\n\n# load sample tag info into R\nsmk &lt;- fread(file = \"data/raw_data/WTA-AB-SMK-v2-0_Sample_Tag_Calls.csv\", \n                     sep = \",\", \n                     header=TRUE) %&gt;% \n  data.frame(row.names = 1)\n\n\n# add sample tag info into seurat object\nrna &lt;- AddMetaData(object = rna, metadata = smk)\n\n\n\n\n\n\n\n@QUESTION3\n\n\n\nHow do we know the sample tag information is added into the Seurat object rna?\n\n\n\n\n\n\nTip\n\n\n\nClick on rna in the top right window, then click on meta.data. What do you see?"
+  },
+  {
+    "objectID": "supplementary_targeted_analysis.html",
+    "href": "supplementary_targeted_analysis.html",
+    "title": "Data import and quality control for targeted assays",
+    "section": "",
+    "text": "# libraries for this chapter\nlibrary(tidyverse)\nlibrary(Seurat)\nlibrary(data.table)\nlibrary(sctransform)\nlibrary(clustree)\nThe BD Rhapsody™ Targeted mRNA Kits profile a subset of genes, from dozens to hundreds. These genes are in the targeted panel.\nIn Chapter 2, we introduce filtering low quality cell labels using WTA assays. WTA assays profile whole transcriptome which can have up to 30,000 genes. Because the number of profiling genes is substantially higher in WTA assays, and the targeted assays often do not include mitochondrial genes, the filtering threthold for low quality cell labels in targeted assays is different from WTA."
+  },
+  {
+    "objectID": "supplementary_targeted_analysis.html#data-import",
+    "href": "supplementary_targeted_analysis.html#data-import",
+    "title": "Data import and quality control for targeted assays",
+    "section": "2.1 Data import",
+    "text": "2.1 Data import\n\n\n\n\n\n\nNote\n\n\n\nWhen creating the Seurat object, it is important to specify min.cells = 1 and min.features = 1.\n\n\n\nexpMat &lt;- Read10X(\"data/raw_data/16HIRP_DBEC_MolsPerCell_MEX//\",\n                  gene.column = 2,\n                  cell.column = 1,\n                  unique.features = TRUE)\n\nrna &lt;- Seurat::CreateSeuratObject(counts = expMat, \n                                min.cells = 1, \n                                min.features = 1, \n                                assay = \"RNA\")"
+  },
+  {
+    "objectID": "supplementary_targeted_analysis.html#ncount_rna-umi-counts-per-cell",
+    "href": "supplementary_targeted_analysis.html#ncount_rna-umi-counts-per-cell",
+    "title": "Data import and quality control for targeted assays",
+    "section": "2.2 nCount_RNA UMI counts per cell",
+    "text": "2.2 nCount_RNA UMI counts per cell\n\nrna@meta.data %&gt;% \n  ggplot(aes(x=nCount_RNA)) + \n  geom_density(alpha = 0.2) + \n  scale_x_log10() + \n  theme_classic() +\n  ylab(\"Cell density\") +\n  ggtitle(\"nCount_RNA\")"
+  },
+  {
+    "objectID": "supplementary_targeted_analysis.html#nfeature_rna-gene-counts-per-cell",
+    "href": "supplementary_targeted_analysis.html#nfeature_rna-gene-counts-per-cell",
+    "title": "Data import and quality control for targeted assays",
+    "section": "2.3 nFeature_RNA Gene counts per cell",
+    "text": "2.3 nFeature_RNA Gene counts per cell\n\nrna@meta.data %&gt;% \n  ggplot(aes(x=nFeature_RNA)) + \n  geom_density(alpha = 0.2) + \n  scale_x_log10() + \n  theme_classic() +\n  ylab(\"Cell density\") +\n  ggtitle(\"nFeature_RNA\")"
+  },
+  {
+    "objectID": "supplementary_targeted_analysis.html#combine-metrics-to-come-up-the-filtering-threshold",
+    "href": "supplementary_targeted_analysis.html#combine-metrics-to-come-up-the-filtering-threshold",
+    "title": "Data import and quality control for targeted assays",
+    "section": "2.4 Combine metrics to come up the filtering threshold",
+    "text": "2.4 Combine metrics to come up the filtering threshold\n\nrna@meta.data %&gt;% \n  ggplot(aes(x=nCount_RNA, y=nFeature_RNA)) + \n  geom_point() + \n  scale_colour_gradient(low = \"gray90\", high = \"black\") +\n  stat_smooth(method=lm) +\n  scale_x_log10() + \n  scale_y_log10() + \n  theme_classic() +\n  geom_vline(xintercept = 90, colour = \"black\") +\n  geom_vline(xintercept = 3000, colour = \"black\") +\n  geom_hline(yintercept = 25, colour = \"red\") +\n  geom_hline(yintercept = 170, colour = \"red\") +\n  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))\n\n\n\n\nMajority of cells have nFeature_RNA between 30 - 170 and nCount_RNA between 90 - 3000. The cells on the right with high nCount_RNA are likely multiplets. We will filter the cell groups with the identified threshold."
+  },
+  {
+    "objectID": "supplementary_targeted_analysis.html#filter-on-cells",
+    "href": "supplementary_targeted_analysis.html#filter-on-cells",
+    "title": "Data import and quality control for targeted assays",
+    "section": "3.1 Filter on cells",
+    "text": "3.1 Filter on cells\nBased on the quality metrics, we use the following thresholds to filter out low quality cells:\nnCount_RNA &gt; 90\nnCount_RNA &lt; 3000\nnFeature_RNA &gt; 30\nnFeature_RNA &lt; 170\n\nfiltered.rna &lt;- subset(x = rna, \n                       subset = (nCount_RNA &gt; 90) & \n                         (nCount_RNA &lt; 3000) &\n                         (nFeature_RNA &gt; 30) &\n                         (nFeature_RNA &lt; 170))"
+  },
+  {
+    "objectID": "supplementary_targeted_analysis.html#filter-on-genes",
+    "href": "supplementary_targeted_analysis.html#filter-on-genes",
+    "title": "Data import and quality control for targeted assays",
+    "section": "3.2 Filter on genes",
+    "text": "3.2 Filter on genes\nWe keep only genes that are expressed in at least one cells. GetAssayData is a convenient command to get information from the Seurat object. We use GetAssayData to extract the UMI counts.\n\n# Extract counts\ncounts &lt;- GetAssayData(object = filtered.rna, slot = \"counts\")\n\n# Output a logical matrix specifying for each gene whether or not \n# there are more than zero counts per cell\nnonzero &lt;- counts &gt; 0\n\n# Sum all TRUE values and return TRUE \n# if equal or more than 5 TRUE values per gene\nkeep_genes &lt;- Matrix::rowSums(nonzero) &gt;= 1\n\n# Only keep those genes\nfiltered_counts &lt;- counts[keep_genes, ]\n\n# Create Seurat object\nfiltered.rna &lt;- CreateSeuratObject(filtered_counts, meta.data = filtered.rna@meta.data)"
+  },
+  {
+    "objectID": "supplementary_targeted_analysis.html#re-assess-metrics",
+    "href": "supplementary_targeted_analysis.html#re-assess-metrics",
+    "title": "Data import and quality control for targeted assays",
+    "section": "3.3 Re-assess metrics",
+    "text": "3.3 Re-assess metrics\nAfter filtering, we look back to the metrics to ensure the filtered data matches expectations and is suitable for downstream analysis. We plot QC metrics using the filtered data.\n\nfiltered.rna@meta.data %&gt;% \n  ggplot(aes(x=nCount_RNA, y=nFeature_RNA)) + \n  geom_point() + \n  scale_colour_gradient(low = \"gray90\", high = \"black\") +\n  stat_smooth(method=lm) +\n  scale_x_log10() + \n  scale_y_log10() + \n  theme_classic() +\n  geom_vline(xintercept = 90, colour = \"black\") +\n  geom_vline(xintercept = 3000, colour = \"black\") +\n  geom_hline(yintercept = 25, colour = \"red\") +\n  geom_hline(yintercept = 170, colour = \"red\") +\n  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))\n\n\n\n\nThe feature number and cell number before filtering:\n\nrna\n\nAn object of class Seurat \n382 features across 16771 samples within 1 assay \nActive assay: RNA (382 features, 0 variable features)\n\n\nThe feature number and cell number after filtering:\n\nfiltered.rna\n\nAn object of class Seurat \n381 features across 16675 samples within 1 assay \nActive assay: RNA (381 features, 0 variable features)"
   }
 ]

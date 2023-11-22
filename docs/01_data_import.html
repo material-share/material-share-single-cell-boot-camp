@@ -118,7 +118,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <ul class="list-unstyled mt-1">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./about.html" class="sidebar-item-text sidebar-link">
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Introduction</span></a>
   </div>
 </li>
@@ -178,12 +178,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./07_differential_expression_analysis.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Chapter 7 Differential Expression Analysis</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
   <a href="./08_enrichment_analysis.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Chapter 8 Enrichment Analysis</span></a>
   </div>
@@ -231,14 +225,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   
 
-</header><div class="cell" data-hash="01_data_import_cache/html/unnamed-chunk-1_968c271daec74896bc880d9ef1539f13">
+</header><div class="cell" data-hash="01_data_import_cache/html/unnamed-chunk-1_6ceead56b86d6c9e4bebeb8dc9644d62">
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># libraries for this chapter</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat">Seurat</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com">data.table</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/LTLA/celldex">celldex</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/LTLA/SingleR">SingleR</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">ExperimentHub</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com">data.table</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="demo-data" class="level1"><h1>Demo data</h1>
 <p>The demo data is generated from freshly isolated human PBMCs. The PBMCs were grown for 24 hours in the presence of CD3/CD28 stimulation (“treated”) and compared to PBMCs grown for 24 hours in regular media (“naive”). Cells were then labeled with a 20plex AbSeq panel consisting of lineage markers and T-cell activation markers, as well as unique Sample Tags from the BD Rhapsody<sup>™</sup> Human Single Cell Multiplexing Kit (resting PBMC: ST1; treated PBMC: ST2). The cells were mixed at a 1:1 ratio and processed using the BD Rhapsody<sup>™</sup> Single-Cell Analysis System. Sequencing libraries for RNA and AbSeq antibodies were generated using the BD Rhapsody WTA Amplification kit.</p>
@@ -252,7 +243,7 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Please review the <strong>setup</strong> chapter to ensure that R packages are installed and data is downloaded.</p>
+<p>Please review the <strong>setup</strong> chapter to ensure that R packages are installed and the demo data is downloaded.</p>
 </div>
 </div>
 </section><section id="data-import" class="level1"><h1>1. Data import</h1>
@@ -451,7 +442,7 @@ Function notation with <code>::</code>
 </div>
 <p>Multiplet and Undetermined are removed from the downstream analysis by <code>subset</code>.</p>
 <div class="cell" data-hash="01_data_import_cache/html/unnamed-chunk-11_18e7645701fdfdf303ad63791ea87cf2">
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rna</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/subset.html">subset</a></span><span class="op">(</span><span class="va">rna</span>, subset <span class="op">=</span> <span class="va">Sample_Name</span> <span class="op"><a href="https://rdrr.io/pkg/BiocGenerics/man/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Multiplet"</span>, <span class="st">"Undetermined"</span><span class="op">)</span>, invert <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rna</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">rna</span>, subset <span class="op">=</span> <span class="va">Sample_Name</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Multiplet"</span>, <span class="st">"Undetermined"</span><span class="op">)</span>, invert <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="save" class="level1"><h1>5. Save</h1>
 <p>Save the files into RData for documentation.</p>
