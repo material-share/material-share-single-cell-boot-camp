@@ -118,7 +118,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <ul class="list-unstyled mt-1">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./about.html" class="sidebar-item-text sidebar-link">
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Introduction</span></a>
   </div>
 </li>
@@ -176,9 +176,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Chapter 6 Marker Identification</span></a>
   </div>
 </li>
-        <li class="sidebar-item">
- <span class="menu-text">07_differential_expression_analysis.qmd</span>
-  </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./08_enrichment_analysis.html" class="sidebar-item-text sidebar-link">
@@ -243,14 +240,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   
 
-</header><div class="cell" data-hash="02_quality_control_cache/html/unnamed-chunk-1_091de106ebc53e84827f5287e000e8d2">
+</header><div class="cell" data-hash="02_quality_control_cache/html/unnamed-chunk-1_7ff3bc3f9f6f7ce4894c241117f550c2">
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># libraries for this chapter</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat">Seurat</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com">data.table</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/LTLA/celldex">celldex</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/LTLA/SingleR">SingleR</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">ExperimentHub</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com">data.table</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="load-rdata" class="level1"><h1>Load RData</h1>
 <p>Load the RData which contains all files from previous chapter.</p>
@@ -411,7 +405,7 @@ Tip
 <p><code>nFeature_RNA</code> &lt; 5000</p>
 <p><code>percent.mt</code> &lt; 25%</p>
 <div class="cell" data-hash="02_quality_control_cache/html/unnamed-chunk-10_0b5203e8dc2816504068ecf0dd70a48d">
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">filtered.rna</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/subset.html">subset</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">rna</span>, </span>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">filtered.rna</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">rna</span>, </span>
 <span>                       subset <span class="op">=</span> <span class="op">(</span><span class="va">nCount_RNA</span> <span class="op">&gt;=</span> <span class="fl">500</span><span class="op">)</span> <span class="op">&amp;</span> </span>
 <span>                         <span class="op">(</span><span class="va">nFeature_RNA</span> <span class="op">&gt;=</span> <span class="fl">300</span><span class="op">)</span> <span class="op">&amp;</span></span>
 <span>                         <span class="op">(</span><span class="va">nFeature_RNA</span> <span class="op">&lt;=</span> <span class="fl">5000</span><span class="op">)</span> <span class="op">&amp;</span></span>

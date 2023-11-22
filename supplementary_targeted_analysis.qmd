@@ -3,6 +3,9 @@ title: "Data import and quality control for targeted assays"
 execute:
   warning: false
   message: false
+format: 
+  html:
+    embed-resources: true
 ---
 
 ```{r}
@@ -11,58 +14,47 @@ execute:
 library(tidyverse)
 library(Seurat)
 library(data.table)
+library(sctransform)
+library(clustree)
 ```
 
-The BD Rhapsody™ Targeted mRNA Kits profile a subset of genes, usually ranging from dozens to hundreds.
+The BD Rhapsody™ Targeted mRNA Kits profile a subset of genes, from dozens to hundreds. These genes are in the targeted panel.
 
-In Chapter 2, we introduce filtering low quality cell labels using WTA assays. WTA assays profile whole transcriptome which includes 25000 to 30000 genes. Because the profiled gene number is substantially lower in targeted assays and very often the targeted assays do not include mitochondrial genes, the filtering cutoff for low quality cell labels in WTA assays is different from the one for targeted assays.
+In Chapter 2, we introduce filtering low quality cell labels using WTA assays. WTA assays profile whole transcriptome which can have up to 30,000 genes. Because the number of profiling genes is substantially higher in WTA assays, and the targeted assays often do not include mitochondrial genes, the filtering threthold for low quality cell labels in targeted assays is different from WTA.
 
-# 1. Metrics for quality control
+# 1. Metrics for quality control in Targeted assay
 
-When creating a Seurat object, Seurat automatically creates some metadata for each cell. This information is stored in the `meta.data`.
+Because Targeted assays often do not include mitochondrial genes, the filtering threthold for low quality cell labels rely primarily on `nCount_RNA` and `nFeature_RNA`.
+
+# 2. Assessing the quality metrics in Targeted assay
+
+The BD Rhapsody™ Targeted mRNA demo dataset can be downloaded from: <https://bd-rhapsody-public.s3.amazonaws.com/Rhapsody-Demo-Data/16HIRP-targeted-EB-20kPBMC.zip>
+
+This Targeted mRNA dataset was generated from 20,000 resting PBMC using the pre-designed BD Rhapsody™ Immune Response Panel HS.
+
+## 2.1 Data import
+
+::: callout-note
+When creating the Seurat object, it is important to specify `min.cells = 1` and `min.features = 1`.
+:::
 
 ```{r}
-rna@meta.data %>% head()
+expMat <- Read10X("data/raw_data/16HIRP_DBEC_MolsPerCell_MEX//",
+                  gene.column = 2,
+                  cell.column = 1,
+                  unique.features = TRUE)
+
+rna <- Seurat::CreateSeuratObject(counts = expMat, 
+                                min.cells = 1, 
+                                min.features = 1, 
+                                assay = "RNA")
 ```
 
-# 2. Calculate mitochondrial percentage per cell
-
-Seurat has a convenient function, `PercentageFeatureSet`, to calculate the mitochondrial percentage in a cell.
-
-```{r}
-rna[["percent.mt"]] <- PercentageFeatureSet(rna, pattern = "^MT.")
-```
-
-# 3. Assessing the quality metrics
-
-## 3.1 Remove Multiplet and Undetermined
-
-```{r fig.height=15, fig.width=20}
-# plot
-rna@meta.data %>% 
-  group_by(Sample_Name) %>% 
-  tally() %>% 
-  mutate(pct = n/sum(n)) %>% 
-  ggplot(aes(x=Sample_Name, y=n, fill= Sample_Name)) + 
-  geom_bar(stat = "identity") +
-  geom_text(aes(y = n,
-                label = paste0(n, "\n", scales::percent(pct)),
-                vjust= -0.5, size = 2.5), show.legend = FALSE) + 
-  theme_classic()
-```
-
-Multiplet and Undetermined are removed from the downstream analysis by `subset`.
-
-```{r}
-# remove multiplets and undetermiend
-rna <- subset(rna, subset = Sample_Name %in% c("Multiplet", "Undetermined"), invert = T)
-```
-
-## 3.2 `nCount_RNA` UMI counts per cell
+## 2.2 `nCount_RNA` UMI counts per cell
 
 ```{r}
 rna@meta.data %>% 
-  ggplot(aes(color=Sample_Name, x=nCount_RNA, fill= Sample_Name)) + 
+  ggplot(aes(x=nCount_RNA)) + 
   geom_density(alpha = 0.2) + 
   scale_x_log10() + 
   theme_classic() +
@@ -70,11 +62,11 @@ rna@meta.data %>%
   ggtitle("nCount_RNA")
 ```
 
-## 3.3 `nFeature_RNA` Gene counts per cell
+## 2.3 `nFeature_RNA` Gene counts per cell
 
 ```{r}
 rna@meta.data %>% 
-  ggplot(aes(color=Sample_Name, x=nFeature_RNA, fill= Sample_Name)) + 
+  ggplot(aes(x=nFeature_RNA)) + 
   geom_density(alpha = 0.2) + 
   scale_x_log10() + 
   theme_classic() +
@@ -82,79 +74,52 @@ rna@meta.data %>%
   ggtitle("nFeature_RNA")
 ```
 
-## 3.4 `percent.mt` Mitochondrial percentage per cell
-
-```{r}
-rna@meta.data %>% 
-  ggplot(aes(color=Sample_Name, x=percent.mt, fill=Sample_Name)) + 
-  geom_density(alpha = 0.2) + 
-  theme_classic() +
-  ggtitle("percent.mt")
-```
-
-## 3.5 Combine metrics to come up the filtering threshold
+## 2.4 Combine metrics to come up the filtering threshold
 
 ```{r}
 #| warning: false
 rna@meta.data %>% 
-  ggplot(aes(x=nCount_RNA, y=nFeature_RNA, color=percent.mt)) + 
+  ggplot(aes(x=nCount_RNA, y=nFeature_RNA)) + 
   geom_point() + 
   scale_colour_gradient(low = "gray90", high = "black") +
   stat_smooth(method=lm) +
   scale_x_log10() + 
   scale_y_log10() + 
   theme_classic() +
-  geom_vline(xintercept = 500, colour = "red") +
-  geom_hline(yintercept = 300, colour = "red") +
-  facet_wrap(~Sample_Name) +
+  geom_vline(xintercept = 90, colour = "black") +
+  geom_vline(xintercept = 3000, colour = "black") +
+  geom_hline(yintercept = 25, colour = "red") +
+  geom_hline(yintercept = 170, colour = "red") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
 
-::: callout-note
-# @QUESTION1
+Majority of cells have `nFeature_RNA` between 30 - 170 and `nCount_RNA` between 90 - 3000. The cells on the right with high nCount_RNA are likely multiplets. We will filter the cell groups with the identified threshold.
 
-Look at the bottom right quadrant. Do you think these cells are high quality cells?
-:::
+# 3. Filter data
 
-## 3.6 Other kinds of plots for QC
-
-```{r}
-# violin plot
-Seurat::VlnPlot(rna, features = c("nCount_RNA", 
-                                  "nFeature_RNA",
-                                  "percent.mt"))
-```
-
-```{r}
-# scatter plot
-Seurat::FeatureScatter(rna, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
-```
-
-# 4. Filter
-
-## 4.1 Filter on cells
+## 3.1 Filter on cells
 
 Based on the quality metrics, we use the following thresholds to filter out low quality cells:
 
-`nCount_RNA` \> 500
+`nCount_RNA` \> 90
 
-`nFeature_RNA` \> 300
+`nCount_RNA` \< 3000
 
-`nFeature_RNA` \< 5000
+`nFeature_RNA` \> 30
 
-`percent.mt` \< 25%
+`nFeature_RNA` \< 170
 
 ```{r}
 filtered.rna <- subset(x = rna, 
-                       subset = (nCount_RNA >= 500) & 
-                         (nFeature_RNA >= 300) &
-                         (nFeature_RNA <= 5000) &
-                         (percent.mt < 25))
+                       subset = (nCount_RNA > 90) & 
+                         (nCount_RNA < 3000) &
+                         (nFeature_RNA > 30) &
+                         (nFeature_RNA < 170))
 ```
 
-## 4.2 Filter on genes
+## 3.2 Filter on genes
 
-We keep only genes that are expressed in **five or more cells**. `GetAssayData` is a convenient command to get information from the Seurat object. We use `GetAssayData` to extract the UMI counts.
+We keep only genes that are expressed in **at least one cells**. `GetAssayData` is a convenient command to get information from the Seurat object. We use `GetAssayData` to extract the UMI counts.
 
 ```{r}
 # Extract counts
@@ -166,7 +131,7 @@ nonzero <- counts > 0
 
 # Sum all TRUE values and return TRUE 
 # if equal or more than 5 TRUE values per gene
-keep_genes <- Matrix::rowSums(nonzero) >= 5
+keep_genes <- Matrix::rowSums(nonzero) >= 1
 
 # Only keep those genes
 filtered_counts <- counts[keep_genes, ]
@@ -175,37 +140,101 @@ filtered_counts <- counts[keep_genes, ]
 filtered.rna <- CreateSeuratObject(filtered_counts, meta.data = filtered.rna@meta.data)
 ```
 
-# 5. Re-assess metrics
+## 3.3 Re-assess metrics
 
 After filtering, we look back to the metrics to ensure the filtered data matches expectations and is suitable for downstream analysis. We plot QC metrics using the filtered data.
 
 ```{r}
 #| warning: false
 filtered.rna@meta.data %>% 
-  ggplot(aes(x=nCount_RNA, y=nFeature_RNA, color=percent.mt)) + 
+  ggplot(aes(x=nCount_RNA, y=nFeature_RNA)) + 
   geom_point() + 
   scale_colour_gradient(low = "gray90", high = "black") +
   stat_smooth(method=lm) +
   scale_x_log10() + 
   scale_y_log10() + 
   theme_classic() +
-  geom_vline(xintercept = 500, color = "red") +
-  geom_hline(yintercept = 300, color = "red") +
-  facet_wrap(~Sample_Name)
+  geom_vline(xintercept = 90, colour = "black") +
+  geom_vline(xintercept = 3000, colour = "black") +
+  geom_hline(yintercept = 25, colour = "red") +
+  geom_hline(yintercept = 170, colour = "red") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
 
-Before filtering:
+The feature number and cell number before filtering:
 
 ```{r}
-rna@meta.data %>% 
-  group_by(Sample_Name) %>% 
-  dplyr::summarise(cell_number = length(Sample_Name))
+rna
 ```
 
-After filtering:
+The feature number and cell number after filtering:
 
 ```{r}
-filtered.rna@meta.data %>% 
-  group_by(Sample_Name) %>% 
-  dplyr::summarise(cell_number = length(Sample_Name))
+filtered.rna
+```
+
+# 4. Normalization 
+
+For targeted assays, we apply sctransfrom normalization.
+
+-   Note that this single command replaces `NormalizeData()`, `ScaleData()`, and `FindVariableFeatures()`.
+
+-   Setting min_cells = 0 will keep all genes in the normalized data.
+
+```{r}
+filtered.rna.sct <- SCTransform(filtered.rna, 
+                                vst.flavor = "v2", 
+                                min_cells = 0, 
+                                return.only.var.genes = F,
+                                verbose = FALSE)
+```
+
+# 5. PCA and UMAP
+
+```{r}
+filtered.rna.sct <- RunPCA(filtered.rna.sct, npcs = 50, verbose = FALSE)
+```
+
+```{r}
+ElbowPlot(filtered.rna.sct, ndims = 50)
+```
+
+Select the first 20 PC to calculate UMAP.
+
+```{r}
+filtered.rna.sct <- RunUMAP(filtered.rna.sct, 
+                            reduction = "pca", 
+                            dims = 1:20)
+
+DimPlot(filtered.rna.sct)
+```
+
+# 6. Clustering
+
+```{r}
+# Determine the K-nearest neighbor graph
+filtered.rna.sct <- FindNeighbors(object = filtered.rna.sct, dims = 1:20)
+                                
+# Determine the clusters for various resolutions                                
+filtered.rna.sct <- FindClusters(object = filtered.rna.sct,
+                                 resolution = c(0.1, 0.2, 0.4, 0.6,  0.8, 1, 1.2, 1.4),
+                                 verbose = F)
+```
+
+We use `clustree` to help determining which resolution to choose.
+
+```{r fig.height=10}
+clustree(filtered.rna.sct, prefix = "SCT_snn_res.")
+```
+
+```{r}
+DimPlot(filtered.rna.sct, group.by = "SCT_snn_res.0.1", label = T)
+```
+
+```{r}
+DimPlot(filtered.rna.sct, group.by = "SCT_snn_res.0.2", label = T)
+```
+
+```{r}
+DimPlot(filtered.rna.sct, group.by = "SCT_snn_res.0.4", label = T)
 ```
