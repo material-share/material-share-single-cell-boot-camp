@@ -10,9 +10,6 @@ execute:
 library(tidyverse)
 library(Seurat)
 library(data.table)
-library(celldex)
-library(SingleR)
-library(ExperimentHub)
 ```
 
 # Demo data
@@ -20,7 +17,7 @@ library(ExperimentHub)
 The demo data is generated from freshly isolated human PBMCs. The PBMCs were grown for 24 hours in the presence of CD3/CD28 stimulation ("treated") and compared to PBMCs grown for 24 hours in regular media ("naive"). Cells were then labeled with a 20plex AbSeq panel consisting of lineage markers and T-cell activation markers, as well as unique Sample Tags from the BD Rhapsody^™^ Human Single Cell Multiplexing Kit (resting PBMC: ST1; treated PBMC: ST2). The cells were mixed at a 1:1 ratio and processed using the BD Rhapsody^™^ Single-Cell Analysis System. Sequencing libraries for RNA and AbSeq antibodies were generated using the BD Rhapsody WTA Amplification kit.
 
 ::: callout-note
-Please review the **setup** chapter to ensure that R packages are installed and data is downloaded.
+Please review the **setup** chapter to ensure that R packages are installed and the demo data is downloaded.
 :::
 
 # 1. Data import

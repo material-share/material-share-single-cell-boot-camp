@@ -1,0 +1,230 @@
+---
+title: "Chapter 7 Differential Expression Analysis"
+execute:
+  warning: false
+  message: false
+---
+
+```{r}
+#| message: false
+# libraries for this chapter
+library(tidyverse)
+library(Seurat)
+library(data.table)
+library(celldex)
+library(SingleR)
+library(ExperimentHub)
+library(muscat)
+```
+
+# Load RData
+
+Load the RData which contains all files from the previous chapter.
+
+```{r}
+load("data/intermediate_data/chapter6.RData")
+```
+
+::: callout-note
+# @QUESTION1
+
+What's the default assay of `integrate.filtered.rna`?
+
+::: callout-note
+## Tip
+
+```{r}
+DefaultAssay(integrate.filtered.rna)
+```
+
+```{r}
+# If the default assay is not "RNA", change it to "RNA"
+DefaultAssay(integrate.filtered.rna) <- "RNA"
+```
+
+Differential gene expression should be performed on assay "RNA".
+:::
+:::
+
+# 1. Find marker genes
+
+## 1.1 `FindAllMarkers`
+
+The function `FindAllMarkers` performs a Wilcoxon plot to determine the genes differentially expressed between each cluster and the rest of the cells.
+
+```{r}
+# FindAllMarkers
+treated.markers <- FindAllMarkers(subset(integrate.filtered.rna, subset = Sample_Name == "treated"), 
+                                  assay = "RNA",
+                                  only.pos = TRUE, 
+                                  min.pct = 0.25, 
+                                  logfc.threshold = 0.25)
+```
+
+Let's look at the top 2 significant marker genes in each cluster.
+
+```{r}
+top2 <- treated.markers %>%
+    group_by(cluster) %>%
+    slice_max(n = 2, order_by = avg_log2FC)
+```
+
+And generate a dotplot:
+
+```{r}
+dittoDotPlot(integrate.filtered.rna,
+                       vars = unique(top2$gene), 
+                       group.by = "integrated_snn_res.0.4")
+```
+
+## 1.2 `FindMarkers`
+
+We can use the `FindMarkers` to determine the differentially expressed genes between two groups of cells, such as CD8 T cells vs. CD4 T cells.
+
+First we can set the default cell identity to the cell types defined by `Azimuth`:
+
+```{r}
+integrate.filtered.rna <- Seurat::SetIdent(integrate.filtered.rna, value = "predicted.celltype.l1")
+```
+
+```{r}
+example_findmarkers <- FindMarkers(integrate.filtered.rna,
+                          assay = "RNA",
+                          ident.1 = "CD8 T",
+                          ident.2 = "CD4 T",
+                          group.by = "predicted.celltype.l1") %>% 
+  rownames_to_column("gene")
+
+
+```
+
+::: callout-note
+# @QUESTION2
+
+Look at `example_findmarkers`. What does a positive avg_log2FC mean?
+
+::: callout-note
+## Tip
+
+The differential expression is done by comparing `ident.1` / `ident.2`.
+:::
+:::
+
+# 2. `muscat` for Differential State analysis (DS)
+
+Pseudo-bulk aggregation transforms scRNA-seq data into bulk-like data by aggregating gene counts within each cell type and subject. We use the package `muscat` (Multi-sample multi-group scRNA-seq data analysis tools) to perform pseudo-bulk analysis.
+
+## 2.1 Setup
+
+Let's assume we have three biological replicates in each condition (we make them up for the purpose of illustration).
+
+```{r}
+#| message: false
+# read in dummy group
+dummy <- read_csv("data/dummy.csv")
+
+# add the dummy meta into the seurat object
+integrate.filtered.rna <- AddMetaData(integrate.filtered.rna, 
+                                      dummy$dummy_group, 
+                                      col.name = "dummy_group")
+```
+
+We will focus on "CD4 T" and "NK" .
+
+```{r}
+#| warning: false
+subset.rna <- subset(integrate.filtered.rna, 
+                     subset = predicted.celltype.l1 %in% 
+                       c("CD4 T", "NK"))
+```
+
+## 2.3 Setup `SingleCellExperiment`
+
+The `muscat` package requires the input object as the `SingleCellExperiment` object. We first transform the Seurat object into SCE object.
+
+`muscat` requires three pieces of meta data information: `sample_id` sample IDs, corresponds to `dummy_group` in the `meta.data` `cluster_id` cell types, corresponds to `predicted.celltype.l1` in the `meta.data` `group_id` sample groups, corresponds to `sample` in the `meta.data`
+
+Let's first tidy up the meta data.
+
+```{r}
+subset.rna@meta.data <- subset.rna@meta.data %>% 
+  dplyr::select(Sample_Name, predicted.celltype.l1, dummy_group) %>% 
+  `colnames<-`(c("group_id", "cluster_id", "sample_id"))
+```
+
+Seurat has a convenient function to convert Seurat object into SingleCellExperiment object, `as.SingleCellExperiment`.
+
+```{r}
+# construct experiment_info
+experiment_info <- subset.rna@meta.data %>% 
+  group_by(sample_id, group_id) %>% 
+  dplyr::summarise(n_cells = length(group_id))
+
+# convert seurat object into SingleCellExperiment object
+subset.rna <- as.SingleCellExperiment(subset.rna, assay = "RNA")
+```
+
+The SCE object doesn't contain the experiment_info. We add the information into the SCE object.
+
+```{r}
+# assign experiment info into the created SingleCellExperiment
+subset.rna@metadata[["experiment_info"]] <- experiment_info
+```
+
+## 2.4 Aggregation
+
+We first aggregate measurements for each sample (in each cell type) to obtain pseudobulk data.
+
+```{r}
+# aggregate counts per cell type per dummy group
+subset.pb <- aggregateData(subset.rna,
+                           assay = "counts", 
+                           fun = "sum",
+                           by = c("cluster_id", "sample_id"))
+```
+
+We can look at how the pseudobulk samples cluster on the MDS plot.
+
+```{r}
+muscat::pbMDS(subset.pb)
+```
+
+Next, we can run DS analysis by specifying `method` as `DESeq2`.
+
+```{r}
+# change group_id into a factor
+subset.pb$group_id <- subset.pb$group_id %>% factor(levels = c("treated", "naive"))
+
+# run DS analysis with DESeq2
+res <- pbDS(subset.pb, method = "DESeq2", verbose = F)
+```
+
+The result is stored in the `table` slot of `res`.
+
+We will focus on the deferentially expressed genes in CD4 T cells.
+
+```{r}
+cd4t <- res$table$naive$`CD4 T`
+
+# Filter the results with p_adj.loc < 0.05, abs(logFC) > 1
+cd4t.sig <- dplyr::filter(cd4t, p_adj.loc < 0.05, abs(logFC) > 1) %>% 
+  arrange(p_adj.loc)
+
+head(cd4t.sig)
+```
+
+-   `p_adj.loc` is produced by correcting for multiple testing across all genes tested within a cluster.
+
+-   `p_adj.glb` is produced by correcting for multiple testing across all genes tested in all clusters.
+
+We can plot the DEGs from CD4+ T cells in a heatmap.
+
+```{r}
+# scale the RNA data
+integrate.filtered.rna <- ScaleData(integrate.filtered.rna, features = rownames(integrate.filtered.rna), assay = "RNA")
+
+# plot heatmap
+integrate.filtered.rna %>%
+  subset(., subset = predicted.celltype.l1 == "CD4 T") %>% 
+  DoHeatmap(features = cd4t.sig$gene[1:30], group.by = "Sample_Name")
+```

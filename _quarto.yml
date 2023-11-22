@@ -20,9 +20,10 @@ website:
       - 04_integration.qmd
       - 05_clustering.qmd
       - 06_marker_identification.qmd
-      - 07_differential_expression_analysis.qmd
+      # - 07_differential_expression_analysis.qmd
       - 08_enrichment_analysis.qmd
       - 09_combining.qmd
+      # - supplementary_targeted_analysis.qmd
       - sessioninfo.qmd
 
 format:
