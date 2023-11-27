@@ -4,12 +4,12 @@ project:
   output-dir: docs
 
 website:
-  sidebar: 
-    style: "docked"  
+  sidebar:
+    style: "docked"
     title: "Single Cell Boot Camp: Analyzing Single Cell RNA-seq with R"
     search: true
     page-navigation: true
-    contents: 
+    contents:
       - index.qmd
       - setup.qmd
       - precourse_preparation_R.qmd
@@ -31,6 +31,7 @@ format:
     theme: cosmo
     css: styles.css
     toc: true
+    embed-resources: true
 
 execute:
   freeze: auto 
