@@ -1,10 +1,11 @@
 ---
 title: "SessionInfo"
-execute:
-  warning: false
-  message: false
+format: 
+  html:
+    embed-resources: true
 ---
 
 ```{r}
-sessionInfo()
+library(sessioninfo)
+session_info()
 ```
