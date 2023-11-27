@@ -91,7 +91,7 @@ library(muscat)
 
 # 3. Data to run the materials
 
-Please access the folder [Data](https://bd1-my.sharepoint.com/:u:/g/personal/yujuan_gui_bd_com/EYjhv7OoboRBlFrbrWLzdbwBYd8nPyuoGF9nuuG6xO31Fg?e=3Ce4LE) to download data to run the prerequisites and course chapters.
+Please access the folder [Data](https://bd1-my.sharepoint.com/:u:/r/personal/yujuan_gui_bd_com/Documents/11_demo_data/data_for_boot_camp/data_for_boot_camp.zip?csf=1&web=1&e=e27OTV) to download data to run the prerequisites and course chapters.
 
 You will also need to download the entire repository as a .zip from <https://github.com/material-share/material-share-single-cell-boot-camp/tree/master>.
 
@@ -100,3 +100,40 @@ You will also need to download the entire repository as a .zip from <https://git
 After download, unzip the repository and **put the Data folder in the repository**.
 
 To run the analysis, double click on **single-cell-boot-camp.Rproj**. One should be able to bring the RStudio console.
+
+# 4. Install Seurat V4
+
+The teaching materials run on `Seurat` V4. Please check the version of `SeuratObject` and `Seurat`.
+
+```{r}
+packageVersion("SeuratObject")
+packageVersion("Seurat")
+```
+
+If the version of `Seurat` is 4.x.x, you are good to go. If the version is 5.0.x, please follow the below instructions to remove the existing `Seurat` package and install `Seurat` V4.
+
+```{r}
+#| eval: false
+remove.packages("SeuratObject")
+remove.packages("Seurat")
+```
+
+```{r}
+#| eval: false
+packageurl <- "https://cran.r-project.org/src/contrib/Archive/SeuratObject/SeuratObject_4.1.4.tar.gz" 
+install.packages(packageurl, repos=NULL, type="source")
+```
+
+```{r}
+#| eval: false
+packageurl <- "https://cran.r-project.org/src/contrib/Archive/Seurat/Seurat_4.4.0.tar.gz" 
+install.packages(packageurl, repos=NULL, type="source")
+```
+
+Validate the installation is successful by running `packageVersion.`
+
+```{r}
+#| eval: false
+packageVersion("SeuratObject")
+packageVersion("Seurat")
+```
