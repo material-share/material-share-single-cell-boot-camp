@@ -1,5 +1,5 @@
 ---
-title: "Setting up"
+title: "Setup"
 execute:
   warning: false
   message: false
@@ -7,9 +7,9 @@ execute:
 ---
 
 ::: callout-important
-The course will run on virtual machine. We have materials and RStudio setting up on the virtual machine, so you DO NOT need to set up anything on your desktop for the course.
+The course will run on virtual machine. We have materials and RStudio setting up on the virtual machine, so you DO NOT need to set up anything on your desktop for the instructor-led course.
 
-However, if you are going to run through the Precourse preparation - R and the course chapters, please follow this chapter to set up R and RStudio on the desktop.
+However, if you are going to run through the code on your local desktop, please follow this chapter to set up R and RStudio on the desktop.
 :::
 
 # 1. R and RStudio
@@ -23,10 +23,17 @@ Install the packages in the order listed below.
 
 The package names are case sensitive.
 
-At any point (especially if you have used R/Bioconductor in the past), in the console **R may ask you if you want to update any old packages by asking Update all/some/none? \[a/s/n\]:**. If you see this, **type "a" at the prompt and hit Enter** to update any old packages.
+At any point (especially if you have used R/Bioconductor in the past), in the console **R may ask you if you want to update any old packages by asking Update all/some/none? \[a/s/n\]:**. If you see this, please **type "n" at the prompt and hit Enter** to **NOT** update all old packages.
+
+If you want to update packages, please go to: Tools -\> Check for Package Updates. Select the packages to upload.
+
+![](pics/Screenshot%202023-11-28%20at%2020.08.18.png)
+
+Please do **NOT** update `dplyr`, `Seurat`, `SeuratObject`.
 :::
 
-1.  Install the packages listed below **one by one** from CRAN using the `install.packages()` function.
+1.  Only for windows machines: Please download and install RTools from <https://cran.r-project.org/bin/windows/Rtools/>.
+2.  Install the packages listed below **one by one** from CRAN using the `install.packages()` function.
 
 `install.packages("tidyverse")`
 
@@ -40,19 +47,13 @@ At any point (especially if you have used R/Bioconductor in the past), in the co
 
 `install.packages("readxl")`
 
-`install.packages("Seurat")`
-
 `install.packages("BiocManager")`
+
+`install.packages("ggpubr")`
 
 2.  Install the packages listed below **one by one** from bioconductor using the `BiocManager::install()` function.
 
-`BiocManager::install("AnnotationHub")`
-
 `BiocManager::install("ensembldb")`
-
-`BiocManager::install("SingleR")`
-
-`BiocManager::install("celldex")`
 
 `BiocManager::install("org.Hs.eg.db")`
 
@@ -64,46 +65,11 @@ At any point (especially if you have used R/Bioconductor in the past), in the co
 
 `BiocManager::install("enrichplot")`
 
-`BiocManager::install("muscat")`
+`BiocManager::install("HGNChelper")`
 
-3.  Check that all the packages were installed successfully by loading them **one by one** at a time using the `library()` function.
+3.  Install `Seurat` V4
 
-```{r}
-library(tidyverse)
-library(Seurat)
-library(BiocManager)
-library(Matrix)
-library(RCurl)
-library(readxl)
-library(scales)
-library(data.table)
-library(AnnotationHub)
-library(ensembldb)
-library(SingleR)
-library(celldex)
-library(org.Hs.eg.db)
-library(clusterProfiler)
-library(AnnotationDbi)
-library(biomaRt)
-library(enrichplot)
-library(muscat)
-```
-
-# 3. Data to run the materials
-
-Please access the folder [Data](https://bd1-my.sharepoint.com/:u:/r/personal/yujuan_gui_bd_com/Documents/11_demo_data/data_for_boot_camp/data_for_boot_camp.zip?csf=1&web=1&e=e27OTV) to download data to run the prerequisites and course chapters.
-
-You will also need to download the entire repository as a .zip from <https://github.com/material-share/material-share-single-cell-boot-camp/tree/master>.
-
-![](pics/1-5-github.png)
-
-After download, unzip the repository and **put the Data folder in the repository**.
-
-To run the analysis, double click on **single-cell-boot-camp.Rproj**. One should be able to bring the RStudio console.
-
-# 4. Install Seurat V4
-
-The teaching materials run on `Seurat` V4. Please check the version of `SeuratObject` and `Seurat`.
+The teaching materials run on `Seurat` V4. If you already install `Seurat`, please check the version of `SeuratObject` and `Seurat`.
 
 ```{r}
 packageVersion("SeuratObject")
@@ -137,3 +103,44 @@ Validate the installation is successful by running `packageVersion.`
 packageVersion("SeuratObject")
 packageVersion("Seurat")
 ```
+
+4.  Check that all the packages were installed successfully by loading them **one by one** at a time using the `library()` function.
+
+```{r}
+library(tidyverse)
+library(Seurat)
+library(BiocManager)
+library(Matrix)
+library(RCurl)
+library(readxl)
+library(scales)
+library(ggpubr)
+library(data.table)
+library(AnnotationHub)
+library(ensembldb)
+library(HGNChelper)
+library(clusterProfiler)
+library(AnnotationDbi)
+library(biomaRt)
+library(enrichplot)
+```
+
+# 3. Download dataset and code
+
+**Dataset**: Please download the data from [Data](https://bd1-my.sharepoint.com/:f:/g/personal/yujuan_gui_bd_com/Em8N_QpnFJpAnPfuOVFcGGcB4vQ_Dc4nqZP7KAbG0UPIGw?e=2PVTCn). It is required to run the prerequisites and course chapters.
+
+**Code**: You will also need to download the entire repository as a .zip from <https://github.com/material-share/material-share-single-cell-boot-camp/tree/master>.
+
+![](pics/1-5-github.png)
+
+After download, unzip the repository and **put the Data folder in the repository**.
+
+To run the analysis, double click on **single-cell-boot-camp.Rproj**. One should be able to bring out the RStudio console on desktop.
+
+# 4. Where to find the most up-to-date course materials?
+
+This website! This website is constantly updated. The Log outlines the change through time.
+
+If you would like to contribute, report bugs, or suggest any tools or workflow, please open on issue: <https://github.com/material-share/material-share-single-cell-boot-camp/issues>.
+
+# 

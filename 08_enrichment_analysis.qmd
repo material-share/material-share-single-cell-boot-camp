@@ -62,7 +62,7 @@ Next, we can give a list of gene symbols and retrieve the Entrez ID through `get
 ```{r}
 results <- getBM(attributes = c("entrezgene_id", "external_gene_name"),
                  filters = "external_gene_name", 
-                 values = cd4t$gene,
+                 values = cd4t.bulk$gene,
                  mart = mart)
 ```
 
@@ -83,8 +83,9 @@ results %>% head
 Not every gene has the Entrez ID. We keep only genes that have a matched Entrez ID.
 
 ```{r}
-cd4t <- left_join(cd4t, results, by = c("gene" = "external_gene_name")) %>% 
-  filter(!is.na(entrezgene_id))
+cd4t.bulk <- left_join(cd4t.bulk, results, by = c("gene" = "external_gene_name")) %>% 
+  filter(!is.na(entrezgene_id)) %>% 
+  filter(!is.na(p_val_adj.bulk))
 ```
 
 # 2. GO over-representation analysis
@@ -94,10 +95,10 @@ Over Representation Analysis (ORA) is a widely used approach to determine whethe
 We use the `enrichGO` to get the enriched GO terms in the list of DEGs.
 
 ```{r}
-cd4t.sig <- dplyr::filter(cd4t, p_adj.loc < 0.05, logFC > 1)
+cd4t.bulk.sig <- dplyr::filter(cd4t.bulk, p_val_adj.bulk < 0.01, abs(avg_log2FC.bulk) > 1)
 
 # get the enriched GO terms
-ego <- enrichGO(gene = cd4t.sig$entrezgene_id,
+ego <- enrichGO(gene = cd4t.bulk.sig$entrezgene_id,
                 keyType = "ENTREZID",
                 OrgDb = org.Hs.eg.db,
                 ont = "BP",
@@ -129,8 +130,6 @@ Let's convert the `ego` object into a data frame and visualize the results in a 
 
 ```{r}
 ego.table <- as.data.frame(ego)
-
-head(ego.table)
 ```
 
 -   `GeneRatio` The gene counts from the input list found in the gene set of a GO term / gene counts of input list.
@@ -138,19 +137,22 @@ head(ego.table)
 -   `BgRatio` The gene counts of a geneset / size of all of the unique genes in the collection of genesets.
 
 ```{r fig.height=10}
-barplot(ego, showCategory = 18)
+filter(ego, Description %in% grep("T cell", ego.table$Description, ignore.case = T, value = T)) %>% 
+barplot(showCategory = 18)
+
+
 ```
 
-# 3. Gene set enrichment analysis
+# 3. Gene set enrichment analysis - Optional
 
 All genes can be used as input of gene set enrichment analysis (GSEA). We first rank the genes based on `stat`.
 
 ```{r}
-# order genes based on stat
-cd4t <- cd4t[order(-cd4t$stat), ]
+# order genes
+cd4t.bulk <- cd4t.bulk[order(-cd4t.bulk$avg_log2FC.bulk), ]
 
-gene_list <- cd4t$stat
-names(gene_list) <- cd4t$entrezgene_id
+gene_list <- cd4t.bulk$avg_log2FC.bulk
+names(gene_list) <- cd4t.bulk$entrezgene_id
 ```
 
 We use `gseGO` to perform GSEA and convert the results into a dataframe.
@@ -172,7 +174,7 @@ gse.table <- as.data.frame(gse) %>%
 We can look at the enrichment of some GO terms in GSEA plot.
 
 ```{r}
-gseaplot2(gse, geneSetID = c(188, 194))
+gseaplot2(gse, geneSetID = c(509, 526))
 ```
 
 We have significant enriched term in the unregulated genes. Along the x axis is the ranked genes. Each of the vertical line is one of those genes that are found in this gene set. Along the running line, you can see a lot of genes running together and it falls out when the gene becomes more sparse in the list.
@@ -182,6 +184,5 @@ We have significant enriched term in the unregulated genes. Along the x axis is 
 Save the files into RData for documentation.
 
 ```{r}
-save(integrate.filtered.rna, expMat, cd4t, ego.table, gse.table, 
-     file = "data/intermediate_data/chapter8.RData")
+# save.image(file = "data/intermediate_data/chapter8.RData")
 ```

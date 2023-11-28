@@ -10,7 +10,7 @@ execute:
 library(tidyverse)
 library(Seurat)
 library(data.table)
-# library(muscat)
+library(ggpubr)
 ```
 
 # Load RData
@@ -22,6 +22,8 @@ load("data/intermediate_data/chapter6.RData")
 ```
 
 # 1. FindMarkers
+
+## 1.1 DE analysis across conditions
 
 In the last chapter, we used `FindMarkers` to find the marker genes between two clusters by specifying `ident.1` and `ident.2`.
 
@@ -55,21 +57,96 @@ head(treated_naive)
 
 -   `avg_log2FC` log2 fold-change of the average expression between the two groups.
 
-We can also find genes deferentially expressed in CD4 T cells between the two samples. We start by subsetting the cells annotated as "CD4 T".
+## 1.2 Perform DE analysis within the same cell type across conditions
+
+We can also perform DE analysis within the same cell type across conditions.
 
 ```{r}
 # subset CD4 T cells
-cd4t <- subset(integrate.filtered.rna, subset = predicted.celltype.l1 == "CD4 T")
+integrate.filtered.rna$celltype.stim <- paste(integrate.filtered.rna$Sample_Name, integrate.filtered.rna$predicted.celltype.l1, sep = "_")
 
 # Find genes differentially expressed between activated vs. naive samples in CD4 T cells
-treated_naive_cd4t <- 
-  FindMarkers(cd4t, ident.1 = "treated", ident.2 = "naive", 
-              assay = "RNA", recorrect_umi = FALSE) %>% 
-  rownames_to_column("gene") %>% 
-  dplyr::filter(p_val_adj < 0.05)
+Idents(integrate.filtered.rna) <- "celltype.stim"
+
+cd4t.sc <- FindMarkers(integrate.filtered.rna, 
+                       ident.1 = "treated_CD4 T", 
+                       ident.2 = "naive_CD4 T", 
+                       verbose = FALSE)
+
+head(cd4t.sc, n = 10)
 ```
 
-# 2. Save
+# 2. Pseudobulk analysis
+
+## 2.1 Setup
+
+Let's assume we have three biological replicates in each condition (we make them up for the purpose of illustration).
+
+```{r}
+# make a fake group information
+integrate.filtered.rna$group <- sample(x = c('A', 'B', 'C'), size = ncol(integrate.filtered.rna), replace = TRUE)
+
+# pseudo-bulk by per condition per cell type
+cd4t.bulk <- Seurat:::PseudobulkExpression(integrate.filtered.rna, 
+                                        assays = "RNA",
+                                     pb.method = 'aggregate',
+                                     group.by = c('Sample_Name', 'predicted.celltype.l1', 'group'),
+                                     slot = "counts",
+                                     return.seurat = T)
+  
+# tidy up names
+cd4t.bulk$Sample_Name <- cd4t.bulk %>% colnames() %>% 
+  str_split(., pattern = "_") %>% 
+  lapply(., "[", 1) %>% 
+  unlist()
+
+cd4t.bulk$cellType <- cd4t.bulk %>% colnames() %>% 
+  str_split(., pattern = "_") %>% 
+  lapply(., "[", 2) %>% 
+  unlist
+
+cd4t.bulk$celltype.stim <- paste(cd4t.bulk$Sample_Name, cd4t.bulk$cellType, sep = "_")
+
+# perform pseudobulk
+Idents(cd4t.bulk) <- "celltype.stim"
+
+cd4t.bulk <- FindMarkers(cd4t.bulk, 
+                         ident.1 = "treated_CD4 T", 
+                         ident.2 = "naive_CD4 T", 
+                         test.use = "DESeq2")
+```
+
+```{r}
+# compare the DE P-values between the single-cell level and the pseudobulk level results
+cd4t.bulk <- cd4t.bulk %>% 
+  `colnames<-`(paste0(names(cd4t.bulk), ".bulk")) %>% 
+  mutate(gene = rownames(cd4t.bulk))
+
+cd4t.sc <- cd4t.sc %>% 
+  `colnames<-`(paste0(names(cd4t.sc), ".sc")) %>% 
+  mutate(gene = rownames(cd4t.sc))
+
+merge_dat <- merge(cd4t.bulk, cd4t.sc, by = "gene") %>% 
+  arrange(p_val.bulk)
+
+# Number of genes that are marginally significant in both; marginally significant only in bulk; and marginally significant only in single-cell
+common <- merge_dat$gene[which(merge_dat$p_val.bulk < 0.05 & 
+                                merge_dat$p_val.sc < 0.05)]
+only_sc <- merge_dat$gene[which(merge_dat$p_val.bulk > 0.05 & 
+                                  merge_dat$p_val.sc < 0.05)]
+only_bulk <- merge_dat$gene[which(merge_dat$p_val.bulk < 0.05 & 
+                                    merge_dat$p_val.sc > 0.05)]
+```
+
+The majority of DEGs are shared in both pseudobulk and single-cell analysis. The log2FC is also correlated.
+
+```{r}
+ggscatter(merge_dat, x = "avg_log2FC.bulk", y = "avg_log2FC.sc", 
+          add = "reg.line", conf.int = TRUE, 
+          cor.coef = TRUE, cor.method = "pearson")
+```
+
+# 3. Save
 
 Save the files into RData for documentation.
 

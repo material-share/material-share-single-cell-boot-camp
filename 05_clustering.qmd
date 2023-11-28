@@ -10,6 +10,8 @@ execute:
 library(tidyverse)
 library(Seurat)
 library(data.table)
+library(clustree)
+library(HGNChelper)
 ```
 
 # Load RData
@@ -50,6 +52,10 @@ The `meta.data` has a separate column for each of the different resolution calcu
 integrate.filtered.rna@meta.data %>% 
   dplyr::select(contains("integrat")) %>% 
   map_int(~ unique(.x) %>% length)
+```
+
+```{r fig.height=10}
+clustree(integrate.filtered.rna, prefix = "integrated_snn_res.")
 ```
 
 We start with the resolution of 0.6. We assign the identity of the clusters using the `Idents` function to specify that we want to look at the clusters calculating with resolution = 0.6.

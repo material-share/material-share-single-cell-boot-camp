@@ -4505,7 +4505,7 @@ vertical-align: -.125em;
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./setup.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Setting up</span></a>
+ <span class="menu-text">Setup</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -4558,6 +4558,12 @@ vertical-align: -.125em;
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./07_differential_expression_analysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 7 Differential Expression Analysis</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./08_enrichment_analysis.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Chapter 8 Enrichment Analysis</span></a>
   </div>
@@ -4578,6 +4584,12 @@ vertical-align: -.125em;
   <div class="sidebar-item-container"> 
   <a href="./sessioninfo.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">SessionInfo</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./log.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Log</span></a>
   </div>
 </li>
     </ul>
@@ -4638,7 +4650,7 @@ vertical-align: -.125em;
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">&quot;data/intermediate_data/chapter1.RData&quot;</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="metrics-for-quality-control" class="level1"><h1>1. Metrics for quality control</h1>
-<p>When creating a Seurat object, Seurat automatically creates some metadata for each cell. This information is stored in the <code>meta.data</code>.</p>
+<p>When creating a <code>Seurat</code> object, <code>Seurat</code> automatically creates some metadata for each cell. This information is stored in the <code>meta.data</code>.</p>
 <div class="cell" data-hash="02_quality_control_cache/html/unnamed-chunk-3_fcf74bf5d0f6c36fc301409c791f0b24">
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rna</span><span class="op">@</span><span class="va">meta.data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -4675,8 +4687,9 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The targeted assay profiles a subset of genes, which are usually the genes of interest. Mitochondrial genes are often not included in the gene panel of the targeted assay.</p>
-<p>So, the quality control of targeted assays will not look at mitochondrial percentage, and focus on <code>nCount_RNA</code> and <code>nFeature_RNA</code> only.</p>
+<p>The targeted assay profiles a subset of genes. Mitochondrial genes are often not included in the gene panel of the targeted assay.</p>
+<p>So, the quality control of targeted assays will not include mitochondrial percentage, and focus on <code>nCount_RNA</code> and <code>nFeature_RNA</code> only.</p>
+<p>For an example on how to analyze targeted assay, please look at “Supplementary: Data import and quality control for targeted assays”.</p>
 </div>
 </div>
 </section><section id="calculate-mitochondrial-percentage-per-cell" class="level1"><h1>2. Calculate mitochondrial percentage per cell</h1>
@@ -4831,19 +4844,6 @@ Important
 <span><span class="co"># Create Seurat object</span></span>
 <span><span class="va">filtered.rna</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/CreateSeuratObject.html">CreateSeuratObject</a></span><span class="op">(</span><span class="va">filtered_counts</span>, meta.data <span class="op">=</span> <span class="va">filtered.rna</span><span class="op">@</span><span class="va">meta.data</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Tip
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Targeted assay contains genes expressing in the profiling cells, so “Filter on genes” is usually not performed on targeted assays.</p>
-</div>
-</div>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -4854,7 +4854,7 @@ Important
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>In this example, we keep only genes that are expressed in five or more cells. One may need to adjust the threshold.</p>
+<p>In this example, we keep only genes that are expressed in five or more cells.</p>
 </div>
 </div>
 </section></section><section id="re-assess-metrics" class="level1"><h1>5. Re-assess metrics</h1>

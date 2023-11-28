@@ -17,7 +17,7 @@ library(data.table)
 The demo data is generated from freshly isolated human PBMCs. The PBMCs were grown for 24 hours in the presence of CD3/CD28 stimulation ("treated") and compared to PBMCs grown for 24 hours in regular media ("naive"). Cells were then labeled with a 20plex AbSeq panel consisting of lineage markers and T-cell activation markers, as well as unique Sample Tags from the BD Rhapsody^™^ Human Single Cell Multiplexing Kit (resting PBMC: ST1; treated PBMC: ST2). The cells were mixed at a 1:1 ratio and processed using the BD Rhapsody^™^ Single-Cell Analysis System. Sequencing libraries for RNA and AbSeq antibodies were generated using the BD Rhapsody WTA Amplification kit.
 
 ::: callout-note
-Please review the **setup** chapter to ensure that R packages are installed and the demo data is downloaded.
+Please review the **setup** chapter to ensure that R packages are installed and the demo data (in folder "raw_data") is downloaded.
 :::
 
 # 1. Data import
@@ -27,10 +27,6 @@ The expression matrix stores the UMI counts of a feature (gene or protein). Depe
 Rhapsody single cell platform outputs expression matrix in two formats: MEX and H5AD.
 
 We import MEX using the function from Seurat, `Read10x`. We assign a name to the created object, `expMat` (**exp**ression **Mat**rix).
-
-::: callout-note
-The expression matrix in Rhapsody v1 pipeline is in CSV format. If you run Rhapsody v2.0 pipeline, the expression matrix is available in MEX format.
-:::
 
 ```{r}
 expMat <- Read10X("data/raw_data/WTA-AB-SMK-v2-0_DBEC_MolsPerCell_MEX/",
@@ -75,7 +71,7 @@ scRNA-seq usually contains many zeros. The zeros can come from:
 -   Limitation of single cell technology: On average, 5 - 8% of mRNA transcripts can be captured by the technology.
 :::
 
-# 2. Create a Seurat object to store Gene Expression
+# 2. Create a `Seurat` object to store Gene Expression
 
 Let's create a Seurat object to store Gene Expression and assign "rna" as the object name.
 

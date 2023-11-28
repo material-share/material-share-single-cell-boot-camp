@@ -73,6 +73,8 @@ For example, while loading data as a classical data frame, the spaces in names a
 
 In this part of tutorial, we will work on table downloaded from supplementary data of Salcher, Stefan et al. (doi:10.1016/j.ccell.2022.10.008). The table contains the metadata of patients for which samples were processed on different single-cell platforms.
 
+The example data required by this chapter is available at the precourse_preparation_data in [Data](https://bd1-my.sharepoint.com/:f:/g/personal/yujuan_gui_bd_com/Em8N_QpnFJpAnPfuOVFcGGcB4vQ_Dc4nqZP7KAbG0UPIGw?e=2PVTCn).
+
 ### 1.3.2 Loading data
 
 Depending on the input format, there are different dedicated libraries to load data into R. Here we start from excel spreadsheet and use function from `readxl` library. The `readxl` library is part of `tidyverse` package that will be covered in second chapter of this tutorial.

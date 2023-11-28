@@ -4505,7 +4505,7 @@ vertical-align: -.125em;
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./setup.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Setting up</span></a>
+ <span class="menu-text">Setup</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -4564,6 +4564,12 @@ vertical-align: -.125em;
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./07_differential_expression_analysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 7 Differential Expression Analysis</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./09_combining.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Chapter 9 Combine scRNAseq and AbSeq</span></a>
   </div>
@@ -4580,6 +4586,12 @@ vertical-align: -.125em;
  <span class="menu-text">SessionInfo</span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./log.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Log</span></a>
+  </div>
+</li>
     </ul>
 </div>
 </nav><div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
@@ -4590,7 +4602,7 @@ vertical-align: -.125em;
   <ul>
 <li><a href="#demo-data" id="toc-demo-data" class="nav-link active" data-scroll-target="#demo-data">Demo data</a></li>
   <li><a href="#data-import" id="toc-data-import" class="nav-link" data-scroll-target="#data-import">1. Data import</a></li>
-  <li><a href="#create-a-seurat-object-to-store-gene-expression" id="toc-create-a-seurat-object-to-store-gene-expression" class="nav-link" data-scroll-target="#create-a-seurat-object-to-store-gene-expression">2. Create a Seurat object to store Gene Expression</a></li>
+  <li><a href="#create-a-seurat-object-to-store-gene-expression" id="toc-create-a-seurat-object-to-store-gene-expression" class="nav-link" data-scroll-target="#create-a-seurat-object-to-store-gene-expression">2. Create a <code>Seurat</code> object to store Gene Expression</a></li>
   <li><a href="#add-sample-multiplexing-kit-into-meta.data" id="toc-add-sample-multiplexing-kit-into-meta.data" class="nav-link" data-scroll-target="#add-sample-multiplexing-kit-into-meta.data">3. Add sample multiplexing kit into <code>meta.data</code></a></li>
   <li><a href="#remove-multiplet-and-undetermined" id="toc-remove-multiplet-and-undetermined" class="nav-link" data-scroll-target="#remove-multiplet-and-undetermined">4. Remove Multiplet and Undetermined</a></li>
   <li><a href="#save" id="toc-save" class="nav-link" data-scroll-target="#save">5. Save</a></li>
@@ -4629,26 +4641,13 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Please review the <strong>setup</strong> chapter to ensure that R packages are installed and the demo data is downloaded.</p>
+<p>Please review the <strong>setup</strong> chapter to ensure that R packages are installed and the demo data (in folder “raw_data”) is downloaded.</p>
 </div>
 </div>
 </section><section id="data-import" class="level1"><h1>1. Data import</h1>
 <p>The expression matrix stores the UMI counts of a feature (gene or protein). Depending on the single cell platform, common format of expression matrix include CSV, MEX (Market Exchange) or H5AD.</p>
 <p>Rhapsody single cell platform outputs expression matrix in two formats: MEX and H5AD.</p>
 <p>We import MEX using the function from Seurat, <code>Read10x</code>. We assign a name to the created object, <code>expMat</code> (<strong>exp</strong>ression <strong>Mat</strong>rix).</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The expression matrix in Rhapsody v1 pipeline is in CSV format. If you run Rhapsody v2.0 pipeline, the expression matrix is available in MEX format.</p>
-</div>
-</div>
 <div class="cell" data-hash="01_data_import_cache/html/unnamed-chunk-2_1f4c30234e193fac937deb1d4188a53c">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">expMat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/Read10X.html">Read10X</a></span><span class="op">(</span><span class="st">&quot;data/raw_data/WTA-AB-SMK-v2-0_DBEC_MolsPerCell_MEX/&quot;</span>,</span>
 <span>                  gene.column <span class="op">=</span> <span class="fl">2</span>,</span>
@@ -4688,7 +4687,7 @@ Question
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -4697,7 +4696,7 @@ Answer
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>The “.” corresponds to 0.</p>
 <p>scRNA-seq usually contains many zeros. The zeros can come from:</p>
@@ -4708,7 +4707,7 @@ Answer
 </div>
 </div>
 </div>
-</section><section id="create-a-seurat-object-to-store-gene-expression" class="level1"><h1>2. Create a Seurat object to store Gene Expression</h1>
+</section><section id="create-a-seurat-object-to-store-gene-expression" class="level1"><h1>2. Create a <code>Seurat</code> object to store Gene Expression</h1>
 <p>Let’s create a Seurat object to store Gene Expression and assign “rna” as the object name.</p>
 <div class="cell" data-hash="01_data_import_cache/html/unnamed-chunk-4_ded8ab7e5b5516dcb8e67afe9a271984">
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rna</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/CreateSeuratObject.html">CreateSeuratObject</a></span><span class="op">(</span>counts <span class="op">=</span> <span class="va">expMat</span><span class="op">$</span><span class="va">`Gene Expression`</span>, </span>
