@@ -4505,7 +4505,7 @@ vertical-align: -.125em;
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./setup.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Setting up</span></a>
+ <span class="menu-text">Setup</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -4558,6 +4558,12 @@ vertical-align: -.125em;
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./07_differential_expression_analysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 7 Differential Expression Analysis</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./08_enrichment_analysis.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Chapter 8 Enrichment Analysis</span></a>
   </div>
@@ -4578,6 +4584,12 @@ vertical-align: -.125em;
   <div class="sidebar-item-container"> 
   <a href="./sessioninfo.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">SessionInfo</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./log.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Log</span></a>
   </div>
 </li>
     </ul>
@@ -4825,8 +4837,9 @@ Contains 3 meta.data field(s) to transfer.</code></pre>
 </section><section id="marker-based" class="level2"><h2 class="anchored" data-anchor-id="marker-based">2.1 Marker-based</h2>
 <p>We use ScType (<a href="https://github.com/IanevskiAleksandr/sc-type/blob/master/README.md" class="uri">https://github.com/IanevskiAleksandr/sc-type/blob/master/README.md</a>) to annotate cell population based on known immune markers.</p>
 <p>ScType also has an open source portal: <a href="https://sctype.app/" class="uri">https://sctype.app/</a>.</p>
-<div class="cell" data-hash="06_marker_identification_cache/html/unnamed-chunk-11_1f8bb527c0b7b52fe50670d1b473cb6e">
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html">source</a></span><span class="op">(</span><span class="st">&quot;https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/R/gene_sets_prepare.R&quot;</span><span class="op">)</span>; <span class="kw"><a href="https://rdrr.io/r/base/source.html">source</a></span><span class="op">(</span><span class="st">&quot;https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/R/sctype_score_.R&quot;</span><span class="op">)</span></span>
+<div class="cell" data-hash="06_marker_identification_cache/html/unnamed-chunk-11_10b17b2946d029b71b1e12436d989f97">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># load ScType R functions</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/source.html">source</a></span><span class="op">(</span><span class="st">&quot;https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/R/gene_sets_prepare.R&quot;</span><span class="op">)</span>; <span class="kw"><a href="https://rdrr.io/r/base/source.html">source</a></span><span class="op">(</span><span class="st">&quot;https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/R/sctype_score_.R&quot;</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># get cell-type-specific gene sets from our in-built database (DB)</span></span>
 <span><span class="co"># list downloaded from https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/ScTypeDB_short.xlsx</span></span>
@@ -4868,8 +4881,8 @@ Contains 3 meta.data field(s) to transfer.</code></pre>
 </div>
 </section></section><section id="save" class="level1"><h1>3. Save</h1>
 <p>Save the files into RData for documentation.</p>
-<div class="cell" data-hash="06_marker_identification_cache/html/unnamed-chunk-13_500824c467b35a7c2a1afcc4fa6c6fae">
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># save(integrate.filtered.rna, expMat, file = &quot;data/intermediate_data/chapter6.RData&quot;)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="06_marker_identification_cache/html/unnamed-chunk-13_965998dc609af6cfeca370a3ecc9885c">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span><span class="op">(</span><span class="va">integrate.filtered.rna</span>, <span class="va">expMat</span>, file <span class="op">=</span> <span class="st">&quot;data/intermediate_data/chapter6.RData&quot;</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 

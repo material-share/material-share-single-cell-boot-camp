@@ -5,7 +5,8 @@ format:
     embed-resources: true
 ---
 
+::: callout-note
 ```{r}
-library(sessioninfo)
-session_info()
+sessionInfo()
 ```
+:::

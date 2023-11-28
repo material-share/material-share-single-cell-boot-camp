@@ -1,0 +1,85 @@
+---
+title: "Log"
+execute:
+  warning: false
+  message: false
+  eval: false
+---
+
+# 20231128
+
+The following chapters have the below changes:
+
+## **Setup**
+
+1.  Add instruction to install Seurat V4.
+2.  Add instruction to update packages.
+3.  Delete packages to be installed: SingleR, celldex, muscat.
+4.  Add packages to be installed: HGNChelper, ggpubr, RTools.
+5.  Update Data download link.
+
+## **Precourse preperation - R**
+
+1.  Add data download link
+
+## Chapter 5 Clustering
+
+1.  Add `clustree`
+
+## Chapter 6 Marker Identification
+
+1.  Replace `singleR` with `ScType`
+2.  Add VlnPlot stack plot
+
+## Chapter 7 Differential Expression Analysis
+
+1.  Replace `muscat` with functions in `Seurat` V4 to perform pseudobulk analysis
+
+## Chapter 8
+
+1.  Replace ranking in GSEA gene list from stat to log2FC
+2.  Force enrich bar plots to plot GO terms with the key word "T Cell"
+
+## **Error log**
+
+1.  `RunUMAP`
+
+![](pics/irlba_error.png)
+
+Solution: Downgrading `Matrix`
+
+If Mac is updated to Sonoma 14.x.x, you may see errors related to gfortran, like:
+
+ld: warning: search path '/opt/R/arm64/gfortran/lib/gcc/aarch64-apple-darwin20.2.0/11.0.0' not found\
+ld: warning: search path '/opt/R/arm64/gfortran/lib' not found\
+ld: library 'gfortran' not found
+
+If that's the case, please download and install gfortran-12.2-universal.pkg <https://cran.r-project.org/bin/macosx/tools/> before proceed.
+
+```{r}
+#| eval: false
+install.packages("remotes")
+remotes::install_version("Matrix", version = "1.6-1")
+packageVersion("Matrix")
+```
+
+Source: <https://cran.r-project.org/bin/macosx/tools/>
+
+2.  `getBM`
+
+![](pics/getBM_error.png)
+
+Solution: Downgrading `dbplyr`
+
+```{r}
+#| eval: false
+devtools::install_version("dbplyr", version = "2.3.4")
+```
+
+Source: <https://stackoverflow.com/questions/77370659/error-failed-to-collect-lazy-table-caused-by-error-in-db-collect-using>
+
+3.  `useMart`
+
+![](pics/useMart_error.png)
+
+Solution: Go to <http://status.ensembl.org> to check the status of Ensembl. If it says service is down, wait a few hours and try again.

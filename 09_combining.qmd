@@ -17,7 +17,7 @@ library(data.table)
 Load the RData which contains all files from the previous chapter.
 
 ```{r}
-load("data/intermediate_data/chapter8.RData")
+load("data/intermediate_data/chapter7.RData")
 ```
 
 When the experiment has RNA profiling (scRNA) and protein profiling (AbSeq) in single cell resolution, each measurement is one modality. The combined analysis of scRNA and AbSeq is so called "multimodal analysis".

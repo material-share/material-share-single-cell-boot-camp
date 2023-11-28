@@ -22,7 +22,7 @@ load("data/intermediate_data/chapter1.RData")
 
 # 1. Metrics for quality control
 
-When creating a Seurat object, Seurat automatically creates some metadata for each cell. This information is stored in the `meta.data`.
+When creating a `Seurat` object, `Seurat` automatically creates some metadata for each cell. This information is stored in the `meta.data`.
 
 ```{r}
 rna@meta.data %>% head()
@@ -51,9 +51,11 @@ Low quality cells have the below characteristics:
 In practice, we look at the distribution of quality metrics in cell population and set appropriate cutoff to filter out low quality cells.
 
 ::: callout-tip
-The targeted assay profiles a subset of genes, which are usually the genes of interest. Mitochondrial genes are often not included in the gene panel of the targeted assay.
+The targeted assay profiles a subset of genes. Mitochondrial genes are often not included in the gene panel of the targeted assay.
 
-So, the quality control of targeted assays will not look at mitochondrial percentage, and focus on `nCount_RNA` and `nFeature_RNA` only.
+So, the quality control of targeted assays will not include mitochondrial percentage, and focus on `nCount_RNA` and `nFeature_RNA` only.
+
+For an example on how to analyze targeted assay, please look at "Supplementary: Data import and quality control for targeted assays".
 :::
 
 # 2. Calculate mitochondrial percentage per cell
@@ -198,12 +200,8 @@ filtered_counts <- counts[keep_genes, ]
 filtered.rna <- CreateSeuratObject(filtered_counts, meta.data = filtered.rna@meta.data)
 ```
 
-::: callout-tip
-Targeted assay contains genes expressing in the profiling cells, so "Filter on genes" is usually not performed on targeted assays.
-:::
-
 ::: callout-important
-In this example, we keep only genes that are expressed in five or more cells. One may need to adjust the threshold.
+In this example, we keep only genes that are expressed in five or more cells.
 :::
 
 # 5. Re-assess metrics

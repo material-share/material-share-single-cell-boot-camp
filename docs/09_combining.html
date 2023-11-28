@@ -4564,6 +4564,12 @@ vertical-align: -.125em;
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./07_differential_expression_analysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 7 Differential Expression Analysis</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./09_combining.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Chapter 9 Combine scRNAseq and AbSeq</span></a>
   </div>
@@ -4618,8 +4624,8 @@ vertical-align: -.125em;
 </div>
 <section id="load-rdata" class="level1"><h1>Load RData</h1>
 <p>Load the RData which contains all files from the previous chapter.</p>
-<div class="cell" data-hash="09_combining_cache/html/unnamed-chunk-2_8cbd265a0d48c2b89535cf217bd8bb0b">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">&quot;data/intermediate_data/chapter8.RData&quot;</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="09_combining_cache/html/unnamed-chunk-2_2aa9946a8aba1b218bf90bd342df9f35">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">&quot;data/intermediate_data/chapter7.RData&quot;</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>When the experiment has RNA profiling (scRNA) and protein profiling (AbSeq) in single cell resolution, each measurement is one modality. The combined analysis of scRNA and AbSeq is so called “multimodal analysis”.</p>
 <p>Seurat package also provides the framework to analyze multimodal data. The framework is the the weighted nearest neighbors (WNN) approach, which enables simultaneous clustering of cells based on weighted combination of both modalities.</p>
