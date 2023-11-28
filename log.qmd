@@ -42,7 +42,7 @@ The following chapters have the below changes:
 
 ## **Error log**
 
-1.  `RunUMAP`
+1.  When you run `RunUMAP`\...
 
 ![](pics/irlba_error.png)
 
@@ -65,7 +65,7 @@ packageVersion("Matrix")
 
 Source: <https://cran.r-project.org/bin/macosx/tools/>
 
-2.  `getBM`
+2.  When you run `getBM`\...
 
 ![](pics/getBM_error.png)
 
@@ -78,7 +78,7 @@ devtools::install_version("dbplyr", version = "2.3.4")
 
 Source: <https://stackoverflow.com/questions/77370659/error-failed-to-collect-lazy-table-caused-by-error-in-db-collect-using>
 
-3.  `useMart`
+3.  When you run `useMart`\...
 
 ![](pics/useMart_error.png)
 
