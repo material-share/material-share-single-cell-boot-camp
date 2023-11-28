@@ -85,16 +85,16 @@ Methods to select top PCs were used a lot more often when the data was normalize
 
 ```{r}
 integrate.filtered.rna <- ScaleData(integrate.filtered.rna, verbose = FALSE)
-integrate.filtered.rna <- RunPCA(integrate.filtered.rna, npcs = 30, verbose = FALSE)
+integrate.filtered.rna <- RunPCA(integrate.filtered.rna, npcs = 50, verbose = FALSE)
 ```
 
 Elbow plot can help to select top PCs. The PC number, where the elbow is, is used to calculate UMAP.
 
 ```{r}
-ElbowPlot(integrate.filtered.rna)
+ElbowPlot(integrate.filtered.rna, ndims = 50)
 ```
 
-For this dataset, we use the first top 10 PCs. For other datasets, one may need to adjust the PCs according to the elbow plot.
+For this dataset, we use the first top 20 PCs. For other datasets, one may need to adjust the PCs according to the elbow plot.
 
 ```{r}
 integrate.filtered.rna <- RunUMAP(integrate.filtered.rna, 

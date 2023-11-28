@@ -94,8 +94,7 @@ Over Representation Analysis (ORA) is a widely used approach to determine whethe
 We use the `enrichGO` to get the enriched GO terms in the list of DEGs.
 
 ```{r}
-cd4t.sig <- dplyr::filter(cd4t, p_adj.loc < 0.05, logFC > 1) %>% 
-  arrange(p_adj.loc)
+cd4t.sig <- dplyr::filter(cd4t, p_adj.loc < 0.05, logFC > 1)
 
 # get the enriched GO terms
 ego <- enrichGO(gene = cd4t.sig$entrezgene_id,
@@ -138,7 +137,7 @@ head(ego.table)
 
 -   `BgRatio` The gene counts of a geneset / size of all of the unique genes in the collection of genesets.
 
-```{r}
+```{r fig.height=10}
 barplot(ego, showCategory = 18)
 ```
 
