@@ -312,7 +312,7 @@
     "href": "07_differential_expression_analysis.html#setup",
     "title": "Chapter 7 Differential Expression Analysis",
     "section": "2.1 Setup",
-    "text": "2.1 Setup\nLet’s assume we have three biological replicates in each condition (we make them up for the purpose of illustration).\n\n# make a fake group information\nintegrate.filtered.rna$group &lt;- sample(x = c('A', 'B', 'C'), size = ncol(integrate.filtered.rna), replace = TRUE)\n\n# pseudo-bulk by per condition per cell type\ncd4t.bulk &lt;- Seurat:::PseudobulkExpression(integrate.filtered.rna, \n                                        assays = \"RNA\",\n                                     pb.method = 'aggregate',\n                                     group.by = c('Sample_Name', 'predicted.celltype.l1', 'group'),\n                                     slot = \"counts\",\n                                     return.seurat = T)\n  \n# tidy up names\ncd4t.bulk$Sample_Name &lt;- cd4t.bulk %&gt;% colnames() %&gt;% \n  str_split(., pattern = \"_\") %&gt;% \n  lapply(., \"[\", 1) %&gt;% \n  unlist()\n\ncd4t.bulk$cellType &lt;- cd4t.bulk %&gt;% colnames() %&gt;% \n  str_split(., pattern = \"_\") %&gt;% \n  lapply(., \"[\", 2) %&gt;% \n  unlist\n\ncd4t.bulk$celltype.stim &lt;- paste(cd4t.bulk$Sample_Name, cd4t.bulk$cellType, sep = \"_\")\n\n# perform pseudobulk\nIdents(cd4t.bulk) &lt;- \"celltype.stim\"\n\ncd4t.bulk &lt;- FindMarkers(cd4t.bulk, \n                         ident.1 = \"treated_CD4 T\", \n                         ident.2 = \"naive_CD4 T\", \n                         test.use = \"DESeq2\")\n\n\n# compare the DE P-values between the single-cell level and the pseudobulk level results\ncd4t.bulk &lt;- cd4t.bulk %&gt;% \n  `colnames&lt;-`(paste0(names(cd4t.bulk), \".bulk\")) %&gt;% \n  mutate(gene = rownames(cd4t.bulk))\n\ncd4t.sc &lt;- cd4t.sc %&gt;% \n  `colnames&lt;-`(paste0(names(cd4t.sc), \".sc\")) %&gt;% \n  mutate(gene = rownames(cd4t.sc))\n\nmerge_dat &lt;- merge(cd4t.bulk, cd4t.sc, by = \"gene\") %&gt;% \n  arrange(p_val.bulk)\n\n# Number of genes that are marginally significant in both; marginally significant only in bulk; and marginally significant only in single-cell\ncommon &lt;- merge_dat$gene[which(merge_dat$p_val.bulk &lt; 0.05 & \n                                merge_dat$p_val.sc &lt; 0.05)]\nonly_sc &lt;- merge_dat$gene[which(merge_dat$p_val.bulk &gt; 0.05 & \n                                  merge_dat$p_val.sc &lt; 0.05)]\nonly_bulk &lt;- merge_dat$gene[which(merge_dat$p_val.bulk &lt; 0.05 & \n                                    merge_dat$p_val.sc &gt; 0.05)]\n\nThe majority of DEGs are shared in both pseudobulk and single-cell analysis. The log2FC is also correlated.\n\nggscatter(merge_dat, x = \"avg_log2FC.bulk\", y = \"avg_log2FC.sc\", \n          add = \"reg.line\", conf.int = TRUE, \n          cor.coef = TRUE, cor.method = \"pearson\")"
+    "text": "2.1 Setup\nLet’s assume we have three biological replicates in each condition (we make them up for the purpose of illustration).\n\n# make a fake group information\nintegrate.filtered.rna$group &lt;- sample(x = c('A', 'B', 'C'), size = ncol(integrate.filtered.rna), replace = TRUE)\n\n# pseudo-bulk by per condition per cell type\ncd4t.bulk &lt;- Seurat:::PseudobulkExpression(integrate.filtered.rna, \n                                        assays = \"RNA\",\n                                     pb.method = 'aggregate',\n                                     group.by = c('Sample_Name', 'predicted.celltype.l1', 'group'),\n                                     slot = \"counts\",\n                                     return.seurat = T)\n  \n# tidy up names\ncd4t.bulk$Sample_Name &lt;- cd4t.bulk %&gt;% colnames() %&gt;% \n  str_split(., pattern = \"_\") %&gt;% \n  lapply(., \"[\", 1) %&gt;% \n  unlist()\n\ncd4t.bulk$cellType &lt;- cd4t.bulk %&gt;% colnames() %&gt;% \n  str_split(., pattern = \"_\") %&gt;% \n  lapply(., \"[\", 2) %&gt;% \n  unlist\n\ncd4t.bulk$celltype.stim &lt;- paste(cd4t.bulk$Sample_Name, cd4t.bulk$cellType, sep = \"_\")\n\n# perform pseudobulk\nIdents(cd4t.bulk) &lt;- \"celltype.stim\"\n\ncd4t.bulk &lt;- FindMarkers(cd4t.bulk, \n                         ident.1 = \"treated_CD4 T\", \n                         ident.2 = \"naive_CD4 T\", \n                         test.use = \"DESeq2\")\n\n\n# compare the DE P-values between the single-cell level and the pseudobulk level results\ncd4t.bulk &lt;- cd4t.bulk %&gt;% \n  `colnames&lt;-`(paste0(names(cd4t.bulk), \".bulk\")) %&gt;% \n  mutate(gene = rownames(cd4t.bulk))\n\ncd4t.sc &lt;- cd4t.sc %&gt;% \n  `colnames&lt;-`(paste0(names(cd4t.sc), \".sc\")) %&gt;% \n  mutate(gene = rownames(cd4t.sc))\n\nmerge_dat &lt;- merge(cd4t.bulk, cd4t.sc, by = \"gene\") %&gt;% \n  arrange(p_val.bulk)\n\n# Number of genes that are marginally significant in both; marginally significant only in bulk; and marginally significant only in single-cell\ncommon &lt;- merge_dat$gene[which(merge_dat$p_val.bulk &lt; 0.05 & \n                                merge_dat$p_val.sc &lt; 0.05)]\nonly_sc &lt;- merge_dat$gene[which(merge_dat$p_val.bulk &gt; 0.05 & \n                                  merge_dat$p_val.sc &lt; 0.05)]\nonly_bulk &lt;- merge_dat$gene[which(merge_dat$p_val.bulk &lt; 0.05 & \n                                    merge_dat$p_val.sc &gt; 0.05)]\n\nThe majority of DEGs are shared in both pseudobulk and single-cell analysis."
   },
   {
     "objectID": "07_differential_expression_analysis.html#select-cell-groups",
@@ -473,55 +473,55 @@
     "href": "log.html",
     "title": "Log",
     "section": "",
-    "text": "The following chapters have the below changes:\n\n\nAdd instruction to install Seurat V4.\nAdd instruction to update packages.\nDelete packages to be installed: SingleR, celldex, muscat.\nAdd packages to be installed: HGNChelper, ggpubr, RTools.\nUpdate Data download link.\n\n\nAdd data download link\n\n\nAdd clustree\n\n\n\nReplace singleR with ScType\n\nAdd VlnPlot stack plot\n\n\nReplace muscat with functions in Seurat V4 to perform pseudobulk analysis\n\n\nReplace ranking in GSEA gene list from stat to log2FC\nForce enrich bar plots to plot GO terms with the key word “T Cell”\n\n\nWhen you run RunUMAP...\n\n\nSolution: Downgrading Matrix\nIf Mac is updated to Sonoma 14.x.x, you may see errors related to gfortran, like:\nld: warning: search path ‘/opt/R/arm64/gfortran/lib/gcc/aarch64-apple-darwin20.2.0/11.0.0’ not found\nld: warning: search path ‘/opt/R/arm64/gfortran/lib’ not found\nld: library ‘gfortran’ not found\nIf that’s the case, please download and install gfortran-12.2-universal.pkg https://cran.r-project.org/bin/macosx/tools/ before proceed.\n\ninstall.packages(\"remotes\")\nremotes::install_version(\"Matrix\", version = \"1.6-1\")\npackageVersion(\"Matrix\")\n\nSource: https://cran.r-project.org/bin/macosx/tools/\n\nWhen you run getBM...\n\n\nSolution: Downgrading dbplyr\n\ndevtools::install_version(\"dbplyr\", version = \"2.3.4\")\n\nSource: https://stackoverflow.com/questions/77370659/error-failed-to-collect-lazy-table-caused-by-error-in-db-collect-using\n\nWhen you run useMart...\n\n\nSolution: Go to http://status.ensembl.org to check the status of Ensembl. If it says service is down, wait a few hours and try again."
+    "text": "The following chapters have the below changes:\nChapter 7 Differential Expression Analysis\n\nRemove log2FC correlation plot."
   },
   {
     "objectID": "log.html#setup",
     "href": "log.html#setup",
     "title": "Log",
-    "section": "",
-    "text": "Add instruction to install Seurat V4.\nAdd instruction to update packages.\nDelete packages to be installed: SingleR, celldex, muscat.\nAdd packages to be installed: HGNChelper, ggpubr, RTools.\nUpdate Data download link."
+    "section": "Setup",
+    "text": "Setup\n\nAdd instruction to install Seurat V4.\nAdd instruction to update packages.\nDelete packages to be installed: SingleR, celldex, muscat.\nAdd packages to be installed: HGNChelper, ggpubr, RTools.\nUpdate Data download link."
   },
   {
     "objectID": "log.html#precourse-preperation---r",
     "href": "log.html#precourse-preperation---r",
     "title": "Log",
-    "section": "",
-    "text": "Add data download link"
+    "section": "Precourse preperation - R",
+    "text": "Precourse preperation - R\n\nAdd data download link"
   },
   {
     "objectID": "log.html#chapter-5-clustering",
     "href": "log.html#chapter-5-clustering",
     "title": "Log",
-    "section": "",
-    "text": "Add clustree"
+    "section": "Chapter 5 Clustering",
+    "text": "Chapter 5 Clustering\n\nAdd clustree"
   },
   {
     "objectID": "log.html#chapter-6-marker-identification",
     "href": "log.html#chapter-6-marker-identification",
     "title": "Log",
-    "section": "",
-    "text": "Replace singleR with ScType\n\nAdd VlnPlot stack plot"
+    "section": "Chapter 6 Marker Identification",
+    "text": "Chapter 6 Marker Identification\n\nReplace singleR with ScType\n\nAdd VlnPlot stack plot"
   },
   {
     "objectID": "log.html#chapter-7-differential-expression-analysis",
     "href": "log.html#chapter-7-differential-expression-analysis",
     "title": "Log",
-    "section": "",
-    "text": "Replace muscat with functions in Seurat V4 to perform pseudobulk analysis"
+    "section": "Chapter 7 Differential Expression Analysis",
+    "text": "Chapter 7 Differential Expression Analysis\n\nReplace muscat with functions in Seurat V4 to perform pseudobulk analysis"
   },
   {
     "objectID": "log.html#chapter-8",
     "href": "log.html#chapter-8",
     "title": "Log",
-    "section": "",
-    "text": "Replace ranking in GSEA gene list from stat to log2FC\nForce enrich bar plots to plot GO terms with the key word “T Cell”"
+    "section": "Chapter 8",
+    "text": "Chapter 8\n\nReplace ranking in GSEA gene list from stat to log2FC\nForce enrich bar plots to plot GO terms with the key word “T Cell”"
   },
   {
     "objectID": "log.html#error-log",
     "href": "log.html#error-log",
     "title": "Log",
-    "section": "",
-    "text": "When you run RunUMAP...\n\n\nSolution: Downgrading Matrix\nIf Mac is updated to Sonoma 14.x.x, you may see errors related to gfortran, like:\nld: warning: search path ‘/opt/R/arm64/gfortran/lib/gcc/aarch64-apple-darwin20.2.0/11.0.0’ not found\nld: warning: search path ‘/opt/R/arm64/gfortran/lib’ not found\nld: library ‘gfortran’ not found\nIf that’s the case, please download and install gfortran-12.2-universal.pkg https://cran.r-project.org/bin/macosx/tools/ before proceed.\n\ninstall.packages(\"remotes\")\nremotes::install_version(\"Matrix\", version = \"1.6-1\")\npackageVersion(\"Matrix\")\n\nSource: https://cran.r-project.org/bin/macosx/tools/\n\nWhen you run getBM...\n\n\nSolution: Downgrading dbplyr\n\ndevtools::install_version(\"dbplyr\", version = \"2.3.4\")\n\nSource: https://stackoverflow.com/questions/77370659/error-failed-to-collect-lazy-table-caused-by-error-in-db-collect-using\n\nWhen you run useMart...\n\n\nSolution: Go to http://status.ensembl.org to check the status of Ensembl. If it says service is down, wait a few hours and try again."
+    "section": "Error log",
+    "text": "Error log\n\nWhen you run RunUMAP...\n\n\nSolution: Downgrading Matrix\nIf Mac is updated to Sonoma 14.x.x, you may see errors related to gfortran, like:\nld: warning: search path ‘/opt/R/arm64/gfortran/lib/gcc/aarch64-apple-darwin20.2.0/11.0.0’ not found\nld: warning: search path ‘/opt/R/arm64/gfortran/lib’ not found\nld: library ‘gfortran’ not found\nIf that’s the case, please download and install gfortran-12.2-universal.pkg https://cran.r-project.org/bin/macosx/tools/ before proceed.\n\ninstall.packages(\"remotes\")\nremotes::install_version(\"Matrix\", version = \"1.6-1\")\npackageVersion(\"Matrix\")\n\nSource: https://cran.r-project.org/bin/macosx/tools/\n\nWhen you run getBM...\n\n\nSolution: Downgrading dbplyr\n\ndevtools::install_version(\"dbplyr\", version = \"2.3.4\")\n\nSource: https://stackoverflow.com/questions/77370659/error-failed-to-collect-lazy-table-caused-by-error-in-db-collect-using\n\nWhen you run useMart...\n\n\nSolution: Go to http://status.ensembl.org to check the status of Ensembl. If it says service is down, wait a few hours and try again."
   }
 ]

@@ -6,6 +6,14 @@ execute:
   eval: false
 ---
 
+# 20231129
+
+The following chapters have the below changes:
+
+**Chapter 7 Differential Expression Analysis**
+
+1.  Remove log2FC correlation plot.
+
 # 20231128
 
 The following chapters have the below changes:
