@@ -227,5 +227,5 @@ DimPlot(integrate.filtered.rna, reduction = "umap", label = TRUE, repel = TRUE, 
 Save the files into RData for documentation.
 
 ```{r}
-save(integrate.filtered.rna, expMat, file = "data/intermediate_data/chapter6.RData")
+# save(integrate.filtered.rna, expMat, file = "data/intermediate_data/chapter6.RData")
 ```

@@ -138,13 +138,7 @@ only_bulk <- merge_dat$gene[which(merge_dat$p_val.bulk < 0.05 &
                                     merge_dat$p_val.sc > 0.05)]
 ```
 
-The majority of DEGs are shared in both pseudobulk and single-cell analysis. The log2FC is also correlated.
-
-```{r}
-ggscatter(merge_dat, x = "avg_log2FC.bulk", y = "avg_log2FC.sc", 
-          add = "reg.line", conf.int = TRUE, 
-          cor.coef = TRUE, cor.method = "pearson")
-```
+The majority of DEGs are shared in both pseudobulk and single-cell analysis.
 
 # 3. Save
 
