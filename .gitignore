@@ -1,0 +1,20 @@
+# ignore single file
+precourse_preparation_theory.qmd
+
+# ignore *
+*.Rproj.user
+*.Rhistory
+*.RData
+*.Ruserdata
+*.zip
+*_freeze/
+*_cache/
+*_files/
+*prerequisite_figures/
+data/*
+BD-Demo-WTA-AbSeq-SMK/*
+BD-Demo-WTA-AbSeq-SMK.zip
+16HIRP-targeted-EB-20kPBMC/*
+16HIRP-targeted-EB-20kPBMC.zip
+/.quarto/
+
