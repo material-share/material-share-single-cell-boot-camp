@@ -1,8 +1,11 @@
 ---
-title: "Chapter 3 Normalization and PCA"
+title: "Chapter 3 Normalization"
 execute:
   warning: false
   message: false
+format:
+  html:
+    embed-resources: true
 ---
 
 ```{r}
@@ -17,7 +20,7 @@ library(data.table)
 Load the RData which contains all files from previous chapter.
 
 ```{r}
-load("data/intermediate_data/chapter2.RData")
+load("data/chapter2.RData")
 ```
 
 # 1. Normalization
@@ -27,8 +30,8 @@ We will perform normalization on UMI counts using `LogNormalize`.
 `LogNormalize` divides the UMI counts of a gene in a cell into the total UMI counts in that cell. After division, we take the natural log.
 
 ```{r}
-filtered.rna <- NormalizeData(filtered.rna, 
-                              normalization.method = "LogNormalize")
+filtered <- NormalizeData(filtered, 
+                          normalization.method = "LogNormalize")
 ```
 
 ::: callout-important
@@ -40,96 +43,81 @@ Where are the normalized counts stored?
 ::: {.callout-tip collapse="T"}
 ## Answer
 
-The normalized counts are stored in the slot `RNA`.
+The normalized counts are stored in the `data` layer of assay `RNA`.
 
 ```{r}
-filtered.rna@assays[["RNA"]]@data[1:5, 1:5]
+filtered[["RNA"]]@layers$data %>% 
+  .[1:10, 1:10]
 ```
 :::
 
-# 2. Evaluating effects of mitochondrial percentage (optional)
-
-The unwanted variation, such as the difference in mitochondrial percentage, could bias the downstream analysis.
-
-For example, we don't want the cells clustered based on the difference in mitochondrial percentage.
-
-Let's first has a look if the mitochondrial percentage introduces unwanted variation in the dataset or not. We take the normalized counts and follow the below steps to check.
-
-1.  The mitochondrial percentage is a series of numbers. We can turn the mitochondrial percentage variable into a categorical variable based on quartiles.
+After normalization, we scale the data and identify highly variable features. Data scaling is to remove the bias from high expressors which is required by PCA calculation.
 
 ```{r}
-summary(filtered.rna$percent.mt)
+# Scale data
+filtered <- ScaleData(filtered, features = rownames(filtered))
+
+# Find variable features
+filtered <- FindVariableFeatures(filtered)
 ```
 
-The cells can be grouped into 4 categories.
+# 2. PCA
 
-MT% \< 1st quartile: Low.
-
-MT% between 1st quartile and Median: Median.
-
-MT% between Median and 3rd quartile: Median high.
-
-MT% \> 3rd quartile (15.4158%): High.
-
-Next, we create a new variable based on the thretholds.
+The PCA is calculated with the highly variable features. Each PC can explain some variance of the data. The first PC can explain the most variance, and gradually decrease through the PCs. We can visualize the PCs by Elbow plot.
 
 ```{r}
-filtered.rna$quartile.mt <- cut(filtered.rna$percent.mt, 
-                                breaks=c(-Inf, 10.1004, 12.4155, 15.1489, Inf),
-                                labels=c("Low","Medium","Medium high", "High"))
+filtered <- RunPCA(filtered, npcs = 50, verbose = FALSE)
 ```
-
-We use PCA to check whether the mitochondrial percentage is a source of variation. We plot the first two principal components and visualize the data.
 
 ```{r}
-# Identify the most variable genes
-filtered.rna <- FindVariableFeatures(filtered.rna,
-                                     selection.method = "vst",
-                                     nfeatures = 2000, 
-                                     verbose = FALSE)
-		     
-# Scale the data
-filtered.rna <- ScaleData(filtered.rna, 
-                          features = rownames(filtered.rna))
-
-# perform PCA
-filtered.rna <- RunPCA(filtered.rna)
-
-# Plot pc1 and pc2
-DimPlot(filtered.rna,
-        reduction = "pca",
-        group.by= "quartile.mt",
-        split.by = "quartile.mt")
+ElbowPlot(filtered, ndims = 50)
 ```
 
-Based on the above plot, we can see a different scatter pattern in cells with "Low" mitochondrial percentage.
+# 3. UMAP visualization
 
-We observe that the lobe of cells on the right middle side of the plot is only in the category "Low". For all other levels of mitochondrial percentage, we see a more even distribution of cells across the PCA plot.
+Only the top PCs will be used for UMAP. Elbow plot can help to select the top PCs. We used the PCs until where the elbow is to calculate UMAP.
 
-::: callout-tip
-Oftentimes, it is helpful to regress out variation due to mitochondrial percentage. However, if the differences in mitochondrial percentation has the biological meaning that might help to distinguish cell clusters, then we do not regress it out.
-:::
-
-::: callout-tip
-Cell cycle is another common source of bias. For instructions on how to remove cell cycle bias, please refer to <https://satijalab.org/seurat/articles/cell_cycle_vignette.html>
-:::
-
-To regress out the effect of mitochondrial percentage, add the argument `vars.to.regress = "percent.mt"` to the `ScaleData`.
+For this dataset, we use the first top 20 PCs.
 
 ```{r}
-# Scale the data
-filtered.rna <- ScaleData(filtered.rna, 
-                          features = rownames(filtered.rna), 
-                          vars.to.regress = "percent.mt")
+filtered <- RunUMAP(filtered, 
+                    reduction = "pca", 
+                    dims = 1:20)
 
-# Recalculate PCA
-filtered.rna <- RunPCA(filtered.rna)
+filtered <- FindNeighbors(filtered, 
+                          reduction = "pca", 
+                          dims = 1:20)
+
+# Plot UMAP                             
+DimPlot(filtered, group.by = "Sample_Name")   
 ```
+
+## Exercise 1
+
+Change the number of PCs and see how the UMAP changes.
+
+Tips: You can change the PC numbers by `dims` argument in `RunUMAP`.
+
+## Exercise 2
+
+`Dimplot` has many arguments to control the plots.
+
+1.  Search `Dimplot` in the "Help" tab and read the documentation.
+2.  Change `group.by` to `split.by`. What is the difference?
+
+```{r}
+p1 <- DimPlot(filtered, group.by = "Sample_Name") + NoLegend()
+p2 <- DimPlot(filtered, split.by = "Sample_Name")  + NoLegend()
+
+p1|p2
+```
+
+# 
 
 # 3. Save
 
 Save the files into RData for documentation.
 
 ```{r}
-# save(filtered.rna, expMat, file = "data/intermediate_data/chapter3.RData")
+save(filtered, file = "data/chapter3.RData")
 ```

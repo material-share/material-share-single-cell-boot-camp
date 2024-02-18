@@ -1,0 +1,192 @@
+---
+title: "Chapter 7 Enrichment Analysis"
+execute:
+  warning: false
+  message: false
+format:
+  html:
+    embed-resources: true
+---
+
+```{r}
+# libraries for this chapter
+library(tidyverse)
+library(Seurat)
+library(data.table)
+library(org.Hs.eg.db)
+library(clusterProfiler)
+library(AnnotationDbi)
+library(enrichplot)
+library(biomaRt)
+```
+
+# Load RData
+
+Load the RData which contains all files from the previous chapter.
+
+```{r}
+load("data/chapter6.RData")
+```
+
+Oftentimes, enrichment analysis takes the differentially expressed genes and looks at which gene ontology (GO) terms are enriched.
+
+GO terms defines concepts/classes used to describe gene function and relationships between these concepts. `clusterProfiler` is an R package implementing many methods to analyze and visualize functional profiles from a group of features. It classifies functions in three aspects.
+
+-   MF: **M**olecular **F**unction: molecular activities of gene products.
+
+-   CC: **C**ellular **C**omponent: where gene products are active.
+
+-   BP: **B**iological **P**rocess: pathways and larger processes made up of the activities of multiple gene products.
+
+This chapter uses the differentially expressed genes in CD4+ T cells from last chapter as an example.
+
+# 1. Get Entrez ID
+
+`clusterProfiler` prefers the input of Entrez ID. We use `biomaRt` package to convert the gene symbol into Entrez ID.
+
+::: callout-note
+`biomaRt` is handy to get information about features. You can use it to get gene symbols, genomic coordinates, transcript sequences, etc. You can explore what data is stored in `biomaRt` with `listAttributes`.
+:::
+
+The differentially expressed genes in CD4+ T cells between naïve and treated PBMCs are stored in the matrix `cd4t`. The gene symbol in this list can be converted into Entrez ID by `biomaRt`.
+
+Firstly, connect to the Ensembl database and specify we want to retrieve information from the dataset of Homo Sapien.
+
+```{r}
+mart <- useMart(biomart = "ensembl", dataset = "hsapiens_gene_ensembl")
+```
+
+-   `biomart` BioMart database connect to. Here, we want to connect to `ensembl` database.
+
+-   `dataset` Dataset to use. Here specify `hsapiens_gene_ensembl`.
+
+Next, we can give a list of gene symbols and retrieve the Entrez ID through `getBM`.
+
+```{r}
+results <- getBM(attributes = c("entrezgene_id", "external_gene_name"),
+                 filters = "external_gene_name", 
+                 values = rownames(cd4t.deg),
+                 mart = mart)
+```
+
+-   `attributes` Attributes to retrieve. We want to have the gene symbols and Entrez ID in the results.
+
+-   `filters` Which filter to use to filter the dataset.
+
+-   `values` A list of features as a query.
+
+-   `mart` Object of class Mart, created with the `useMart` function.
+
+A table of two columns is created and stored in the matrix of `results`.
+
+```{r}
+results %>% head
+```
+
+Not every gene has the Entrez ID. We keep only genes that have a matched Entrez ID.
+
+```{r}
+cd4t.deg <- cd4t.deg %>% 
+  rownames_to_column("gene") %>% 
+  left_join(., results, by = c("gene" = "external_gene_name")) %>% 
+  filter(!is.na(entrezgene_id)) %>% 
+  filter(!is.na(p_val_adj))
+```
+
+# 2. GO over-representation analysis
+
+Over Representation Analysis (ORA) is a widely used approach to determine whether known biological functions or processes are over-represented (= enriched) in an experimentally-derived gene list, e.g. a list of differentially expressed genes (DEGs).
+
+We use the `enrichGO` to get the enriched GO terms in the list of DEGs.
+
+```{r}
+cd4t.deg.sig <- dplyr::filter(cd4t.deg, p_val_adj < 0.05, 
+                               abs(avg_log2FC) > 1)
+
+# get the enriched GO terms
+ego <- enrichGO(gene = cd4t.deg.sig$entrezgene_id,
+                keyType = "ENTREZID",
+                OrgDb = org.Hs.eg.db,
+                ont = "BP",
+                pAdjustMethod = "BH",
+                pvalueCutoff = 0.01,
+                qvalueCutoff = 0.05,
+                readable = TRUE)
+```
+
+-   `gene` A list of Entrez gene id.
+
+-   `keyType` The keytype of input gene.
+
+-   `OrgDb` The database with detailed information about the species.
+
+-   `org.Hs.eg.db` Specify the database of Homo Sapien.
+
+-   `ont` One of "BP" (biological process), "MF" (molecular function), and "CC" (cellular component) subontologies, or "ALL" for all three.
+
+-   `pAdjustMethod` Multiple testing method for p-value.
+
+-   `pvalueCutoff` Adjusted pvalue cutoff on enrichment tests to report.
+
+-   `qvalueCutoff` Tge qvalue cutoff on enrichment tests to report as significant.
+
+-   `readable` Whether mapping gene ID to gene Name.
+
+Let's convert the `ego` object into a data frame and visualize the results in a bar plot.
+
+```{r}
+ego.table <- as.data.frame(ego)
+```
+
+-   `GeneRatio` The gene counts from the input list found in the gene set of a GO term / gene counts of input list.
+
+-   `BgRatio` The gene counts of a geneset / size of all of the unique genes in the collection of genesets.
+
+```{r fig.height=10}
+filter(ego, Description %in% grep("T cell", ego.table$Description, ignore.case = T, value = T)) %>% 
+barplot(showCategory = 18)
+```
+
+# 3. Gene set enrichment analysis - Optional
+
+All genes can be used as input of gene set enrichment analysis (GSEA). We first rank the genes based on `stat`.
+
+```{r}
+# order genes
+cd4t.deg <- cd4t.deg[order(-cd4t.deg$avg_log2FC), ]
+
+gene_list <- cd4t.deg$avg_log2FC
+names(gene_list) <- cd4t.deg$entrezgene_id
+```
+
+We use `gseGO` to perform GSEA and convert the results into a dataframe.
+
+```{r}
+# perform GSEA
+gse <- gseGO(gene_list,
+             keyType = "ENTREZID",
+             ont = "BP",
+             OrgDb = "org.Hs.eg.db")
+
+# convert the results into a dataframe
+gse.table <- as.data.frame(gse) %>% 
+  mutate(geneSetID = 1:dim(.)[1])
+```
+
+`enrichmentScore` The enrichment score (ES) represents the degree to which a set S is over-represented at the top or bottom of the ranked list L.
+
+We can look at the enrichment of some GO terms in GSEA plot.
+
+```{r}
+gseaplot2(gse, geneSetID = c(161, 171))
+```
+
+We have significant enriched term in the unregulated genes. Along the x axis is the ranked genes. Each of the vertical line is one of those genes that are found in this gene set. Along the running line, you can see a lot of genes running together and it falls out when the gene becomes more sparse in the list.
+
+# 4. Save
+
+Save the files into RData for documentation.
+
+```{r}
+save(filtered, cd4t.deg, cd4t.deg.sig, ego, ego.table, gse, gse.table, file = "data/chapter7.RData")
+```

@@ -1,0 +1,120 @@
+---
+title: "Chapter 6 Differential Expression Analysis"
+execute:
+  warning: false
+  message: false
+format:
+  html:
+    embed-resources: true
+---
+
+```{r}
+# libraries for this chapter
+library(tidyverse)
+library(Seurat)
+library(data.table)
+library(ggpubr)
+```
+
+# Load RData
+
+Load the RData which contains all files from the previous chapter.
+
+```{r}
+load("data/chapter5.RData")
+```
+
+# 1. FindMarkers
+
+## 1.1 DE analysis across conditions
+
+In the last chapter, we used `FindMarkers` to find the marker genes between two clusters by specifying `ident.1` and `ident.2`.
+
+Changing the `ident.1` and `ident.2` arguments, we can perform differential expression analysis between two groups.
+
+For instance, we want to find genes deferentially expressed between naïve and treated PBMC.
+
+```{r}
+# change default assay to "RNA"
+DefaultAssay(filtered) <- "RNA"
+
+# change default identity to "Sample_Name"
+Idents(filtered) <- "Sample_Name"
+
+# Find genes differentially expressed
+# SampleTag02_hs: treated, SampleTag01_hs: naive
+treated_naive <- 
+  FindMarkers(filtered, ident.1 = "SampleTag02_hs", ident.2 = "SampleTag01_hs") %>% 
+  rownames_to_column("gene") %>% 
+  dplyr::filter(p_val_adj < 0.05)
+```
+
+We can compare the gene expression between two groups by specifying `ident.1` and `ident.2`.
+
+```{r}
+head(treated_naive)
+```
+
+-   `gene` Gene symbol.
+
+-   `p_val` P-value without multiple testing.
+
+-   `avg_log2FC` log2 fold-change of the average expression between the two groups.
+
+-   `pct.1` Percentage of cells in ident.1 expressing the gene.
+
+-   `pct.2` Percentage of cells in ident.2 expressing the gene.
+
+-   `p_val_adj` Adjusted p-value.
+
+## 1.2 Perform DE analysis within the same cell type across conditions
+
+We can also perform DE analysis within the same cell type across conditions.
+
+```{r}
+filtered$predicted.celltype.l1.tag <- paste(filtered$predicted.celltype.l1, filtered$Sample_Name, sep = "_")
+
+# Find genes differentially expressed between activated vs. naive samples in CD4 T cells
+Idents(filtered) <- "predicted.celltype.l1.tag"
+
+cd4t.deg <- FindMarkers(filtered, 
+                       ident.1 = "CD4 T_SampleTag02_hs", 
+                       ident.2 = "CD4 T_SampleTag01_hs", 
+                       verbose = FALSE)
+
+head(cd4t.deg, n = 10)
+```
+
+# 2. Pseudobulk analysis
+
+## 2.1 Setup
+
+Let's assume we have three biological replicates in each condition (we make them up for the purpose of illustration).
+
+```{r}
+# make a fake group information
+filtered$donor <- sample(x = c('A', 'B', 'C'), size = ncol(filtered), replace = TRUE)
+
+pseudo <- AggregateExpression(filtered, assays = "RNA", return.seurat = T, 
+                              group.by = c("Sample_Name", "donor", "predicted.celltype.l1"))
+
+# perform pseudobulk
+pseudo$predicted.celltype.l1.tag <- paste(pseudo$predicted.celltype.l1, pseudo$Sample_Name, sep = "_")
+
+Idents(pseudo) <- "predicted.celltype.l1.tag"
+
+cd4t.bulk <- FindMarkers(object = pseudo, 
+                         ident.1 = "CD4 T_SampleTag02-hs", 
+                         ident.2 = "CD4 T_SampleTag01-hs",
+                         test.use = "DESeq2")
+
+head(cd4t.bulk, n = 15)
+```
+
+# 3. Save
+
+Save the files into RData for documentation.
+
+```{r}
+save(filtered, cd4t.deg, file = "data/chapter6.RData")
+```

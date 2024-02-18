@@ -13,16 +13,13 @@ website:
       - index.qmd
       - setup.qmd
       - precourse_preparation_R.qmd
-      - precourse_preparation_theory.qmd
       - 01_data_import.qmd
       - 02_quality_control.qmd
       - 03_normalization.qmd
-      - 04_integration.qmd
-      - 05_clustering.qmd
-      - 06_marker_identification.qmd
-      - 07_differential_expression_analysis.qmd
-      - 08_enrichment_analysis.qmd
-      - 09_combining.qmd
+      - 04_clustering.qmd
+      - 05_marker_identification.qmd
+      - 06_differential_expression_analysis.qmd
+      - 07_enrichment_analysis.qmd
       - supplementary_targeted_analysis.qmd
       - sessioninfo.qmd
       - log.qmd

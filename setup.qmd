@@ -1,16 +1,10 @@
 ---
-title: "Setup"
+title: "Setup R and RStudio on Desktop"
 execute:
   warning: false
   message: false
   eval: false
 ---
-
-::: callout-important
-The course will run on virtual machine. We have materials and RStudio setting up on the virtual machine, so you DO NOT need to set up anything on your desktop for the instructor-led course.
-
-However, if you are going to run through the code on your local desktop, please follow this chapter to set up R and RStudio on the desktop.
-:::
 
 # 1. R and RStudio
 
@@ -19,20 +13,10 @@ Please follow the instruction to set up the **most up to date** R and RStudio on
 # 2. Install R packages
 
 ::: callout-note
-Install the packages in the order listed below.
-
-The package names are case sensitive.
-
-At any point (especially if you have used R/Bioconductor in the past), in the console **R may ask you if you want to update any old packages by asking Update all/some/none? \[a/s/n\]:**. If you see this, please **type "n" at the prompt and hit Enter** to **NOT** update all old packages.
-
-If you want to update packages, please go to: Tools -\> Check for Package Updates. Select the packages to upload.
-
-![](pics/Screenshot%202023-11-28%20at%2020.08.18.png)
-
-Please do **NOT** update `dplyr`, `Seurat`, `SeuratObject`.
+Install the packages in the order listed below. The package names are case sensitive.
 :::
 
-1.  Only for windows machines: Please download and install RTools from <https://cran.r-project.org/bin/windows/Rtools/>.
+1.  **Only for windows machines**: Please download and install RTools from <https://cran.r-project.org/bin/windows/Rtools/>.
 2.  Install the packages listed below **one by one** from CRAN using the `install.packages()` function.
 
 `install.packages("tidyverse")`
@@ -51,6 +35,8 @@ Please do **NOT** update `dplyr`, `Seurat`, `SeuratObject`.
 
 `install.packages("ggpubr")`
 
+`install.packages("Seurat")`
+
 2.  Install the packages listed below **one by one** from bioconductor using the `BiocManager::install()` function.
 
 `BiocManager::install("ensembldb")`
@@ -67,16 +53,16 @@ Please do **NOT** update `dplyr`, `Seurat`, `SeuratObject`.
 
 `BiocManager::install("HGNChelper")`
 
-3.  Install `Seurat` V4
+**Optional**: The materials are updated to Seurat V5. If you want to use `Seurat` V4, you can follow the below instruction to install `Seurat` V4. Please note that you may need to adapt the code to fit `Seurat` V4 structure.
 
-The teaching materials run on `Seurat` V4. If you already install `Seurat`, please check the version of `SeuratObject` and `Seurat`.
+First check the version of installed `SeuratObject` and `Seurat`.
 
 ```{r}
 packageVersion("SeuratObject")
 packageVersion("Seurat")
 ```
 
-If the version of `Seurat` is 4.x.x, you are good to go. If the version is 5.0.x, please follow the below instructions to remove the existing `Seurat` package and install `Seurat` V4.
+If the version is 5.0.x, please follow the below instructions to remove the existing `Seurat` package and install `Seurat` V4.
 
 ```{r}
 #| eval: false
@@ -127,19 +113,18 @@ library(enrichplot)
 
 # 3. Download dataset and code
 
-**Dataset**: Please download the data from [Data](https://bd1-my.sharepoint.com/:f:/g/personal/yujuan_gui_bd_com/Em8N_QpnFJpAnPfuOVFcGGcB4vQ_Dc4nqZP7KAbG0UPIGw?e=2PVTCn). It is required to run the prerequisites and course chapters.
+Please follow the below steps if you would like to run the materials locally.
 
-**Code**: You will also need to download the entire repository as a .zip from <https://github.com/material-share/material-share-single-cell-boot-camp/tree/master>.
+1.  **Dataset**: Please download the data here: [Data](https://bd-rhapsody-public.s3.amazonaws.com/Rhapsody-Demo-Data/WTA/BD-Demo-WTA-AbSeq-SMK.zip).
+2.  **Code**: You will also need to download the entire repository as a .zip from <https://github.com/material-share/material-share-single-cell-boot-camp/tree/master>.
 
 ![](pics/1-5-github.png)
 
 After download, unzip the repository and **put the Data folder in the repository**.
 
-To run the analysis, double click on **single-cell-boot-camp.Rproj**. One should be able to bring out the RStudio console on desktop.
+3.  To run the analysis, double click on **single-cell-boot-camp.Rproj**. One should be able to bring out the RStudio console on desktop.
 
-# 4. Where to find the most up-to-date course materials?
-
-This website! This website is constantly updated. The Log outlines the change through time.
+# 4. Contribution
 
 If you would like to contribute, report bugs, or suggest any tools or workflow, please open on issue: <https://github.com/material-share/material-share-single-cell-boot-camp/issues>.
 

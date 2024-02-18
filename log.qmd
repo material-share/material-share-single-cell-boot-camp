@@ -6,6 +6,12 @@ execute:
   eval: false
 ---
 
+# 20240216
+
+1.  Updated to Seurat V5
+2.  Archive precourse_preparation_theory.qmd for future development
+3.  <https://github.com/satijalab/seurat/issues/8202>
+
 # 20231129
 
 The following chapters have the below changes:
@@ -50,7 +56,7 @@ The following chapters have the below changes:
 
 ## **Error log**
 
-1.  When you run `RunUMAP`\...
+1.  When you run `RunUMAP`...
 
 ![](pics/irlba_error.png)
 
@@ -73,7 +79,7 @@ packageVersion("Matrix")
 
 Source: <https://cran.r-project.org/bin/macosx/tools/>
 
-2.  When you run `getBM`\...
+2.  When you run `getBM`...
 
 ![](pics/getBM_error.png)
 
@@ -86,7 +92,7 @@ devtools::install_version("dbplyr", version = "2.3.4")
 
 Source: <https://stackoverflow.com/questions/77370659/error-failed-to-collect-lazy-table-caused-by-error-in-db-collect-using>
 
-3.  When you run `useMart`\...
+3.  When you run `useMart`...
 
 ![](pics/useMart_error.png)
 

@@ -4505,19 +4505,13 @@ vertical-align: -.125em;
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./setup.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Setup</span></a>
+ <span class="menu-text">Setup R and RStudio on Desktop</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./precourse_preparation_R.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Precourse Preparation - R</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./precourse_preparation_theory.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Precourse Preparation - Theory</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -4535,49 +4529,37 @@ vertical-align: -.125em;
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./03_normalization.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Chapter 3 Normalization and PCA</span></a>
+ <span class="menu-text">Chapter 3 Normalization</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./04_integration.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Chapter 4 Integration</span></a>
+  <a href="./04_clustering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 4 Clustering</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05_clustering.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Chapter 5 Clustering</span></a>
+  <a href="./05_marker_identification.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 5 Marker Identification</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./06_marker_identification.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Chapter 6 Marker Identification</span></a>
+  <a href="./06_differential_expression_analysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 6 Differential Expression Analysis</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./07_differential_expression_analysis.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Chapter 7 Differential Expression Analysis</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./08_enrichment_analysis.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Chapter 8 Enrichment Analysis</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./09_combining.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Chapter 9 Combine scRNAseq and AbSeq</span></a>
+  <a href="./07_enrichment_analysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chapter 7 Enrichment Analysis</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./supplementary_targeted_analysis.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Supplementary: Data import and quality control for targeted assays</span></a>
+ <span class="menu-text">Supplementary: Targeted assays</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -5124,7 +5106,7 @@ Tip
 </section><section id="example-data-1" class="level2"><h2 class="anchored" data-anchor-id="example-data-1">2.2 Example data</h2>
 <p>In this chapter we will work on an expression matrix table (gene expression) which is in CSV format. Below is example of how to load the table.</p>
 <div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-28_919fdc87e08baf342f8b67d000a5cf44">
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">expMat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fread.html">fread</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">&quot;data/precourse_preparation_data/Demo-WTA-AbSeq.csv&quot;</span>, sep <span class="op">=</span> <span class="st">&quot;,&quot;</span>, header<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">expMat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/fread.html">fread</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">&quot;data/precourse_preparation_data/Demo-WTA-AbSeq.csv&quot;</span>, sep <span class="op">=</span> <span class="st">&quot;,&quot;</span>, header<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># file: provide full directory to file</span></span>
 <span><span class="co"># sep: indicate separator, in this case coma</span></span>
@@ -5151,7 +5133,7 @@ Tip
 <p>The same set of above operations can be performed with pipe in one line of code. We read the file and convert first column to row names and save as data frame. The result is assigned to expMat variable by using the arrow.</p>
 <div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-31_890e70cc313a0d8c1539ecdd9d85b35f">
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#pipe operations</span></span>
-<span><span class="va">expMat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fread.html">fread</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">&quot;data/precourse_preparation_data/Demo-WTA-AbSeq.csv&quot;</span>, sep <span class="op">=</span> <span class="st">&quot;,&quot;</span>, header<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span><span class="va">expMat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/fread.html">fread</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">&quot;data/precourse_preparation_data/Demo-WTA-AbSeq.csv&quot;</span>, sep <span class="op">=</span> <span class="st">&quot;,&quot;</span>, header<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>row.names <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="select" class="level2"><h2 class="anchored" data-anchor-id="select">2.3 <code>select()</code>
@@ -5368,7 +5350,7 @@ Tip
 <p>The assays slots can be accessed by function <code>GetAssayData</code>. In the example below, we access the <code>counts</code> slot.</p>
 <div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-50_033d89b8a3b0f8ec34b885dfa229c77a">
 <div class="sourceCode" id="cb76"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#Seurat object saved before normalization</span></span>
-<span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/AssayData.html">GetAssayData</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">seuratObj</span>, slot <span class="op">=</span> <span class="st">&quot;counts&quot;</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/SeuratObject/man/AssayData.html">GetAssayData</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">seuratObj</span>, slot <span class="op">=</span> <span class="st">&quot;counts&quot;</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="va">.</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span> , <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">&quot;6660551&quot;</span>,<span class="st">&quot;2066735&quot;</span>,<span class="st">&quot;9164959&quot;</span>,<span class="st">&quot;3709837&quot;</span><span class="op">)</span><span class="op">]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>5 x 4 sparse Matrix of class &quot;dgCMatrix&quot;
@@ -5385,7 +5367,7 @@ A2M.AS1        .       .       .       .</code></pre>
 <div class="sourceCode" id="cb78"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#Seurat object saved after normalization</span></span>
 <span><span class="va">seuratObj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/NormalizeData.html">NormalizeData</a></span><span class="op">(</span><span class="va">seuratObj</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/AssayData.html">GetAssayData</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">seuratObj</span>, slot <span class="op">=</span> <span class="st">&quot;data&quot;</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/SeuratObject/man/AssayData.html">GetAssayData</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">seuratObj</span>, slot <span class="op">=</span> <span class="st">&quot;data&quot;</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="va">.</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span> , <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">&quot;6660551&quot;</span>,<span class="st">&quot;2066735&quot;</span>,<span class="st">&quot;9164959&quot;</span>,<span class="st">&quot;3709837&quot;</span><span class="op">)</span><span class="op">]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>5 x 4 sparse Matrix of class &quot;dgCMatrix&quot;
@@ -5426,7 +5408,7 @@ A2M.AS1  .        .         .         .        </code></pre>
 <p>It is possible to add new information to <code>meta.data</code>. It can be any information about the cells such as experimental batch or sub-population identity.</p>
 <div class="cell" data-hash="precourse_preparation_R_cache/html/unnamed-chunk-54_acbf5752b8305d8de51d4b3a46e9fdda">
 <div class="sourceCode" id="cb84"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#add meta data</span></span>
-<span><span class="va">seuratObj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/AddMetaData.html">AddMetaData</a></span><span class="op">(</span><span class="va">seuratObj</span>, <span class="co">#indicate object</span></span>
+<span><span class="va">seuratObj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/SeuratObject/man/AddMetaData.html">AddMetaData</a></span><span class="op">(</span><span class="va">seuratObj</span>, <span class="co">#indicate object</span></span>
 <span>            <span class="st">&quot;experiment_1&quot;</span>, <span class="co">#metadata to be added</span></span>
 <span>            <span class="st">&quot;batch&quot;</span><span class="op">)</span> <span class="co">#column name for metadata</span></span>
 <span></span>

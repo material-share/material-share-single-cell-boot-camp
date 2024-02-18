@@ -3,6 +3,9 @@ title: "Chapter 2 Quality Control"
 execute:
   warning: false
   message: false
+format:
+  html:
+    embed-resources: true
 ---
 
 ```{r}
@@ -17,26 +20,12 @@ library(data.table)
 Load the RData which contains all files from previous chapter.
 
 ```{r}
-load("data/intermediate_data/chapter1.RData")
+load("data/chapter1.RData")
 ```
 
 # 1. Metrics for quality control
 
 When creating a `Seurat` object, `Seurat` automatically creates some metadata for each cell. This information is stored in the `meta.data`.
-
-```{r}
-rna@meta.data %>% head()
-```
-
-`orig.ident` Sample identity or sample name. By default, it is "SeuratProject".
-
-`nCount_RNA` UMI counts per cell.
-
-`nFeature_RNA` Gene counts per cell.
-
-`Sample_Tag` The cell is from which sample tag.
-
-`Sample_Name` The cell is from which sample.
 
 Quality control is to filter out cell labels that are of low quality, e.g. dead cells.
 
@@ -55,7 +44,7 @@ The targeted assay profiles a subset of genes. Mitochondrial genes are often not
 
 So, the quality control of targeted assays will not include mitochondrial percentage, and focus on `nCount_RNA` and `nFeature_RNA` only.
 
-For an example on how to analyze targeted assay, please look at "Supplementary: Data import and quality control for targeted assays".
+For an example on how to analyze targeted assay, please look at "Supplementary: Data import and quality control of targeted assays".
 :::
 
 # 2. Calculate mitochondrial percentage per cell
@@ -63,19 +52,24 @@ For an example on how to analyze targeted assay, please look at "Supplementary: 
 Seurat has a convenient function, `PercentageFeatureSet`, to calculate the percentage of UMIs of mitochondrial genes in a cell.
 
 ```{r}
-rna[["percent.mt"]] <- PercentageFeatureSet(rna, pattern = "^MT.")
+seuratObj[["percent.mt"]] <- PercentageFeatureSet(seuratObj, pattern = "^MT-")
 ```
 
 ::: callout-tip
-The mitochondrial genes typically include "MT" in their gene symbol. However, the pattern could be different, such as MT. or MT- or mt-. You may need to adjust the pattern to correctly calculate the percentage.
+The name patterns of mitochondrial genes are different genome versions. To make sure that the mitochondrial percentage is calculated correctly, one can use grep to check the gene name pattern of mitochondrial genes. For example, the demo dataset has mitochondrial genes starting with "MT-".
+
+```{r}
+#| eval: false
+grep(pattern = "mt-", rownames(seuratObj), ignore.case = T, value = T)
+```
 :::
 
 The `PercentageFeatureSet` takes in a `pattern` argument and searches through all feature names in the dataset for that pattern.
 
-Since we are looking for mitochondrial genes, we are searching for any gene names that begin with the pattern `^MT.`. For each cell, the function takes the sum of counts across all genes belonging to `^MT.`, and then divides it by the total counts for all genes. The result is stored in the `percent.mt` of `meta.data` .
+Since we are looking for mitochondrial genes, we are searching for any gene names that begin with the pattern of mitochondrial genes. For each cell, the function takes the sum of counts across all genes belonging to mitochondrial genes, and then divides it by the total counts for all genes. The result is stored in the `percent.mt` of `meta.data` .
 
 ```{r}
-rna@meta.data %>% head
+head(seuratObj@meta.data)
 ```
 
 # 3. Assessing the quality metrics
@@ -87,7 +81,7 @@ We will assess the quality metrics, `nCount_RNA`, `nFeature_RNA`, `percent.mt`, 
 We look at `nCount_RNA` for the sum of UMI counts per cell.
 
 ```{r}
-rna@meta.data %>% 
+seuratObj@meta.data %>% 
   ggplot(aes(color=Sample_Name, x=nCount_RNA, fill= Sample_Name)) + 
   geom_density(alpha = 0.2) + 
   scale_x_log10() + 
@@ -101,7 +95,7 @@ rna@meta.data %>%
 We look at `nFeature_RNA` for sum of gene counts per cell. The majority of cells have gene counts more than 300.
 
 ```{r}
-rna@meta.data %>% 
+seuratObj@meta.data %>% 
   ggplot(aes(color=Sample_Name, x=nFeature_RNA, fill= Sample_Name)) + 
   geom_density(alpha = 0.2) + 
   scale_x_log10() + 
@@ -115,7 +109,7 @@ rna@meta.data %>%
 We look at `percent.mt` for mitochondrial percentage per cell. The majority of cells have mitochondrial percentage below 25%.
 
 ```{r}
-rna@meta.data %>% 
+seuratObj@meta.data %>% 
   ggplot(aes(color=Sample_Name, x=percent.mt, fill=Sample_Name)) + 
   geom_density(alpha = 0.2) + 
   theme_classic() +
@@ -127,7 +121,7 @@ rna@meta.data %>%
 We can combine the metrics to decide the filtering threshold.
 
 ```{r}
-rna@meta.data %>% 
+seuratObj@meta.data %>% 
   ggplot(aes(x=nCount_RNA, y=nFeature_RNA, color=percent.mt)) + 
   geom_point() + 
   scale_colour_gradient(low = "gray90", high = "black") +
@@ -164,7 +158,7 @@ Based on the quality metrics, we use the following thresholds to filter out low 
 `percent.mt` \< 25%
 
 ```{r}
-filtered.rna <- subset(x = rna, 
+filtered <- subset(x = seuratObj, 
                        subset = (nCount_RNA >= 500) & 
                          (nFeature_RNA >= 300) &
                          (nFeature_RNA <= 5000) &
@@ -175,41 +169,12 @@ filtered.rna <- subset(x = rna,
 The filtering thresholds should be decided based on assessing the quality metrics. They may change depending on the sample types, sequencing depth and other factors.
 :::
 
-## 4.2 Filter on genes
-
-After filtering on cells, some genes may have zero counts or are only expressed in few cells. These genes do not bring much information, and they reduce the average expression of a cell.
-
-We keep only genes that are expressed in **five or more cells**. `GetAssayData` is a convenient command to get information from the Seurat object. We use `GetAssayData` to extract the UMI counts.
-
-```{r}
-# Extract counts
-counts <- GetAssayData(object = filtered.rna, slot = "counts")
-
-# Output a logical matrix specifying for each gene whether or not 
-# there are more than zero counts per cell
-nonzero <- counts > 0
-
-# Sum all TRUE values and return TRUE 
-# if equal or more than 5 TRUE values per gene
-keep_genes <- Matrix::rowSums(nonzero) >= 5
-
-# Only keep those genes
-filtered_counts <- counts[keep_genes, ]
-
-# Create Seurat object
-filtered.rna <- CreateSeuratObject(filtered_counts, meta.data = filtered.rna@meta.data)
-```
-
-::: callout-important
-In this example, we keep only genes that are expressed in five or more cells.
-:::
-
 # 5. Re-assess metrics
 
 After filtering, we look back to the metrics to ensure the filtered data matches expectations and is suitable for downstream analysis. We plot all QC metrics using the filtered data.
 
 ```{r}
-filtered.rna@meta.data %>% 
+filtered@meta.data %>% 
   ggplot(aes(color=Sample_Name, x=nCount_RNA, fill= Sample_Name)) + 
   geom_density(alpha = 0.2) + 
   scale_x_log10() + 
@@ -219,7 +184,7 @@ filtered.rna@meta.data %>%
 ```
 
 ```{r}
-filtered.rna@meta.data %>% 
+filtered@meta.data %>% 
   ggplot(aes(color=Sample_Name, x=nFeature_RNA, fill= Sample_Name)) + 
   geom_density(alpha = 0.2) + 
   scale_x_log10() + 
@@ -229,7 +194,7 @@ filtered.rna@meta.data %>%
 ```
 
 ```{r}
-filtered.rna@meta.data %>% 
+filtered@meta.data %>% 
   ggplot(aes(color=Sample_Name, x=percent.mt, fill=Sample_Name)) + 
   geom_density(alpha = 0.2) + 
   theme_classic() +
@@ -237,7 +202,7 @@ filtered.rna@meta.data %>%
 ```
 
 ```{r}
-filtered.rna@meta.data %>% 
+filtered@meta.data %>% 
   ggplot(aes(x=nCount_RNA, y=nFeature_RNA, color=percent.mt)) + 
   geom_point() + 
   scale_colour_gradient(low = "gray90", high = "black") +
@@ -255,7 +220,7 @@ Cells that are considered of low quality in the bottom right quadrant are remove
 Before filtering:
 
 ```{r}
-rna@meta.data %>% 
+seuratObj@meta.data %>% 
   group_by(Sample_Name) %>% 
   dplyr::summarise(cell_number = length(Sample_Name))
 ```
@@ -263,15 +228,15 @@ rna@meta.data %>%
 After filtering:
 
 ```{r}
-filtered.rna@meta.data %>% 
+filtered@meta.data %>% 
   group_by(Sample_Name) %>% 
   dplyr::summarise(cell_number = length(Sample_Name))
 ```
 
 # 6. Save
 
-Save the files into RData for documentation. We do not need all files to continue the course, so we use `save` to save part of the files in RData.
+Save the files into RData for documentation.
 
 ```{r}
-# save(filtered.rna, expMat, file = "data/intermediate_data/chapter2.RData")
+save(filtered, file = "data/chapter2.RData")
 ```
