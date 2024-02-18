@@ -1,4 +1,0 @@
-"0","FetchData(integrate.filtered.rna, "
-"0","                     vars = c(""ident"", ""Sample_Name"")) %>%"
-"0","  dplyr::count(ident, Sample_Name) %>%"
-"0","  tidyr::spread(ident, n)"

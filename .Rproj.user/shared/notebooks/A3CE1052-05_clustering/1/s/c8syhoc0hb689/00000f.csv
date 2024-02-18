@@ -1,4 +1,0 @@
-"0","# UMAP of cells in each cluster by sample"
-"0","DimPlot(integrate.filtered.rna, "
-"0","        label = TRUE, "
-"0","        split.by = ""Sample_Name"")  + NoLegend()"

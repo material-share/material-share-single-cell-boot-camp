@@ -1,5 +1,0 @@
-"0","filtered.rna <- subset(x = rna, "
-"0","                       subset = (nCount_RNA >= 500) & "
-"0","                         (nFeature_RNA >= 300) &"
-"0","                         (nFeature_RNA <= 5000) &"
-"0","                         (percent.mt < 25))"

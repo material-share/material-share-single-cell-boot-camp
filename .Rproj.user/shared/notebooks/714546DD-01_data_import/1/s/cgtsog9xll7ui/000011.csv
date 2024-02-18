@@ -1,6 +1,0 @@
-"0","expMat <- Read10X(""data/raw_data/WTA-AB-SMK-v2-0_DBEC_MolsPerCell_MEX/"","
-"0","                  gene.column = 2,"
-"0","                  cell.column = 1,"
-"0","                  unique.features = TRUE)"
-"2","10X data contains more than one type and is being returned as a list containing matrices of each type.
-"

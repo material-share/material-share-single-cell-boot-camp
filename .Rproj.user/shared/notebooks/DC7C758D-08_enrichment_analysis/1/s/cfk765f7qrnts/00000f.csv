@@ -1,4 +1,0 @@
-"0","results <- getBM(attributes = c(""entrezgene_id"", ""external_gene_name""),"
-"0","                 filters = ""external_gene_name"", "
-"0","                 values = cd4t$gene,"
-"0","                 mart = mart)"

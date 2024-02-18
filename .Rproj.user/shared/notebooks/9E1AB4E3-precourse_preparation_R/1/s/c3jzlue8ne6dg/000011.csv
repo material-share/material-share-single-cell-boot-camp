@@ -1,4 +1,0 @@
-"0","mrna_data %>% dplyr::summarise(mean = mean(counts),    #mean counts"
-"0","                             median = median(counts),    #median counts"
-"0","                             max = max(counts),    #maximum count"
-"0","                             min = min(counts))   #minimum count"

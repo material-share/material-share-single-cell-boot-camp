@@ -1,4 +1,0 @@
-"0","rna <- CreateSeuratObject(counts = expMat$`Gene Expression`, "
-"0","                                min.cells = 1, "
-"0","                                min.features = 100, "
-"0","                                assay = ""RNA"")"

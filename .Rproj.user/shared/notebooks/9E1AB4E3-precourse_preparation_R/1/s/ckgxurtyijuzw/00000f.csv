@@ -1,4 +1,0 @@
-"0","mrna_data %>% rename(SIGNAL_CELLS = cell_status) -> mrna_data"
-"0",""
-"0","#display results"
-"0","mrna_data %>% dplyr::select(last_col()) %>% head #chose last column from mrna_data"

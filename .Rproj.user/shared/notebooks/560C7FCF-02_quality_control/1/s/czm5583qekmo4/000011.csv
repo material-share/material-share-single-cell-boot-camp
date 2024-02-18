@@ -1,7 +1,0 @@
-"0","filtered.rna@meta.data %>% "
-"0","  ggplot(aes(color=Sample_Name, x=nFeature_RNA, fill= Sample_Name)) + "
-"0","  geom_density(alpha = 0.2) + "
-"0","  scale_x_log10() + "
-"0","  theme_classic() +"
-"0","  ylab(""Cell density"") +"
-"0","  ggtitle(""nFeature_RNA"")"
