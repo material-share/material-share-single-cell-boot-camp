@@ -116,7 +116,7 @@ library(enrichplot)
 Please follow the below steps if you would like to run the materials locally.
 
 1.  **Dataset**: Please download the data here: [Data](https://bd-rhapsody-public.s3.amazonaws.com/Rhapsody-Demo-Data/WTA/BD-Demo-WTA-AbSeq-SMK.zip).
-2.  **Code**: You will also need to download the entire repository as a .zip from <https://github.com/material-share/material-share-single-cell-boot-camp/tree/master>.
+2.  **Github folder**: You will also need to download the entire repository as a .zip from <https://github.com/material-share/material-share-single-cell-boot-camp/tree/master>.
 
 ![](pics/1-5-github.png)
 
