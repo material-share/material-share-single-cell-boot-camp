@@ -12,7 +12,7 @@ website:
     contents:
       - index.qmd
       - setup.qmd
-      - precourse_preparation_R.qmd
+      - precourse_preparations_R.qmd
       - 01_data_import.qmd
       - 02_quality_control.qmd
       - 03_normalization.qmd
