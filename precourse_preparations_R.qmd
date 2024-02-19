@@ -414,7 +414,7 @@ After running rowSums we got for each cell the number of counts. The values can 
 
 ```{r}
 mrna_data %>% mutate(counts = mRNA_count_sum) -> mrna_data
-mrna_data %>% dplyr::select(counts)
+mrna_data %>% dplyr::select(counts) %>% head
 ```
 
 The same result can be generated with option below, where the rowSums function is nested inside the mutate function.
@@ -477,7 +477,7 @@ If we would like to add that information as a new column to data table, we can u
 mrna_data %>% mutate(cell_status = if_else(mrna_data["counts"] > 2000, "high_transcriptome", "low_transcriptome")) -> mrna_data
 
 #display cell status column 
-mrna_data %>% dplyr::select(cell_status)
+mrna_data %>% dplyr::select(cell_status) %>% head
 ```
 
 ## 2.7 count()
@@ -526,7 +526,7 @@ Filter function display from the data values that meet defined condition. For ex
 mrna_data %>% filter(cell_status == "high_transcriptome") -> signal_cells
 
 #display last column
-signal_cells %>% dplyr::select(last_col())
+signal_cells %>% dplyr::select(last_col()) %>% head
 ```
 
 ## 2.9 rename()
@@ -539,7 +539,7 @@ Renames the cell_status variable as SIGNAL_CELLS (notice that the new label goes
 mrna_data %>% rename(SIGNAL_CELLS = cell_status) -> mrna_data
 
 #display results
-mrna_data %>% dplyr::select(last_col()) #chose last column from mrna_data
+mrna_data %>% dplyr::select(last_col()) %>% head #chose last column from mrna_data
 ```
 
 # 3. Seurat object
