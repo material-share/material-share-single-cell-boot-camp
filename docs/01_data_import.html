@@ -4584,8 +4584,8 @@ vertical-align: -.125em;
   <ul>
 <li><a href="#demo-data" id="toc-demo-data" class="nav-link active" data-scroll-target="#demo-data">Demo data</a></li>
   <li><a href="#data-import" id="toc-data-import" class="nav-link" data-scroll-target="#data-import">1. Data import</a></li>
-  <li><a href="#remove-multiplet-and-undetermined" id="toc-remove-multiplet-and-undetermined" class="nav-link" data-scroll-target="#remove-multiplet-and-undetermined">4. Remove Multiplet and Undetermined</a></li>
-  <li><a href="#save" id="toc-save" class="nav-link" data-scroll-target="#save">6. Save</a></li>
+  <li><a href="#remove-multiplet-and-undetermined" id="toc-remove-multiplet-and-undetermined" class="nav-link" data-scroll-target="#remove-multiplet-and-undetermined">2. Remove Multiplet and Undetermined</a></li>
+  <li><a href="#save" id="toc-save" class="nav-link" data-scroll-target="#save">3. Save</a></li>
   </ul></nav>
     </div>
 <!-- main -->
@@ -4644,9 +4644,7 @@ Note
 <span><span class="va">seuratObj</span><span class="op">[[</span><span class="st">&quot;RNA&quot;</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/SeuratObject/man/CreateAssay5Object.html">CreateAssay5Object</a></span><span class="op">(</span>counts <span class="op">=</span> <span class="va">rna</span><span class="op">)</span></span>
 <span><span class="va">seuratObj</span><span class="op">[[</span><span class="st">&quot;ADT&quot;</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/SeuratObject/man/CreateAssay5Object.html">CreateAssay5Object</a></span><span class="op">(</span>counts <span class="op">=</span> <span class="va">ab</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<ol type="1">
-<li>Click on the <code>seuratObj</code> on the right.</li>
-</ol>
+<p>Click on the <code>seuratObj</code> on the right.</p>
 <p>A window will pop up and you should be able to see the structure of <code>seuratObj</code>.</p>
 <ul>
 <li><p><code>seuratObj</code> contains two assays: <strong>RNA</strong> and <strong>ADT</strong>. <strong>RNA</strong> stores <strong>Gene Expression</strong>; and <strong>ADT</strong> stores <strong>AbSeq</strong>. We will first focus on RNA analysis.</p></li>
@@ -4663,7 +4661,7 @@ Note
 <li><p><code>Putative_Cell_Algorithm</code> Which algorithm is used to call the cell. Default is “Basic”.</p></li>
 <li><p><code>nCount_ADT</code> UMI counts per AB per cell.</p></li>
 <li><p><code>nFeature_ADT</code> AB counts per cell.</p></li>
-</ul></section><section id="remove-multiplet-and-undetermined" class="level1"><h1>4. Remove Multiplet and Undetermined</h1>
+</ul></section><section id="remove-multiplet-and-undetermined" class="level1"><h1>2. Remove Multiplet and Undetermined</h1>
 <p>The <strong>Multiplet</strong> are cell labels with more than one SMK tags. They could be Multiplets from one microwell containing two cells, or single cells with high ambient SMK noise.</p>
 <p>The <strong>Undetermined</strong> are cell labels without sufficient SMK tag reads. They could be noisy cell labels, or single cells without SMK tag reads.</p>
 <div class="cell" data-hash="01_data_import_cache/html/unnamed-chunk-3_35c731443d97173b9f1e8d948f6183ce">
@@ -4684,7 +4682,7 @@ Note
 <div class="cell" data-hash="01_data_import_cache/html/unnamed-chunk-4_7c10be070c09f968e23d6096fef8336f">
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">seuratObj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">seuratObj</span>, subset <span class="op">=</span> <span class="va">Sample_Name</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">&quot;Multiplet&quot;</span>, <span class="st">&quot;Undetermined&quot;</span><span class="op">)</span>, invert <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section><section id="save" class="level1"><h1>6. Save</h1>
+</section><section id="save" class="level1"><h1>3. Save</h1>
 <p>Save the files into RData for documentation.</p>
 <div class="cell" data-hash="01_data_import_cache/html/unnamed-chunk-5_a17958ecabb2e9ba1d7357a046fabb70">
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span><span class="op">(</span><span class="va">seuratObj</span>, file <span class="op">=</span> <span class="st">&quot;data/chapter1.RData&quot;</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>

@@ -46,7 +46,7 @@ seuratObj[["RNA"]] <- CreateAssay5Object(counts = rna)
 seuratObj[["ADT"]] <- CreateAssay5Object(counts = ab)
 ```
 
-1.  Click on the `seuratObj` on the right.
+Click on the `seuratObj` on the right.
 
 A window will pop up and you should be able to see the structure of `seuratObj`.
 
@@ -74,7 +74,7 @@ A window will pop up and you should be able to see the structure of `seuratObj`.
 
 -   `nFeature_ADT` AB counts per cell.
 
-# 4. Remove Multiplet and Undetermined
+# 2. Remove Multiplet and Undetermined
 
 The **Multiplet** are cell labels with more than one SMK tags. They could be Multiplets from one microwell containing two cells, or single cells with high ambient SMK noise.
 
@@ -98,7 +98,7 @@ Multiplet and Undetermined are removed from the downstream analysis by `subset`.
 seuratObj <- subset(seuratObj, subset = Sample_Name %in% c("Multiplet", "Undetermined"), invert = T)
 ```
 
-# 6. Save
+# 3. Save
 
 Save the files into RData for documentation.
 
