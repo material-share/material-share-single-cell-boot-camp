@@ -78,7 +78,7 @@ In this part of tutorial we will work on table downloaded from supplementary dat
 Depending on the input format there are different dedicated libraries to load data into R. Here we start from excel spreadsheet and use function from readxl library. The readxl library is part of tidyverse packages that will be covered in second chapter of this tutorial.
 
 ```{r}
-df_example <- read_excel("data/precourse_preparation_data/mmc4.xlsx",  skip = 2)
+df_example <- read_excel("precourse_preparation_data/mmc4.xlsx",  skip = 2)
 ```
 
 **NOTE:**
@@ -325,7 +325,7 @@ In this chapter we will work on expression matrix table which is one of the outp
 The table is provided in csv format. Below is example of how to load the table.
 
 ```{r}
-expMat <- fread(file = "data/precourse_preparation_data/Demo-WTA-AbSeq.csv", sep = ",", header=TRUE)
+expMat <- fread(file = "precourse_preparation_data/Demo-WTA-AbSeq.csv", sep = ",", header=TRUE)
 
 # file: provide full directory to file
 # sep: indicate separator, in this case coma
@@ -351,7 +351,7 @@ The same set of above operations can be performed with pipe in one line of code.
 
 ```{r}
 #pipe operations
-expMat <- fread(file = "data/precourse_preparation_data/Demo-WTA-AbSeq.csv", sep = ",", header=TRUE) %>% data.frame(row.names = 1)
+expMat <- fread(file = "precourse_preparation_data/Demo-WTA-AbSeq.csv", sep = ",", header=TRUE) %>% data.frame(row.names = 1)
 ```
 
 ## 2.3 select()
