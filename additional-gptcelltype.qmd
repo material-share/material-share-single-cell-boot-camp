@@ -1,0 +1,56 @@
+---
+title: "Additional - GPTCelltype"
+execute:
+  warning: false
+  message: false
+format:
+  html:
+    embed-resources: true
+---
+
+```{r}
+library(tidyverse)
+library(Seurat)
+```
+
+
+Github: https://github.com/Winnie09/GPTCelltype
+
+
+```{r}
+install.packages("openai")
+remotes::install_github("Winnie09/GPTCelltype")
+```
+
+import data
+```{r}
+load("data/archive/intermediate_data/chapter6.RData")
+```
+
+check existing annotation
+```{r}
+DimPlot(integrate.filtered.rna, group.by = "predicted.celltype.l1", label = T)
+```
+
+annotation
+```{r}
+
+# IMPORTANT! Assign your OpenAI API key. See Vignette for details
+Sys.setenv(OPENAI_API_KEY = 'your_openai_API_key')
+
+# Load packages
+library(GPTCelltype)
+library(openai)
+
+# Assume you have already run the Seurat pipeline https://satijalab.org/seurat/
+# "obj" is the Seurat object; "markers" is the output from FindAllMarkers(obj)
+# Cell type annotation by GPT-4
+res <- gptcelltype(markers, model = 'gpt-4')
+
+# Assign cell type annotation back to Seurat object
+obj@meta.data$celltype <- as.factor(res[as.character(Idents(obj))])
+
+# Visualize cell type annotation on UMAP
+DimPlot(obj,group.by='celltype')
+```
+
