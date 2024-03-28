@@ -8,8 +8,6 @@ format:
     embed-resources: true
 ---
 
-test
-
 ```{r}
 library(tidyverse)
 library(Seurat)
