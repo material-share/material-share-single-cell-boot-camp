@@ -3,6 +3,7 @@ title: "Use GPTCelltype to annotate cell types"
 execute:
   warning: false
   message: false
+  eval: false
 format:
   html:
     embed-resources: true
@@ -34,23 +35,23 @@ library(GPTCelltype)
 load("data/chapter5.RData")
 ```
 
-2. Annotation of cell types
+2. Existed annotation in the Seurat object
 ```{r}
-DimPlot(filtered, group.by = "predicted.celltype.l1", label = T)
+DimPlot(obj, group.by = "predicted.celltype.l1", label = T)
 ```
 
-3. Use annotation
+3. Use GPTCelltype for annotation
 ```{r}
-# IMPORTANT! Assign your OpenAI API key. See Vignette for details
-Sys.setenv(OPENAI_API_KEY = '')
+# IMPORTANT! Assign your OpenAI API key.
+Sys.setenv(OPENAI_API_KEY='your-api-key-here')
 
 # Assume you have already run the Seurat pipeline https://satijalab.org/seurat/
 # "obj" is the Seurat object; "markers" is the output from FindAllMarkers(obj)
 # Cell type annotation by GPT-4
-res <- gptcelltype(treated.markers, model = 'gpt-4')
+res <- gptcelltype(markers, model = 'gpt-4')
 
 # Assign cell type annotation back to Seurat object
-filtered@meta.data$celltype <- as.factor(res[as.character(Idents(filtered))])
+obj@meta.data$celltype <- as.factor(res[as.character(Idents(obj))])
 
 # Visualize cell type annotation on UMAP
 DimPlot(obj,group.by='celltype')
