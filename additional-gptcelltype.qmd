@@ -42,7 +42,7 @@ DimPlot(filtered, group.by = "predicted.celltype.l1", label = T)
 3. Use annotation
 ```{r}
 # IMPORTANT! Assign your OpenAI API key. See Vignette for details
-Sys.setenv(OPENAI_API_KEY = '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')
+Sys.setenv(OPENAI_API_KEY = '')
 
 # Assume you have already run the Seurat pipeline https://satijalab.org/seurat/
 # "obj" is the Seurat object; "markers" is the output from FindAllMarkers(obj)
