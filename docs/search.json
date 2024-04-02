@@ -740,5 +740,40 @@
     "title": "Precourse Preparation",
     "section": "3.3 Meta Data",
     "text": "3.3 Meta Data\nMeta.data slot stores information calculated for cells as for example number of features in each cell, number of counts or cell clusters calculated in downstream process.\nThe meta.data information is stored in a table that can be accessed in Seurat object as below.\n\nseurat.obj_00[[]] %&gt;% \n  .[1:10, ]\n\n        orig.ident nCount_RNA nFeature_RNA nCount_AbO nFeature_AbO\n3091 SeuratProject       2191         1133       9310           35\n3517 SeuratProject       3051         1324       8566           36\n3921 SeuratProject       1672          951       9324           36\n4283 SeuratProject       2091         1117      11314           38\n4318 SeuratProject       2330         1220      12217           36\n5027 SeuratProject       1942         1087       7923           34\n5088 SeuratProject       1784         1045       7025           33\n5418 SeuratProject       2813         1451       7061           36\n5763 SeuratProject       1812          966       2328           33\n5768 SeuratProject       3126         1429      12918           38\n\n\nTo view list of all available meta.data in Seurat object we can view the column names from the data table.\n\nseurat.obj_00[[]] %&gt;% colnames() %&gt;% head\n\n[1] \"orig.ident\"   \"nCount_RNA\"   \"nFeature_RNA\" \"nCount_AbO\"   \"nFeature_AbO\"\n\n\nWe can extract information of interest from data table by indicating to chosen column names.\n\nseurat.obj_00[[c(\"nCount_AbO\", \"nFeature_RNA\")]] %&gt;% \n  .[1:10, ]\n\n     nCount_AbO nFeature_RNA\n3091       9310         1133\n3517       8566         1324\n3921       9324          951\n4283      11314         1117\n4318      12217         1220\n5027       7923         1087\n5088       7025         1045\n5418       7061         1451\n5763       2328          966\n5768      12918         1429\n\n\nIt is possible to add new information to meta data. It can be any information about the cells as experimental batch or sub-population identity.\n\n#add meta data\nseurat.obj_00 &lt;- AddMetaData(seurat.obj_00, #indicate object\n            \"experiment_1\", #metadata to be added\n            \"batch\") #column name for metadata\n\n#display results\nseurat.obj_00[[c(\"batch\")]] %&gt;% \n  .[1:10, ]\n\n [1] \"experiment_1\" \"experiment_1\" \"experiment_1\" \"experiment_1\" \"experiment_1\"\n [6] \"experiment_1\" \"experiment_1\" \"experiment_1\" \"experiment_1\" \"experiment_1\""
+  },
+  {
+    "objectID": "additional-gptcelltype.html",
+    "href": "additional-gptcelltype.html",
+    "title": "Use GPTCelltype to annotate cell types",
+    "section": "",
+    "text": "Github repository: https://github.com/Winnie09/GPTCelltype\nGPTCelltype is a package that uses OpenAI’s GPT-3 and GPT-4 models to annotate cell types based on marker genes. The package is designed to work with Seurat objects and can be used to annotate cell types in single-cell RNA-seq data."
+  },
+  {
+    "objectID": "additional-gptcelltype.html#introduction",
+    "href": "additional-gptcelltype.html#introduction",
+    "title": "Use GPTCelltype to annotate cell types",
+    "section": "",
+    "text": "Github repository: https://github.com/Winnie09/GPTCelltype\nGPTCelltype is a package that uses OpenAI’s GPT-3 and GPT-4 models to annotate cell types based on marker genes. The package is designed to work with Seurat objects and can be used to annotate cell types in single-cell RNA-seq data."
+  },
+  {
+    "objectID": "additional-gptcelltype.html#installation",
+    "href": "additional-gptcelltype.html#installation",
+    "title": "Use GPTCelltype to annotate cell types",
+    "section": "Installation",
+    "text": "Installation\n\ninstall.packages(\"openai\")\nremotes::install_github(\"Winnie09/GPTCelltype\")"
+  },
+  {
+    "objectID": "additional-gptcelltype.html#load-libraries",
+    "href": "additional-gptcelltype.html#load-libraries",
+    "title": "Use GPTCelltype to annotate cell types",
+    "section": "Load libraries",
+    "text": "Load libraries\n\nlibrary(tidyverse)\nlibrary(Seurat)\nlibrary(GPTCelltype)"
+  },
+  {
+    "objectID": "additional-gptcelltype.html#example",
+    "href": "additional-gptcelltype.html#example",
+    "title": "Use GPTCelltype to annotate cell types",
+    "section": "Example",
+    "text": "Example\n\nImport example data\n\n\nload(\"data/chapter5.RData\")\n\n\nExisted annotation in the Seurat object\n\n\nDimPlot(obj, group.by = \"predicted.celltype.l1\", label = T)\n\n\nUse GPTCelltype for annotation\n\n\n# IMPORTANT! Assign your OpenAI API key.\nSys.setenv(OPENAI_API_KEY='your-api-key-here')\n\n# Assume you have already run the Seurat pipeline https://satijalab.org/seurat/\n# \"obj\" is the Seurat object; \"markers\" is the output from FindAllMarkers(obj)\n# Cell type annotation by GPT-4\nres &lt;- gptcelltype(markers, model = 'gpt-4')\n\n# Assign cell type annotation back to Seurat object\nobj@meta.data$celltype &lt;- as.factor(res[as.character(Idents(obj))])\n\n# Visualize cell type annotation on UMAP\nDimPlot(obj,group.by='celltype')"
   }
 ]

@@ -21,6 +21,7 @@ website:
       - 06_differential_expression_analysis.qmd
       - 07_enrichment_analysis.qmd
       - supplementary_targeted_analysis.qmd
+      - supplementary-gptcelltype.qmd
       - sessioninfo.qmd
       - log.qmd
 
