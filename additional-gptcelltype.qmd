@@ -1,5 +1,5 @@
 ---
-title: "Additional - GPTCelltype"
+title: "Use GPTCelltype to annotate cell types"
 execute:
   warning: false
   message: false
@@ -8,47 +8,49 @@ format:
     embed-resources: true
 ---
 
+## Introduction
+Github repository: https://github.com/Winnie09/GPTCelltype
+
+GPTCelltype is a package that uses OpenAI's GPT-3 and GPT-4 models to annotate cell types based on marker genes. The package is designed to work with Seurat objects and can be used to annotate cell types in single-cell RNA-seq data.
+
+## Installation
 ```{r}
-library(tidyverse)
-library(Seurat)
-```
-
-
-Github: https://github.com/Winnie09/GPTCelltype
-
-
-```{r}
+#| eval: FALSE
 install.packages("openai")
 remotes::install_github("Winnie09/GPTCelltype")
 ```
 
-import data
+## Load libraries
 ```{r}
-load("data/archive/intermediate_data/chapter6.RData")
-```
-
-check existing annotation
-```{r}
-DimPlot(integrate.filtered.rna, group.by = "predicted.celltype.l1", label = T)
-```
-
-annotation
-```{r}
-
-# IMPORTANT! Assign your OpenAI API key. See Vignette for details
-Sys.setenv(OPENAI_API_KEY = 'your_openai_API_key')
-
-# Load packages
+library(tidyverse)
+library(Seurat)
 library(GPTCelltype)
-library(openai)
+```
+
+## Example
+
+1. Import example data
+```{r}
+load("data/chapter5.RData")
+```
+
+2. Annotation of cell types
+```{r}
+DimPlot(filtered, group.by = "predicted.celltype.l1", label = T)
+```
+
+3. Use annotation
+```{r}
+# IMPORTANT! Assign your OpenAI API key. See Vignette for details
+Sys.setenv(OPENAI_API_KEY = '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')
 
 # Assume you have already run the Seurat pipeline https://satijalab.org/seurat/
 # "obj" is the Seurat object; "markers" is the output from FindAllMarkers(obj)
 # Cell type annotation by GPT-4
-res <- gptcelltype(markers, model = 'gpt-4')
+res <- gptcelltype(treated.markers, model = 'gpt-4')
 
 # Assign cell type annotation back to Seurat object
-obj@meta.data$celltype <- as.factor(res[as.character(Idents(obj))])
+filtered@meta.data$celltype <- as.factor(res[as.character(Idents(filtered))])
 
 # Visualize cell type annotation on UMAP
 DimPlot(obj,group.by='celltype')
