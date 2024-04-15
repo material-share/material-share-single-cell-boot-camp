@@ -4466,7 +4466,8 @@ vertical-align: -.125em;
     "search-submit-button-title": "Submit",
     "search-label": "Search"
   }
-}</script><link rel="stylesheet" href="styles.css">
+}</script><style type="text/css">
+</style>
 </head>
 <body class="nav-sidebar docked">
 
@@ -4486,7 +4487,7 @@ vertical-align: -.125em;
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">Single Cell Boot Camp: Analyzing Single Cell RNA-seq with R</a> 
+      <a href="./">Single Cell Analysis of BD Rhapsody with R</a> 
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -4498,20 +4499,14 @@ vertical-align: -.125em;
     <ul class="list-unstyled mt-1">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">
+  <a href="./00_about.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Introduction</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./setup.html" class="sidebar-item-text sidebar-link">
+  <a href="./00_setup.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Setup R and RStudio on Desktop</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./precourse_preparation_R.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Precourse Preparation - R</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -4558,8 +4553,8 @@ vertical-align: -.125em;
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./supplementary_targeted_analysis.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Supplementary: Targeted assays</span></a>
+  <a href="./bioinformatics_update.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bioinformatics update</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -4582,9 +4577,8 @@ vertical-align: -.125em;
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">On this page</h2>
    
   <ul>
-<li><a href="#load-rdata" id="toc-load-rdata" class="nav-link active" data-scroll-target="#load-rdata">Load RData</a></li>
-  <li>
-<a href="#findmarkers" id="toc-findmarkers" class="nav-link" data-scroll-target="#findmarkers">1. FindMarkers</a>
+<li>
+<a href="#findmarkers" id="toc-findmarkers" class="nav-link active" data-scroll-target="#findmarkers">1. FindMarkers</a>
   <ul class="collapse">
 <li><a href="#de-analysis-across-conditions" id="toc-de-analysis-across-conditions" class="nav-link" data-scroll-target="#de-analysis-across-conditions">1.1 DE analysis across conditions</a></li>
   <li><a href="#perform-de-analysis-within-the-same-cell-type-across-conditions" id="toc-perform-de-analysis-within-the-same-cell-type-across-conditions" class="nav-link" data-scroll-target="#perform-de-analysis-within-the-same-cell-type-across-conditions">1.2 Perform DE analysis within the same cell type across conditions</a></li>
@@ -4596,7 +4590,6 @@ vertical-align: -.125em;
 <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">2.1 Setup</a></li>
   </ul>
 </li>
-  <li><a href="#save" id="toc-save" class="nav-link" data-scroll-target="#save">3. Save</a></li>
   </ul></nav>
     </div>
 <!-- main -->
@@ -4614,25 +4607,20 @@ vertical-align: -.125em;
   </div>
   
 
-</header><div class="cell" data-hash="06_differential_expression_analysis_cache/html/unnamed-chunk-1_336ec6a3a5a7fd877b5a5f1fc7e6b1c3">
+</header><div class="cell">
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># libraries for this chapter</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat">Seurat</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com">data.table</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rpkgs.datanovia.com/ggpubr/">ggpubr</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="load-rdata" class="level1"><h1>Load RData</h1>
-<p>Load the RData which contains all files from the previous chapter.</p>
-<div class="cell" data-hash="06_differential_expression_analysis_cache/html/unnamed-chunk-2_9380c1255e8504582bd656ab70f80a26">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">&quot;data/chapter5.RData&quot;</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section><section id="findmarkers" class="level1"><h1>1. FindMarkers</h1>
+<section id="findmarkers" class="level1"><h1>1. FindMarkers</h1>
 <section id="de-analysis-across-conditions" class="level2"><h2 class="anchored" data-anchor-id="de-analysis-across-conditions">1.1 DE analysis across conditions</h2>
 <p>In the last chapter, we used <code>FindMarkers</code> to find the marker genes between two clusters by specifying <code>ident.1</code> and <code>ident.2</code>.</p>
 <p>Changing the <code>ident.1</code> and <code>ident.2</code> arguments, we can perform differential expression analysis between two groups.</p>
 <p>For instance, we want to find genes deferentially expressed between naïve and treated PBMC.</p>
-<div class="cell" data-hash="06_differential_expression_analysis_cache/html/unnamed-chunk-3_ed5d0eee5226a5be0def0deb398ad98d">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># change default assay to &quot;RNA&quot;</span></span>
+<div class="cell">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># change default assay to &quot;RNA&quot;</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/SeuratObject/man/DefaultAssay.html">DefaultAssay</a></span><span class="op">(</span><span class="va">filtered</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">&quot;RNA&quot;</span></span>
 <span></span>
 <span><span class="co"># change default identity to &quot;Sample_Name&quot;</span></span>
@@ -4646,8 +4634,8 @@ vertical-align: -.125em;
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">p_val_adj</span> <span class="op">&lt;</span> <span class="fl">0.05</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We can compare the gene expression between two groups by specifying <code>ident.1</code> and <code>ident.2</code>.</p>
-<div class="cell" data-hash="06_differential_expression_analysis_cache/html/unnamed-chunk-4_8258e22226fcd011c1d30e5312a06237">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">treated_naive</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">treated_naive</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   gene         p_val avg_log2FC pct.1 pct.2     p_val_adj
 1 STAT1  0.000000e+00   3.536478 0.855 0.165  0.000000e+00
@@ -4667,8 +4655,8 @@ vertical-align: -.125em;
 <li><p><code>p_val_adj</code> Adjusted p-value.</p></li>
 </ul></section><section id="perform-de-analysis-within-the-same-cell-type-across-conditions" class="level2"><h2 class="anchored" data-anchor-id="perform-de-analysis-within-the-same-cell-type-across-conditions">1.2 Perform DE analysis within the same cell type across conditions</h2>
 <p>We can also perform DE analysis within the same cell type across conditions.</p>
-<div class="cell" data-hash="06_differential_expression_analysis_cache/html/unnamed-chunk-5_d3cdbe6079453604890f8dd5bbfdd07e">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">filtered</span><span class="op">$</span><span class="va">predicted.celltype.l1.tag</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">filtered</span><span class="op">$</span><span class="va">predicted.celltype.l1</span>, <span class="va">filtered</span><span class="op">$</span><span class="va">Sample_Name</span>, sep <span class="op">=</span> <span class="st">&quot;_&quot;</span><span class="op">)</span></span>
+<div class="cell">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">filtered</span><span class="op">$</span><span class="va">predicted.celltype.l1.tag</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">filtered</span><span class="op">$</span><span class="va">predicted.celltype.l1</span>, <span class="va">filtered</span><span class="op">$</span><span class="va">Sample_Name</span>, sep <span class="op">=</span> <span class="st">&quot;_&quot;</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Find genes differentially expressed between activated vs. naive samples in CD4 T cells</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/SeuratObject/man/Idents.html">Idents</a></span><span class="op">(</span><span class="va">filtered</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">&quot;predicted.celltype.l1.tag&quot;</span></span>
@@ -4696,8 +4684,8 @@ RPS27    7.055812e-149 -0.8902341 0.981 1.000 1.990233e-144</code></pre>
 </section></section><section id="pseudobulk-analysis" class="level1"><h1>2. Pseudobulk analysis</h1>
 <section id="setup" class="level2"><h2 class="anchored" data-anchor-id="setup">2.1 Setup</h2>
 <p>Let’s assume we have three biological replicates in each condition (we make them up for the purpose of illustration).</p>
-<div class="cell" data-hash="06_differential_expression_analysis_cache/html/unnamed-chunk-6_1fb69f1cf940caa0b66d7a1a74de9f01">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># make a fake group information</span></span>
+<div class="cell">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># make a fake group information</span></span>
 <span><span class="va">filtered</span><span class="op">$</span><span class="va">donor</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">&#39;A&#39;</span>, <span class="st">&#39;B&#39;</span>, <span class="st">&#39;C&#39;</span><span class="op">)</span>, size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">filtered</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">pseudo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/AggregateExpression.html">AggregateExpression</a></span><span class="op">(</span><span class="va">filtered</span>, assays <span class="op">=</span> <span class="st">&quot;RNA&quot;</span>, return.seurat <span class="op">=</span> <span class="cn">T</span>, </span>
@@ -4716,31 +4704,26 @@ RPS27    7.055812e-149 -0.8902341 0.981 1.000 1.990233e-144</code></pre>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">cd4t.bulk</span>, n <span class="op">=</span> <span class="fl">15</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>         p_val avg_log2FC pct.1 pct.2 p_val_adj
-ACTB         0  4.6338590     1     1         0
-ACTG1        0  5.3351152     1     1         0
-ENO1         0  6.6251870     1     1         0
-FYB1         0  0.1773963     1     1         0
-HSP90AA1     0  6.1199756     1     1         0
-HSP90AB1     0  5.8691572     1     1         0
-HSPA8        0  5.3011800     1     1         0
-IL7R         0 -1.0822124     1     1         0
-MALAT1       0  0.3498426     1     1         0
-NPM1         0  4.5477165     1     1         0
-PFN1         0  4.4851717     1     1         0
-PPIA         0  4.8739051     1     1         0
-PTMA         0  3.9801570     1     1         0
-RAN          0  5.8907963     1     1         0
-RPS27        0  1.2461890     1     1         0</code></pre>
+ACTB         0   1.858575     1     1         0
+ACTG1        0   2.514958     1     1         0
+ENO1         0   3.640279     1     1         0
+FYB1         0  -2.422661     1     1         0
+HSP90AA1     0   3.279807     1     1         0
+HSP90AB1     0   3.037042     1     1         0
+HSPA8        0   2.439773     1     1         0
+IL7R         0  -3.625866     1     1         0
+MALAT1       0  -2.352007     1     1         0
+NPM1         0   1.765282     1     1         0
+PFN1         0   1.688739     1     1         0
+PPIA         0   2.053361     1     1         0
+PTMA         0   1.211173     1     1         0
+RAN          0   2.966751     1     1         0
+RPS27        0  -1.502292     1     1         0</code></pre>
 </div>
-</div>
-</section></section><section id="save" class="level1"><h1>3. Save</h1>
-<p>Save the files into RData for documentation.</p>
-<div class="cell" data-hash="06_differential_expression_analysis_cache/html/unnamed-chunk-7_ac89b54bba0d5a3990d491141e2e5398">
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span><span class="op">(</span><span class="va">filtered</span>, <span class="va">cd4t.deg</span>, file <span class="op">=</span> <span class="st">&quot;data/chapter6.RData&quot;</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 
-</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");

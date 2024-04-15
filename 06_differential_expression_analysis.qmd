@@ -9,19 +9,18 @@ format:
 ---
 
 ```{r}
+#| echo: false
+
+# Load RData
+load("data/chapter5.RData")
+```
+
+```{r}
 # libraries for this chapter
 library(tidyverse)
 library(Seurat)
 library(data.table)
 library(ggpubr)
-```
-
-# Load RData
-
-Load the RData which contains all files from the previous chapter.
-
-```{r}
-load("data/chapter5.RData")
 ```
 
 # 1. FindMarkers
@@ -111,10 +110,9 @@ cd4t.bulk <- FindMarkers(object = pseudo,
 head(cd4t.bulk, n = 15)
 ```
 
-# 3. Save
-
-Save the files into RData for documentation.
-
 ```{r}
-save(filtered, cd4t.deg, file = "data/chapter6.RData")
+#| echo: false
+
+# save the seurat object
+save.image(file = "data/chapter6.RData")
 ```

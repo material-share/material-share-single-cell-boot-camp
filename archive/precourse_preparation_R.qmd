@@ -1,0 +1,649 @@
+---
+title: "Precourse Preparation"
+execute:
+  warning: false
+  message: false
+format: 
+  html:
+    embed-resources: true
+---
+
+# Introduction
+
+This tutorial will help you to understand the basic concepts in R. It will cover the following topics:
+
+1.  Working with Dataframes
+2.  Tidyverse library
+3.  Understanding the Seurat object
+
+# 1. Data frame
+
+### R Libraries
+
+```{r}
+library(readxl)
+library(data.table)
+```
+
+## 1.1 What is data frame
+
+Data frame is data structure in R that store values of any type. You can think of it as a table with columns and rows storing the data as in below example.
+
+![](prerequisite_figures/data_frame.png){width="467"}
+
+Credit: https://www.geeksforgeeks.org/r-data-frames/
+
+Often in data science language the columns are named as variables, the rows are observations and each entry in a table is a value.
+
+Some of the most common examples of input files that can be loaded into R as data frames are spreadsheets, TSVs, CSVs files. TSV and CSV stands for tab-separated or coma-separated values.
+
+Another way to view data frame is as list of vectors of the same length. The vector can be defined as type of data structure that contains elements of the same type. Below you can find example on how create the table presented in Figure 1 from vectors.
+
+```{r}
+#define vectors which will create columns with data in data frame
+
+## Vector of names
+Name <- c("Avrey Bradley","John Holland","Jonas Jerebko","Jordan Midkey","Terry Rozier","Jared Sullinger","Evan Turner")
+
+## Vector of team's names
+Team <- c("Boston Celtics", "Boston Celtics","Boston Celtics","Boston Celtics","Boston Celtics","Boston Celtics","Boston Celtics")
+
+## Vector of values
+Number <- c(0.0,30.0,8.0,NaN,12.0,7.0,11.0)
+
+## Vector of positions
+Position <- c("PG","SG","PF","PF","PG","C","SG")
+
+## Vector of age
+Age <- c(25.0,27.0,29.0,21.0,22.0,NaN,27.0)
+
+#create data frame from vectors
+data.frame(Name,Team,Number,Position,Age)
+```
+
+## 1.2 Convenient version of data frame: "Tibble"
+
+The tibble is package that manipulate data frames. The tibble type of table looks like data frame but have some advantages over using regular data frames.
+
+For example, while loading data as classical data frame, the spaces in names are conversed to periods or "x" before numeric columns is added. While using tibbles, the input names and types remain unchanged. In this tutorial we will work mainly with tibble data frame type.
+
+## 1.3 Working with data frames in R
+
+#### 1.3.1 Example data
+
+In this part of tutorial we will work on table downloaded from supplementary data of Salcher, Stefan et al. publication (doi:10.1016/j.ccell.2022.10.008). The table contains the metadata of patients for which samples were processed on different single-cell platforms.
+
+#### 1.3.2 Loading the data
+
+Depending on the input format there are different dedicated libraries to load data into R. Here we start from excel spreadsheet and use function from readxl library. The readxl library is part of tidyverse packages that will be covered in second chapter of this tutorial.
+
+```{r}
+df_example <- read_excel("precourse_preparation_data/mmc4.xlsx",  skip = 2)
+```
+
+**NOTE:**
+
+1.  The two first rows in the table are empty and therefore skipped while loading.
+
+2.  One of the columns in excel spreadsheet is empty (column N). The R assign automatically the default name to that column and keep it within data frame.
+
+3.  All the missing entries in rows will be filled with "NA" values automatically.
+
+#### 1.3.3 Viewing the content
+
+There are different ways to view the content of data frame. The "View" function will take you to separate window where you see the table displayed and interact with it directly.
+
+```{r}
+#| eval: false
+View(df_example)
+```
+
+The "str" function lists directly in the console: the type of data (tibble), dimensions (322x18), columns with first values displayed and type of values.
+
+```{r}
+str(df_example)
+```
+
+#### 1.3.4 Extracting information
+
+Extracting data from an R data frame means to access its rows or columns. First let's list all columns available in the dataset.
+
+```{r}
+colnames(df_example)
+```
+
+To extract values from single column of the data frame different options can be used:
+
+-   Using \$ operator and providing the column name
+
+```{r}
+head(df_example$study) # head allows to display only 10 first elements 
+```
+
+-   Using \[ , \] and providing the column number (index)
+
+```{r}
+df_example[10, 2]
+```
+
+-   Using \[\[\]\] and providing column number (index)
+
+```{r}
+head(df_example[[2]]) # head allows to display only 10 first elements 
+```
+
+-   Using column name
+
+```{r}
+df_example[10 ,c("study")]
+```
+
+To extract multiple columns or rows at the same time the following rules apply:
+
+![](prerequisite_figures/df_rows_columns.jpg){width="320"}
+
+-   Extract rows range, include all columns.
+
+```{r}
+df_example[c(2:4),] #display rows from 2-4 and all columns
+```
+
+-   Extract rows, include all columns.
+
+```{r}
+df_example[c(2,4),] #display rows 2 and 4 and all columns
+```
+
+-   Extract columns range, include all rows.
+
+```{r}
+df_example[10, c(2:4)] #display columns from 2-4 and all rows
+```
+
+-   Extract columns, include all rows.
+
+```{r}
+df_example[10, c(2,4)] #display columns 2 and 4 and all rows
+```
+
+::: callout-important
+-   **Exercise**
+
+Extract **rows** from 5-10 and **columns** from 3-8.
+:::
+
+::: {.callout-tip collapse="T"}
+-   **Answer**
+
+```{r}
+df_example[c(5:10),c(3,8)]
+```
+:::
+
+#### 1.3.4 Modifying information
+
+The columns or rows can be removed or added to data frame as needed. It is possible to drop specific columns indicating the column indexes.
+
+```{r}
+modified_df_example <- df_example[, -c(1,2,5)]    # Drop columns 1,2,5 and include all columns
+modified_df_example[10, ] # data frame with excluded columns 
+```
+
+The same principle apply to excluding the rows
+
+```{r}
+modified_df_example <- df_example[-c(1,2,5),]     # Drop rows 1,2,5 and include all columns
+modified_df_example[10, ]
+```
+
+We can remove column with specific name. To drop column, we chose all the columns (called by "colnames") except (!=) "patient".
+
+```{r}
+modified_df_example <- df_example[ , colnames(df_example) != "patient"]    # Drop column "patient"
+modified_df_example[10, ]
+```
+
+The new columns can be added to data frame. To add new column, use \$ to indicate the column name for a new column as in the example below.
+
+Here we assign the values from already existing column to a new column. The new column is added at the end of the data table.
+
+```{r}
+df_example$technology_type <- df_example$platform # add new column named "technology_type" with values from "platform" existing column
+df_example[10, ncol(df_example)] #show all rows and last column
+```
+
+The values from chosen column can be replaced with other values. In example below we search in df_example data frame in technology_type column for rows that contain "BD-Rhapsody" text. For those values we assign "microwell-based".
+
+```{r}
+df_example$technology_type[df_example$technology_type == "BD-Rhapsody"] <- "microwell-based"
+df_example$technology_type[df_example$technology_type == "10x"] <- "droplet-based"
+
+df_example[10, c("platform","technology_type")] #display columns
+```
+
+The last useful function to cover in this chapter is summary(). The function gives the statistical summary of each of the columns when applied on data frame. It can be applied on slice of data as for example only on one column or chosen columns and rows.
+
+```{r}
+summary(df_example)
+```
+
+```{r}
+summary(df_example$age)
+```
+
+# 2. Tidyverse
+
+Data often need to be re-shaped, re-arranged, and re-formatted, so that they can be visualized or used in downstream analysis. Throughout this chapter you will learn how to use the tidyverse library to navigate through and adjust the tables you work with.
+
+The tidyverse is collection of R packages. The core packages included in tidyverse are ggplot2, tidyr, readr, dplyr, stringr, purrr, and forcats. Each of the packages is dedicated to handle different operations. In below graphics you can find a summary of all packages and their core functionalities.
+
+![](prerequisite_figures/tidyverse_libs_summary_graphics.png)
+
+Credit: https://www.storybench.org/getting-started-with-tidyverse-in-r/
+
+In this chapter we will cover some of the functions included in tidyverse library and used during workshop. If you would like to learn more about tidyverse and additional libraries, we encourage you to visit official website (https://www.tidyverse.org/).
+
+### R Libraries
+
+```{r}
+library(tidyverse)
+```
+
+When tidyverse is loaded you will see the list of packages included and loaded with tidyverse.
+
+After loading tidyverse, the R inform you about conflicting packages. The reason is there are other packages already loaded by default in R.
+
+Packages consist of a collection of functions related to a particular purpose. Those functions can have naming conflicts with functions from other packages.
+
+The two functions from stats package: filer and lag, exist as well in tidyverse. After loading tidyverse package, the functions from stats package are masked and by default the tidyverse functions will be used. If you would like to use filter() or lag() functions from stats package, you should indicate the package name as in example below.
+
+```{r}
+#| eval: false
+stats::filter()
+```
+
+Without indicating the package name in front of function name, R will use the package that was loaded the most recently in your R session.
+
+## 2.1 Pipe
+
+A pipe is a type of operator in R: %\>%. It takes the output of one function and passes it as the first argument of the next function, allowing us to chain together several steps in R.
+
+![](prerequisite_figures/pipe_tidyverse.png)
+
+Credit: tidyverse.org
+
+The pipe sends the data on left side of the pipe to be the first argument of the function on the right side of the pipe.
+
+```{r}
+16 %>% sqrt() # is equivalent to sqrt(16)
+```
+
+We can pipe multiple functions together. The operations are performed from the left to the right sequentially.
+
+```{r}
+16 %>% sqrt() %>% log2() # is equivalent to log2(sqrt(16))
+```
+
+Below you can find exercises with more examples of piping mathematical functions in R together.
+
+::: callout-important
+1.  Exercise: What would be the equivalent mathematical expression to below piped sequence of operations?
+
+```{r}
+26 %>% -22 %>% sqrt() %>% +4
+```
+:::
+
+::: {.callout-tip collapse="T"}
+1.  Answer:
+
+```{r}
+sqrt(26-22) + 4
+```
+:::
+
+::: callout-important
+2.  Exercise: How below mathematical operation can be shown with pipe option?
+
+```{r}
+sqrt(log2(64)) - 8
+```
+:::
+
+::: {.callout-tip collapse="T"}
+2.  Answer
+
+```{r}
+64 %>% log2() %>% sqrt() %>% -8
+```
+:::
+
+## 2.2 Example data
+
+In this chapter we will work on expression matrix table which is one of the output files from BD Rhapsody Sequencing Analysis Pipeline.
+
+The table is provided in csv format. Below is example of how to load the table.
+
+```{r}
+expMat <- fread(file = "precourse_preparation_data/Demo-WTA-AbSeq.csv", sep = ",", header=TRUE)
+
+# file: provide full directory to file
+# sep: indicate separator, in this case coma
+# header = True is indicating to take the first row as a column names
+```
+
+Displaying first rows and columns of the table gives us a glimpse on what the data contain.
+
+```{r}
+expMat[c(1:5),c(1:5)]
+```
+
+The gene names are displayed in columns and rows contain information about the cells. The column named V1 hold information about the cell index that is given to each cell in primary analysis.
+
+We will set the V1 column as row names. In that way all the columns will contain the gene or protein counts.
+
+```{r}
+#use first column as row names
+expMat <- data.frame(expMat, row.names = 1)
+```
+
+The same set of above operations can be performed with pipe in one line of code. We read the file and convert first column to row names and save as data frame. The result is assigned to expMat variable by using the arrow.
+
+```{r}
+#pipe operations
+expMat <- fread(file = "precourse_preparation_data/Demo-WTA-AbSeq.csv", sep = ",", header=TRUE) %>% data.frame(row.names = 1)
+```
+
+## 2.3 select()
+
+**Functionality:** Select only the columns (variables) that you want to see. Gets rid of all other columns.
+
+Imagine you are interested to extract the data only for one gene existing in your dataset. You can use the gene name, for example "CD4", to indicate in select function which column should be selected.
+
+```{r}
+# choosing the column of CD4 gene
+expMat %>% dplyr::select("CD4") -> CD4_column
+```
+
+In the table we work on, the protein and gene expression information are provided. All the protein markers are labeled with "pAbO" abbreviation, in addition to marker name. We can **select** all the columns that **contain** pAbO in name and save to new table.
+
+```{r}
+#choosing all the columns with AbSeq counts and saving to abseq_data
+expMat %>% dplyr::select(contains("pAbO")) -> abseq_data
+```
+
+All the columns that does not contain the "pAbO" are representing genes. To create a gene data, we can use the contains() function with exclamation mark as in below example.
+
+The "!" is used for negation in R language and is interpreted as "do not". Below expression will be interpreted as "**select** from expMat columns that **do not** **contain** pAbO.".
+
+```{r}
+# choosing all columns that does not contain AbSeq counts (mRNA only)
+expMat %>% dplyr::select(!contains("pAbO")) -> mrna_data
+```
+
+## 2.4 mutate()
+
+**Functionality:** Adds new columns or modifies current variables in the dataset.
+
+The mutate function allows in easy way to add new columns in existing tables. Let's say we want to add column named "measurement_type" and fill with "protein expression" in abseq data table we created in previous step.
+
+```{r}
+#add new column with the same value
+abseq_data %>% mutate(data_modality = "protein_expression") -> abseq_data 
+```
+
+The new column will be added at the end of table. We can show the column by selecting the column name.
+
+```{r}
+#display results
+abseq_data %>% dplyr::select("data_modality") %>% head
+```
+
+Mutate function can be used in combination with other functions.
+
+In this example we will calculate sum of expression count for each cell and store information in table. We summarize the counts from all rows ad add as a new column. The rowSums function is useful for calculating the sum of counts in each row.
+
+```{r}
+rowSums(mrna_data) -> mRNA_count_sum
+
+#display results
+head(mRNA_count_sum)
+```
+
+After running rowSums we got for each cell the number of counts. The values can be added in mrna data table as a new column.
+
+```{r}
+mrna_data %>% mutate(counts = mRNA_count_sum) -> mrna_data
+mrna_data %>% dplyr::select(counts) %>% head
+```
+
+The same result can be generated with option below, where the rowSums function is nested inside the mutate function.
+
+```{r}
+mrna_data %>% mutate(counts = rowSums(mrna_data)) -> mrna_data
+```
+
+Notice that mrna_data is given twice in that case as an argument. The mrna_data is taken by mutate function as first argument and then in rowSums function as second argument.
+
+In above example we used pipe to direct the mrna_data to mutate() function as argument. However the mrna_data was not forwarded by pipe to rowSums. For that reason we had to type it in the rowSums function. By default pipe operator forwards data only as first argument to a function. If you want the pipe to forward data as well as second (and next) argument to function you can use a dot.
+
+```{r}
+mrna_data %>% mutate(counts = rowSums(.)) -> mrna_data
+```
+
+## 2.5 summarise()
+
+**Functionality:** Collapses all rows and returns a one-row summary.
+
+In the example below, summarize function allow us to calculate the max/min, median and mean values for counts.
+
+```{r}
+mrna_data %>% summarise(mean = mean(counts),    #mean counts
+                             median = median(counts),    #median counts
+                             max = max(counts),    #maximum count
+                             min = min(counts))   #minimum count
+```
+
+In above summary we have the overview of the expression range and how minimum and maximum values of molecules expressed differ. Some of cells will have very low transcriptome size in comparison to others.
+
+## 2.6 if_else()
+
+The if_else() function in R is a conditional function. It allows to test the hypothesis and perform actions based on answer.
+
+Let's assume we want to label the cells according to transcriptom size. Based on threshold of counts we give a label of "low_transcriptome" or "high_transcriptome" for a cell status. We can make assumption that all cells with sum of counts lower then thousand are low transcriptome cells and remaining cells are categorized as high transcriptome cells.
+
+The if_else function with combination of mutate will help us to achieve the goal.
+
+First we need to know what is the structure of if_else statement. The first argument of if_else function is the hypotheses or the statement. In our case we want to test if count for cell is below or above the threshold. Second argument of a function is an action to perform if the statement is true. Third argument of if_else function is an action to perform when the statement is false.
+
+![](prerequisite_figures/ifelse.jpg){width="281"}
+
+In our case the hypothesis to test is if counts in a cell are below or above the threshold. We can set the condition to have a counts above 2000. If the counts are above the threshold the statement is true. When the statement is true the action is to set the label as "high_transcriptome". When the statement is false we set the label as "low_transciptome".
+
+```{r}
+if_else(mrna_data$counts > 2000, "high_transcriptome", "low_transcriptome") -> cell_status
+```
+
+In that way we created a cell status for cells based on counts. We should see in a cell_status that was generated two labels. To verify if that is the case we can display unique values of a created vector.
+
+```{r}
+unique(cell_status)
+```
+
+If we would like to add that information as a new column to data table, we can use mutate function as in previous examples.
+
+```{r}
+#calcuate and add cell_status to mrna table
+mrna_data %>% mutate(cell_status = if_else(mrna_data["counts"] > 2000, "high_transcriptome", "low_transcriptome")) -> mrna_data
+
+#display cell status column 
+mrna_data %>% dplyr::select(cell_status) %>% head
+```
+
+## 2.7 count()
+
+**Functionality:** Collapses the rows and counts the number of observations per group of values.
+
+The count function is a quick way to have an overview on number of occurrences. For example to we can use count() to see how many cells were categorized as low or high transcriptome cells.
+
+```{r}
+mrna_data %>% count(cell_status)
+```
+
+The function works on text as well as on numbers. In below example, the result summarizes the number of occurrences (rows) having a different counts for CD3.
+
+```{r}
+mrna_data %>% count(CD4)
+```
+
+We interpret the result in following way: there was 4457 rows with zero count for CD4. In other words, there was 4457 cells with zero count for CD4.
+
+## 2.8 group_by()
+
+**Functionality**: Takes existing data and groups specific variables together for future operations.
+
+The group() function takes an existing table and convert it into grouped table where operations are performed by group.
+
+Let's have a look into following example and assume that we want to compare the mean and median counts for low and high transcriptome cells. In that case we can group data by cell status and calculate average values for those groups.
+
+```{r}
+mrna_data %>% 
+  group_by(cell_status) %>% 
+  summarize(mean = mean(counts),
+            median = median(counts),
+            n = n())  #calculates the total number of observations
+```
+
+In the above code, we have grouped by cell status, meaning that calculations performed on our data will account for high transcriptome and low transcriptome cells separately. Following code execution, the console displays the mean count, the median count and the total number of cells (n()) for low transcriptome and for high transcriptome cells (group_by(cell_status)).
+
+## 2.8 filter()
+
+**Functionality:** Only retain specific rows of data that meet the specified requirement(s).
+
+Filter function display from the data values that meet defined condition. For example, we can filter all cells with low transcriptome cell status and retain only high transcriptome cells.
+
+```{r}
+mrna_data %>% filter(cell_status == "high_transcriptome") -> signal_cells
+
+#display last column
+signal_cells %>% dplyr::select(last_col()) %>% head
+```
+
+## 2.9 rename()
+
+**Functionality:** Renames a column/variable by name and index.
+
+Renames the cell_status variable as SIGNAL_CELLS (notice that the new label goes first in the argument).
+
+```{r}
+mrna_data %>% rename(SIGNAL_CELLS = cell_status) -> mrna_data
+
+#display results
+mrna_data %>% dplyr::select(last_col()) %>% head #chose last column from mrna_data
+```
+
+# 3. Seurat object
+
+Seurat object is a data structure designed for storing single-cell genomics data and associated information. We can think about Seurat object as a box with different sections to keep single-cell data in organized manner.
+
+In this chapter we will have a look in what information we can find in Seurat object and how to categorize them.
+
+### R Libraries
+
+```{r}
+library(Seurat)
+```
+
+## 3.1 Seurat Object Structure
+
+Seurat object stores information about the single cell multiomics data and the analysis that was done during downstream workflow. As we move through the workflow and make calculations, the results are added to Seurat object and stored in different "boxes". Those different "boxes" are called slots.
+
+Let's load the Seurat object into R. We will use the Seurat object that is created during workshop in first step, prior to proceeding with next analysis steps, as normalization, clustering etc.
+
+```{r}
+seurat.obj_00 <- readRDS("data/precourse_preparation_data/example_seuratObj.rds")
+```
+
+Loaded Seurat object was created including mRNA counts table obtained from primary analysis. While Seurat object is generated the following information are added to Seurat slots by default: assays, meta data, active assay, active identity, project name and version.
+
+![](prerequisite_figures/seurat_slots.jpg){width="291"}
+
+The remaining Seurat slots highlighted in grey are empty and filled in with information while it is calculated over analysis.
+
+## 3.2 Assays
+
+The assays slot contain different assays loaded into Seurat object. Those can be for example mRNA expression data or protein expression data. The assay slot contains layers that stores 'transformations' of the data, including raw counts (counts slot), normalized data (data slot), and scaled data for dimensional reduction (scale.data slot)
+
+The assays layers can be listed by Layers(). The layer content can be accessed by function LayerData. In example below we access the **data** layer from **assay slot** and display it as data frame.
+
+```{r}
+LayerData(seurat.obj_00, assay = "RNA", layer = "counts") %>% 
+  .[1:10, 1:10]
+```
+
+In current Seurat object we have one layer for active RNA assay
+
+```{r}
+Layers(seurat.obj_00)
+```
+
+Additional layers will be added while analysis is done. For example, when data are normalized or scaled the "data" and "scale.data" layers are added to the object.
+
+```{r}
+#| eval: false
+seurat.obj_00 <- NormalizeData(seurat.obj_00)
+seurat.obj_00 <- ScaleData(seurat.obj_00)
+```
+
+## 3.3 Meta Data
+
+Meta.data slot stores information calculated for cells as for example number of features in each cell, number of counts or cell clusters calculated in downstream process.
+
+The meta.data information is stored in a table that can be accessed in Seurat object as below.
+
+```{r}
+seurat.obj_00[[]] %>% 
+  .[1:10, ]
+```
+
+To view list of all available meta.data in Seurat object we can view the column names from the data table.
+
+```{r}
+seurat.obj_00[[]] %>% colnames() %>% head
+```
+
+We can extract information of interest from data table by indicating to chosen column names.
+
+```{r}
+seurat.obj_00[[c("nCount_AbO", "nFeature_RNA")]] %>% 
+  .[1:10, ]
+```
+
+It is possible to add new information to meta data. It can be any information about the cells as experimental batch or sub-population identity.
+
+```{r}
+#add meta data
+seurat.obj_00 <- AddMetaData(seurat.obj_00, #indicate object
+            "experiment_1", #metadata to be added
+            "batch") #column name for metadata
+
+#display results
+seurat.obj_00[[c("batch")]] %>% 
+  .[1:10, ]
+```
+
+# 4. References and Resources
+
+https://satijalab.org/seurat/
+
+https://www.geeksforgeeks.org/r-data-frames/
+
+https://bookdown.org/yih_huynh/Guide-to-R-Book/tidyverse.html
+
+https://silviacanelon.com/talk/2020-tour-of-the-tidyverse/
+
+https://oliviergimenez.github.io/intro_tidyverse/
+
+https://jhudatascience.org/tidyversecourse/get-data.html
+
+https://www.analyticsvidhya.com/blog/2019/05/beginner-guide-tidyverse-most-powerful-collection-r-packages-data-science/

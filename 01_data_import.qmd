@@ -98,10 +98,10 @@ Multiplet and Undetermined are removed from the downstream analysis by `subset`.
 seuratObj <- subset(seuratObj, subset = Sample_Name %in% c("Multiplet", "Undetermined"), invert = T)
 ```
 
-# 3. Save
-
-Save the files into RData for documentation.
 
 ```{r}
+#| echo: false
+
+# save the seurat object
 save(seuratObj, file = "data/chapter1.RData")
 ```

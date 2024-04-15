@@ -1,0 +1,103 @@
+---
+title: "Introduction"
+execute:
+  warning: false
+  message: false
+  eval: false
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+This repository contains the teaching materials for the Single Cell Boot
+Camp - Analyzing scRNA-seq with R. The boot camp is to provide an
+overview of analyzing single-cell sequencing data with R. It starts with
+a fast-paced training session on the common workflow, then continues
+with hands-on practice using the bioinformatics packages like Seurat.
+
+## Prerequisites
+
+Each participant are expected to have:
+
+1\. An introductory background in statistics, specifically in the below
+concepts: Median, log2 fold change, p-value, adjusted p-value, variance,
+PCA.
+
+2\. Basic familiarity with R and tidyr package, specifically in the
+below functions: %\>% (pipe), filter, mutate, pivot_longer, pivot_wider,
+map, pmap, select, left_join.
+
+*If you would like to learn on your own with publicly available
+resources:*\
+[Chapter 1 - 4](https://moderndive.com/index.html) from MordernDive.
+
+## Expected outcome
+
+By the end of the workshop, participants will be familiar with the
+following topics: the common workflow of single cell analysis
+(pre-processing, quality control, filtering, normalization, Clustering,
+Cell type annotation).
+
+## Reference
+
+The building of materials for the course references and relies on many
+excellent and well written public avaialbe materials.
+
+-   Seurat <https://satijalab.org/seurat/>
+
+-   Single Cell Best Practices:
+    <https://www.sc-best-practices.org/preamble.html>
+
+-   Orchestrating Single-Cell Analysis with Bioconductor:
+    <https://bioconductor.org/books/release/OSCA/>
+
+-   Mary Piper, Meeta Mistry, Jihe Liu, William Gammerdinger, & Radhika
+    Khetani. (2022, January 6). hbctraining/scRNA-seq_online: scRNA-seq
+    Lessons from HCBC (first release). Zenodo.
+    <https://doi.org/10.5281/zenodo.5826256>
+
+## Disclaimer
+
+Recommendations given by representatives of BD in the context of the
+creation and setup of customer-specific applications and assays, the
+composition of antibody panels and suggestions for data analysis are
+provided in a diligent manner. However, the Customer acknowledges that
+(i) such recommendations should not be treated as a substitute for the
+Customer's own examination, (ii) BD does not make any promises nor
+guarantees that recommendations are accurate and complete and will meet
+the Customer's present or future needs or will produce positive or
+specific results and (iii) Customer remains solely responsible for
+validating and deciding on any such recommendations.
+
+BD therefore accepts no liability whatsoever in connection with any such
+recommendation and/or any results generated on the basis of such
+recommendations and, to the fullest extent permitted by law, expressly
+disclaims any and all warranties and any liability in this respect. In
+particular, the Customer assumes sole responsibility for the validation,
+use, selection, and suitability of the recommendations for its needs and
+objectives.
+
+## License
+
+MIT License
+
+Copyright (c) 2023 material-share
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

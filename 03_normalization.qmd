@@ -9,18 +9,17 @@ format:
 ---
 
 ```{r}
+#| echo: false
+
+# Load RData
+load("data/chapter2.RData")
+```
+
+```{r}
 # libraries for this chapter
 library(tidyverse)
 library(Seurat)
 library(data.table)
-```
-
-# Load RData
-
-Load the RData which contains all files from previous chapter.
-
-```{r}
-load("data/chapter2.RData")
 ```
 
 # 1. Normalization
@@ -112,12 +111,9 @@ p2 <- DimPlot(filtered, split.by = "Sample_Name")  + NoLegend()
 p1|p2
 ```
 
-# 
-
-# 3. Save
-
-Save the files into RData for documentation.
-
 ```{r}
+#| echo: false
+
+# save the seurat object
 save(filtered, file = "data/chapter3.RData")
 ```

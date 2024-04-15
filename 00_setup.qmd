@@ -1,0 +1,131 @@
+---
+title: "Setup R and RStudio on Desktop"
+execute:
+  warning: false
+  message: false
+  eval: false
+---
+
+# 1. R and RStudio
+
+Please follow the instruction to set up the **most up to date** R and RStudio on desktop: <https://posit.co/download/rstudio-desktop/>
+
+# 2. Install R packages
+
+::: callout-note
+Install the packages in the order listed below. The package names are case sensitive.
+:::
+
+1.  **Only for windows machines**: Please download and install RTools from <https://cran.r-project.org/bin/windows/Rtools/>.
+
+2.  Install the packages listed below **one by one** from CRAN using the `install.packages()` function.
+
+`install.packages("tidyverse")`
+
+`install.packages("Matrix")`
+
+`install.packages("RCurl")`
+
+`install.packages("scales")`
+
+`install.packages("data.table")`
+
+`install.packages("readxl")`
+
+`install.packages("BiocManager")`
+
+`install.packages("ggpubr")`
+
+`install.packages("Seurat")`
+
+2.  Install the packages listed below **one by one** from bioconductor using the `BiocManager::install()` function.
+
+`BiocManager::install("ensembldb")`
+
+`BiocManager::install("org.Hs.eg.db")`
+
+`BiocManager::install("clusterProfiler")`
+
+`BiocManager::install("AnnotationDbi")`
+
+`BiocManager::install("biomaRt")`
+
+`BiocManager::install("enrichplot")`
+
+`BiocManager::install("HGNChelper")`
+
+**Optional**: The materials are updated to Seurat V5. If you want to use `Seurat` V4, you can follow the below instruction to install `Seurat` V4. Please note that you may need to adapt the code to fit `Seurat` V4 structure.
+
+First check the version of installed `SeuratObject` and `Seurat`.
+
+```{r}
+packageVersion("SeuratObject")
+packageVersion("Seurat")
+```
+
+If the version is 5.0.x, please follow the below instructions to remove the existing `Seurat` package and install `Seurat` V4.
+
+```{r}
+#| eval: false
+remove.packages("SeuratObject")
+remove.packages("Seurat")
+```
+
+```{r}
+#| eval: false
+packageurl <- "https://cran.r-project.org/src/contrib/Archive/SeuratObject/SeuratObject_4.1.4.tar.gz" 
+install.packages(packageurl, repos=NULL, type="source")
+```
+
+```{r}
+#| eval: false
+packageurl <- "https://cran.r-project.org/src/contrib/Archive/Seurat/Seurat_4.4.0.tar.gz" 
+install.packages(packageurl, repos=NULL, type="source")
+```
+
+Validate the installation is successful by running `packageVersion.`
+
+```{r}
+#| eval: false
+packageVersion("SeuratObject")
+packageVersion("Seurat")
+```
+
+4.  Check that all the packages were installed successfully by loading them **one by one** at a time using the `library()` function.
+
+```{r}
+library(tidyverse)
+library(Seurat)
+library(BiocManager)
+library(Matrix)
+library(RCurl)
+library(readxl)
+library(scales)
+library(ggpubr)
+library(data.table)
+library(AnnotationHub)
+library(ensembldb)
+library(HGNChelper)
+library(clusterProfiler)
+library(AnnotationDbi)
+library(biomaRt)
+library(enrichplot)
+```
+
+# 3. Download dataset and code
+
+Please follow the below steps if you would like to run the materials locally.
+
+1.  **Dataset**: Please download the data here: [Data](https://bd-rhapsody-public.s3.amazonaws.com/Rhapsody-Demo-Data/WTA/BD-Demo-WTA-AbSeq-SMK.zip).
+2.  **Github folder**: You will also need to download the entire repository as a .zip from <https://github.com/material-share/material-share-single-cell-boot-camp/tree/master>.
+
+![](pics/1-5-github.png)
+
+After download, unzip the repository and **put the Data folder in the repository**.
+
+3.  To run the analysis, double click on **single-cell-boot-camp.Rproj**. One should be able to bring out the RStudio console on desktop.
+
+# 4. Contribution
+
+If you would like to contribute, report bugs, or suggest any tools or workflow, please open on issue at: <https://github.com/material-share/material-share-single-cell-boot-camp/issues>.
+

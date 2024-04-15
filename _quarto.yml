@@ -2,17 +2,9 @@ project:
   type: website
   execute-dir: project
   output-dir: docs
-
-website:
-  sidebar:
-    style: "docked"
-    title: "Single Cell Boot Camp: Analyzing Single Cell RNA-seq with R"
-    search: true
-    page-navigation: true
-    contents:
-      - index.qmd
-      - setup.qmd
-      - precourse_preparation_R.qmd
+  render:
+      - 00_about.qmd
+      - 00_setup.qmd
       - 01_data_import.qmd
       - 02_quality_control.qmd
       - 03_normalization.qmd
@@ -20,8 +12,27 @@ website:
       - 05_marker_identification.qmd
       - 06_differential_expression_analysis.qmd
       - 07_enrichment_analysis.qmd
-      - supplementary_targeted_analysis.qmd
-      - supplementary-gptcelltype.qmd
+      - bioinformatics_update.qmd
+      - sessioninfo.qmd
+      - log.qmd
+
+website:
+  sidebar:
+    style: "docked"
+    title: "Single Cell Analysis of BD Rhapsody with R"
+    search: true
+    page-navigation: true
+    contents:
+      - 00_about.qmd
+      - 00_setup.qmd
+      - 01_data_import.qmd
+      - 02_quality_control.qmd
+      - 03_normalization.qmd
+      - 04_clustering.qmd
+      - 05_marker_identification.qmd
+      - 06_differential_expression_analysis.qmd
+      - 07_enrichment_analysis.qmd
+      - bioinformatics_update.qmd
       - sessioninfo.qmd
       - log.qmd
 
@@ -32,9 +43,11 @@ format:
     css: styles.css
     toc: true
     embed-resources: true
+    # sidebar: false
+    # navbar: false
 
 execute:
   freeze: auto 
-  cache: true
+  cache: false
   tidy: true
 

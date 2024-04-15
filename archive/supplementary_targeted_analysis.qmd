@@ -1,0 +1,293 @@
+---
+title: "Supplementary: Targeted assays"
+execute:
+  warning: false
+  message: false
+format: 
+  html:
+    embed-resources: true
+---
+
+```{r}
+#| message: false
+# libraries for this chapter
+library(tidyverse)
+library(Seurat)
+library(data.table)
+library(clustree)
+library(HGNChelper)
+library(openxlsx)
+```
+
+The BD Rhapsody™ Targeted mRNA Kits profile a subset of genes, from dozens to hundreds. The below tutorial showcases an analysis workflow for targeted assays.
+
+::: callout-note
+## Targeted assays vs. WTA (whole transcriptome analysis)
+
+WTA assays profile whole transcriptome around 30,000 genes, so it includes mitochondrial genes. One can look at mitochondrial percentage to filter out low quality cells. The targeted assays often do not include mitochondrial genes.
+:::
+
+# 1. Assessing the quality metrics in Targeted assay
+
+The BD Rhapsody™ Targeted mRNA demo dataset can be downloaded from: <https://bd-rhapsody-public.s3.amazonaws.com/Rhapsody-Demo-Data/16HIRP-targeted-EB-20kPBMC.zip>
+
+This Targeted mRNA dataset was generated from 20,000 resting PBMC using the pre-designed BD Rhapsody™ Immune Response Panel HS.
+
+The data will be downloaded as a zip file. Unzip the file, and put the data folder in the github folder. (Please review "Setup R and RStudio on Desktop" if you have not set up the github folder yet.)
+
+The expression matrix stores the UMI counts of a feature (gene or protein). Rhapsody single cell platform outputs a rds file containing the expression matrix as a `Seurat` object.
+
+```{r}
+seuratObj <- readRDS("16HIRP-targeted-EB-20kPBMC/16HIRP_Seurat.rds")
+
+# update Seurat object
+seuratObj[["RNA"]] <- as(object = seuratObj[["RNA"]], Class = "Assay5") 
+```
+
+Click on the `seuratObj` on the right. One should see a pop-up window with the structure of Seurat. Let's focus first on **assays** and **meta.data**.
+
+![](pics/supplementary1.png){width="665"}
+
+This Seurat Object contains one **assay**: **RNA**. **RNA** stores **Gene Expression**. If one has other assays, like AbSeq or SMK, there will be more assays under this slot.
+
+`meta.data` stores information related to each cell. One can click on the blue arrow next to `meta.data` to expand. We will add more information into the `meta.data` later. For now, it has the below columns:
+
+-   `orig.ident` Sample identity or sample name. By default, it is “SeuratProject”.
+
+-   `nCount_RNA` UMI counts per gene per cell.
+
+-   `nFeature_RNA` Genes counts per cell.
+
+-   `Cell_Type_Experiment` Cell annotation based on 100 marker genes of immune cell types.
+
+-   `Putative_Cell_Algorithm` Which algorithm is used to call the cell. Default is “Basic”.
+
+# 2. Quality control
+
+When creating a `Seurat` object, `Seurat` automatically creates some metadata for each cell. This information is stored in the `meta.data`.
+
+Quality control is to filter out cell labels that are of low quality, e.g. dead cells.
+
+The quality control of Targeted assay relies on two **quality metrics**: `nCount_RNA` and `nFeature_RNA`.
+
+Low quality cells have:
+
+1.  Low number of UMIs (`nCount_RNA` is low).
+
+2.  Low number of genes (`nFeature_RNA` is low).
+
+In practice, we look at the distribution of quality metrics in cell population and set appropriate cutoff to filter out low quality cells.
+
+## 2.1 `nCount_RNA` UMI counts per cell
+
+```{r}
+seuratObj@meta.data %>% 
+  ggplot(aes(x=nCount_RNA)) + 
+  geom_density(alpha = 0.2) + 
+  scale_x_log10() + 
+  theme_classic() +
+  ylab("Cell density") +
+  ggtitle("nCount_RNA")
+```
+
+## 2.2 `nFeature_RNA` Gene counts per cell
+
+```{r}
+seuratObj@meta.data %>% 
+  ggplot(aes(x=nFeature_RNA)) + 
+  geom_density(alpha = 0.2) + 
+  scale_x_log10() + 
+  theme_classic() +
+  ylab("Cell density") +
+  ggtitle("nFeature_RNA")
+```
+
+## 2.3 Combine metrics to come up the filtering threshold
+
+One can combine the two metrics to jointly decide the filtering threshold.
+
+```{r}
+#| warning: false
+seuratObj@meta.data %>% 
+  ggplot(aes(x=nCount_RNA, y=nFeature_RNA)) + 
+  geom_point() + 
+  scale_colour_gradient(low = "gray90", high = "black") +
+  stat_smooth(method=lm) +
+  scale_x_log10() + 
+  scale_y_log10() + 
+  theme_classic() +
+  geom_vline(xintercept = 90, colour = "red") +
+  geom_vline(xintercept = 3000, colour = "red") +
+  geom_hline(yintercept = 30, colour = "red") +
+  geom_hline(yintercept = 200, colour = "red") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+Majority of cells have between 30 - 200 genes. The cells on the right with high nCount_RNA are likely multiplets. We will filter the cells with the identified threshold.
+
+# 3. Filter data
+
+## 3.1 Filter on cells
+
+Based on the quality metrics, we use the following thresholds to filter out low quality cells:
+
+`nCount_RNA` \> 90
+
+`nCount_RNA` \< 3000
+
+`nFeature_RNA` \> 30
+
+`nFeature_RNA` \< 200
+
+```{r}
+filtered <- subset(x = seuratObj, 
+                   subset = (nCount_RNA > 90) & 
+                         (nCount_RNA < 3000) &
+                         (nFeature_RNA > 30) &
+                         (nFeature_RNA < 200))
+```
+
+## 3.2 Re-assess metrics
+
+After filtering, we look back to the metrics to ensure the filtered data matches expectations and is suitable for downstream analysis. We plot QC metrics using the filtered data.
+
+```{r}
+#| warning: false
+filtered@meta.data %>% 
+  ggplot(aes(x=nCount_RNA, y=nFeature_RNA)) + 
+  geom_point() + 
+  scale_colour_gradient(low = "gray90", high = "black") +
+  stat_smooth(method=lm) +
+  scale_x_log10() + 
+  scale_y_log10() + 
+  theme_classic() +
+  geom_vline(xintercept = 90, colour = "black") +
+  geom_vline(xintercept = 3000, colour = "black") +
+  geom_hline(yintercept = 25, colour = "red") +
+  geom_hline(yintercept = 200, colour = "red") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+The feature number and cell number before filtering:
+
+```{r}
+seuratObj
+```
+
+The feature number and cell number after filtering:
+
+```{r}
+filtered
+```
+
+# 4. Normalization
+
+We will perform normalization on gene expression using `LogNormalize`.
+
+`LogNormalize` divides the UMI counts of a gene in a cell into the total UMI counts in that cell. After division, we take the natural log.
+
+```{r}
+filtered <- NormalizeData(filtered, 
+                          normalization.method = "LogNormalize")
+```
+
+::: callout-important
+## Question
+
+Where are the normalized counts stored?
+:::
+
+::: {.callout-tip collapse="T"}
+## Answer
+
+The normalized counts are stored in the `data` layer of assay `RNA`.
+
+```{r}
+filtered[["RNA"]]@layers$data %>% 
+  .[1:10, 1:10]
+```
+:::
+
+After normalization, we scale the data and identify highly variable features. Data scaling is to remove the bias from highly expressed genes. This step is required by PCA calculation.
+
+```{r}
+# Scale data
+filtered <- ScaleData(filtered, features = rownames(filtered))
+
+# Find variable features
+# Targeted assay contains a small set of genes. All genes are often defined as variable features.
+filtered <- FindVariableFeatures(filtered)
+```
+
+# 5. PCA and UMAP
+
+After normalization, one can calculate PCA. The PCA is calculated with the highly variable features. Each PC can explain some variance of the data. The first PC can explain the most variance, and gradually decrease through the PCs. We can visualize the PCs by Elbow plot.
+
+```{r}
+filtered <- RunPCA(filtered, npcs = 50, verbose = FALSE)
+```
+
+```{r}
+ElbowPlot(filtered, ndims = 50)
+```
+
+Only the top PCs will be used for UMAP. Elbow plot can help to select the top PCs. We used the PCs until where the elbow is to calculate UMAP.
+
+For this dataset, we use the first top 20 PCs.
+
+```{r}
+filtered <- RunUMAP(filtered, reduction = "pca", dims = 1:20)
+
+DimPlot(filtered)
+```
+
+# 6. Clustering
+
+Now that we have our high quality cells, we want to know the different cell types present within our population of cells.
+
+Seurat uses a graph-based clustering approach, which embeds cells in a graph structure, using a K-nearest neighbor (KNN) graph (by default), with edges drawn between cells with similar gene expression patterns. Then, it attempts to partition this graph into highly interconnected ‘quasi-cliques’ or ‘communities’.
+
+We will use the `FindClusters` function to perform the graph-based clustering. The `resolution` is an important argument that sets the “granularity” of the downstream clustering and will need to be optimized for **every individual experiment**.
+
+```{r}
+# Determine the K-nearest neighbor graph
+filtered <- FindNeighbors(object = filtered, dims = 1:20)
+                                
+# Determine the clusters for various resolutions                                
+filtered <- FindClusters(object = filtered,
+                                 resolution = c(0.1, 0.2, 0.4, 0.6,  0.8, 1, 1.2, 1.4),
+                                 verbose = F)
+```
+
+We use `clustree` to help determining which resolution to choose.
+
+```{r fig.height=10}
+clustree(filtered, prefix = "RNA_snn_res.")
+```
+
+We can see that some clusters are very distinct and do not change with the value of resolution. On the right side of the tree, we see a single cluster that splits into the multiple clusters. The tree becomes messier as the resolution increases. There are nodes with multiple incoming edges. This is a good indication that we have over clustered the data. We choose resolution 0.2 for clustering.
+
+```{r}
+Idents(filtered) <- filtered$RNA_snn_res.0.2
+DimPlot(filtered, group.by = "RNA_snn_res.0.2", label = T)
+```
+
+# 7. Explore known cell type markers
+
+Let's use Violin plot to explore the know cell type markers for CD8 T cells.
+
+```{r}
+VlnPlot(filtered, features = c("CD4", "CD8A", "CD8B"), stack = T, flip = T)
+```
+
+::: callout-note
+## Question
+
+Which cluster is CD8 T cells?
+:::
+
+We can plot the marker gene expression on UMAP.
+
+```{r}
+FeaturePlot(filtered, features = c("CD4", "CD8A", "CD8B"))
+```

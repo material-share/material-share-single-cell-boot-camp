@@ -9,6 +9,13 @@ format:
 ---
 
 ```{r}
+#| echo: false
+
+# Load RData
+load("data/chapter6.RData")
+```
+
+```{r}
 # libraries for this chapter
 library(tidyverse)
 library(Seurat)
@@ -20,13 +27,6 @@ library(enrichplot)
 library(biomaRt)
 ```
 
-# Load RData
-
-Load the RData which contains all files from the previous chapter.
-
-```{r}
-load("data/chapter6.RData")
-```
 
 Oftentimes, enrichment analysis takes the differentially expressed genes and looks at which gene ontology (GO) terms are enriched.
 
@@ -183,10 +183,9 @@ gseaplot2(gse, geneSetID = c(161, 171))
 
 We have significant enriched term in the unregulated genes. Along the x axis is the ranked genes. Each of the vertical line is one of those genes that are found in this gene set. Along the running line, you can see a lot of genes running together and it falls out when the gene becomes more sparse in the list.
 
-# 4. Save
-
-Save the files into RData for documentation.
-
 ```{r}
-save(filtered, cd4t.deg, cd4t.deg.sig, ego, ego.table, gse, gse.table, file = "data/chapter7.RData")
+#| echo: false
+
+# save the seurat object
+save.image(file = "data/chapter7.RData")
 ```

@@ -9,20 +9,19 @@ format:
 ---
 
 ```{r}
+#| echo: false
+
+# Load RData
+load("data/chapter3.RData")
+```
+
+```{r}
 # libraries for this chapter
 library(tidyverse)
 library(Seurat)
 library(data.table)
 library(clustree)
 library(HGNChelper)
-```
-
-# Load RData
-
-Load the RData which contains all files from the previous chapter.
-
-```{r}
-load("data/chapter3.RData")
 ```
 
 # 1. Clustering
@@ -195,10 +194,9 @@ FeaturePlot(filtered,
             label = TRUE)
 ```
 
-# 4. Save
-
-Save the files into RData for documentation.
-
 ```{r}
+#| echo: false
+
+# save the seurat object
 save(filtered, file = "data/chapter4.RData")
 ```
