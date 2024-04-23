@@ -17,42 +17,25 @@ library(data.table)
 
 # Demo data
 
-The demo data is generated from freshly isolated human PBMCs. The PBMCs were grown for 24 hours in the presence of CD3/CD28 stimulation ("treated") and compared to PBMCs grown for 24 hours in regular media ("naive"). Cells were then labeled with a 20plex AbSeq panel consisting of lineage markers and T-cell activation markers, as well as unique Sample Tags from the BD Rhapsody^™^ Human Single Cell Multiplexing Kit (resting PBMC: ST1; treated PBMC: ST2). The cells were mixed at a 1:1 ratio and processed using the BD Rhapsody^™^ Single-Cell Analysis System. Sequencing libraries for RNA and AbSeq antibodies were generated using the BD Rhapsody WTA Amplification kit.
+The demo data is generated from freshly isolated human PBMCs. The PBMCs were grown for 24 hours in the presence of CD3/CD28 stimulation ("treated") and compared to PBMCs grown for 24 hours in regular media ("naive"). Cells were then labeled with a 20 plex AbSeq panel consisting of lineage markers and T-cell activation markers, as well as unique Sample Tags from the BD Rhapsody^™^ Human Single Cell Multiplexing Kit (resting PBMC: ST1; treated PBMC: ST2). The cells were mixed at a 1:1 ratio and processed using the BD Rhapsody^™^ Single-Cell Analysis System. Sequencing libraries for RNA and AbSeq antibodies were generated using the BD Rhapsody WTA Amplification kit.
 
 ::: callout-note
-Please review the **setup** chapter to ensure that R packages are installed and the demo data (in folder "raw_data") is downloaded.
+Please review the **setup** chapter to install the R packages and download the demo dataset.
 :::
 
 # 1. Data import
 
-The expression matrix stores the UMI counts of a feature (gene or protein). Rhapsody single cell platform outputs a rds file containing the expression matrix as a `Seurat` object. The `Seurat` object also includes the sample tag information.
+Rhapsody single cell platform outputs a rds file containing the expression matrix as a `Seurat` object. The expression matrix stores the UMI counts of a feature (gene or AbSeq).
+
+Let's import the rds file in RStudio.
 
 ```{r}
-seuratObj <- readRDS("BD-Demo-WTA-AbSeq-SMK/BD-Demo-WTA-AbSeq-SMK_Seurat.rds")
-
-# update Seurat object
-seuratObj[["RNA"]] <- as(object = seuratObj[["RNA"]], Class = "Assay5") 
-
-# get bioproduct names for RNA and AbSeq
-ab_name <- grep("pAbO", rownames(seuratObj), value = T, ignore.case = T)
-rna_name <- rownames(seuratObj)[-which(rownames(seuratObj) %in% ab_name)]
-
-# get rna and AbSeq UMI counts, meta data
-ab <- GetAssayData(seuratObj[["RNA"]], features = ab_name)
-rna <- GetAssayData(seuratObj[["RNA"]], features = rna_name)
-
-# recreate seurat object
-seuratObj[["RNA"]] <- CreateAssay5Object(counts = rna)
-seuratObj[["ADT"]] <- CreateAssay5Object(counts = ab)
+seuratObj <- readRDS("processed_BD-Demo-WTA-AbSeq-SMK_Seurat.rds")
 ```
 
-Click on the `seuratObj` on the right.
+Click on the `seuratObj` on the right. A window will pop up and you should be able to see the structure of `seuratObj`.
 
-A window will pop up and you should be able to see the structure of `seuratObj`.
-
--   `seuratObj` contains two assays: **RNA** and **ADT**. **RNA** stores **Gene Expression**; and **ADT** stores **AbSeq**. We will first focus on RNA analysis.
-
--   `seuratObj` contains a slot `meta.data`.
+`seuratObj` contains two assays: **RNA** and **ADT**. **RNA** stores **Gene Expression**; **ADT** stores **AbSeq**.
 
 `meta.data` stores information related to each cell. We will add more information into the `meta.data` later. For now, it has the below columns:
 
@@ -73,31 +56,6 @@ A window will pop up and you should be able to see the structure of `seuratObj`.
 -   `nCount_ADT` UMI counts per AB per cell.
 
 -   `nFeature_ADT` AB counts per cell.
-
-# 2. Remove Multiplet and Undetermined
-
-The **Multiplet** are cell labels with more than one SMK tags. They could be Multiplets from one microwell containing two cells, or single cells with high ambient SMK noise.
-
-The **Undetermined** are cell labels without sufficient SMK tag reads. They could be noisy cell labels, or single cells without SMK tag reads.
-
-```{r fig.height=15, fig.width=20}
-seuratObj@meta.data %>% 
-  group_by(Sample_Name) %>% 
-  tally(name = "cell_count") %>% 
-  ggplot(aes(x=Sample_Name, y=cell_count, fill= Sample_Name)) + 
-  geom_bar(stat = "identity") +
-  geom_text(aes(y = cell_count,
-                label = cell_count,
-                vjust= -0.5, size = 2.5), show.legend = FALSE) + 
-  theme_classic()
-```
-
-Multiplet and Undetermined are removed from the downstream analysis by `subset`.
-
-```{r}
-seuratObj <- subset(seuratObj, subset = Sample_Name %in% c("Multiplet", "Undetermined"), invert = T)
-```
-
 
 ```{r}
 #| echo: false

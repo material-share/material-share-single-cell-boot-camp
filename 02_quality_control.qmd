@@ -22,41 +22,54 @@ library(Seurat)
 library(data.table)
 ```
 
-
 # 1. Metrics for quality control
 
-When creating a `Seurat` object, `Seurat` automatically creates some metadata for each cell. This information is stored in the `meta.data`.
+The single cell dataset will include some low quality cells, such as dead cells. These low quality cells have low UMI counts, low gene counts, and high mitochondrial percentage. We can rely on the distribution of metrics to set appropriate cut off to filter out the low quality cells.
 
-Quality control is to filter out cell labels that are of low quality, e.g. dead cells.
+# 2. Only applicable of SMK: Multiplet and Undetermined
 
-The quality control of WTA relies on three **quality metrics**: `nCount_RNA`, `nFeature_RNA`, and mitochondrial percentage (percentage of UMIs of mitochondrial genes in a cell).
+If the experiment uses Sample Multiplexing Kit (SMK) to multiplex samples, we will find some cells are labelled as "Multiplets" and "Undetermined".
 
-Low quality cells have the below characteristics:
+::: callout-important
+Multiplets of SMK kit is not the same as the comment concept of duplets where one microwell containing two cells.
 
-1.  Low number of UMIs (`nCount_RNA` is low).
-2.  Low number of genes (`nFeature_RNA` is low).
-3.  High mitochondrial percentage.
-
-In practice, we look at the distribution of quality metrics in cell population and set appropriate cutoff to filter out low quality cells.
-
-::: callout-tip
-The targeted assay profiles a subset of genes. Mitochondrial genes are often not included in the gene panel of the targeted assay.
-
-So, the quality control of targeted assays will not include mitochondrial percentage, and focus on `nCount_RNA` and `nFeature_RNA` only.
-
-For an example on how to analyze targeted assay, please look at "Supplementary: Data import and quality control of targeted assays".
+Multiplets of SMK could be the conventional duplets. It also involves singlets where one cell has two SMK tags detected.
 :::
 
-# 2. Calculate mitochondrial percentage per cell
+The **Undetermined** are cell labels with zero or very low SMK tag reads detected. They could be noisy cell labels, or singlets which are not labelled with SMK tags.
 
-Seurat has a convenient function, `PercentageFeatureSet`, to calculate the percentage of UMIs of mitochondrial genes in a cell.
+We can use the bar plot to check the number cells in each SMK tag.
+
+```{r}
+seuratObj@meta.data %>% 
+  group_by(Sample_Name) %>% 
+  tally(name = "cell_count") %>% 
+  ggplot(aes(x=Sample_Name, y=cell_count, fill= Sample_Name)) + 
+  geom_bar(stat = "identity") +
+  geom_text(aes(y = cell_count,
+                label = cell_count,
+                vjust= -0.5, size = 2.5), show.legend = FALSE) + 
+  theme_classic()
+```
+
+Multiplets and Undetermined are removed from the downstream analysis. We can use the function `subset` to remove Multiplets and Undetermined cells.
+
+```{r}
+seuratObj <- subset(seuratObj, subset = Sample_Name %in% c("Multiplet", "Undetermined"), invert = T)
+```
+
+# 3. Calculate mitochondrial percentage per cell
+
+When creating a `Seurat` object, `Seurat` automatically creates some metadata for each cell. This information is stored in the `meta.data`. We can use the metadata to filter out low quality cells. The metadata contains two columns: `nCount_RNA`, `nFeature_RNA`.
+
+We need to first calculate the mitochondrial percentage for each cell. Seurat has a convenient function, `PercentageFeatureSet`, to calculate the percentage of UMIs of mitochondrial genes in a cell.
 
 ```{r}
 seuratObj[["percent.mt"]] <- PercentageFeatureSet(seuratObj, pattern = "^MT-")
 ```
 
 ::: callout-tip
-The name patterns of mitochondrial genes are different genome versions. To make sure that the mitochondrial percentage is calculated correctly, one can use grep to check the gene name pattern of mitochondrial genes. For example, the demo dataset has mitochondrial genes starting with "MT-".
+The name patterns of mitochondrial genes are different according to genome versions. To make sure that the mitochondrial percentage is calculated correctly, one can use grep to check the gene name pattern of mitochondrial genes. For example, the mitochondrial genes in the demo dataset start with "MT-".
 
 ```{r}
 #| eval: false
@@ -68,17 +81,13 @@ The `PercentageFeatureSet` takes in a `pattern` argument and searches through al
 
 Since we are looking for mitochondrial genes, we are searching for any gene names that begin with the pattern of mitochondrial genes. For each cell, the function takes the sum of counts across all genes belonging to mitochondrial genes, and then divides it by the total counts for all genes. The result is stored in the `percent.mt` of `meta.data` .
 
-```{r}
-head(seuratObj@meta.data)
-```
+# 4. Assessing the quality metrics
 
-# 3. Assessing the quality metrics
+We will assess the quality metrics, `nCount_RNA`, `nFeature_RNA`, `percent.mt`, and decide which cells are of low quality and should be removed from the analysis.
 
-We will assess the quality metrics, `nCount_RNA`, `nFeature_RNA`, `percent.mt`, and decide on which cells are of low quality and should be removed from the analysis.
+## 4.1 `nCount_RNA` UMI counts per cell
 
-## 3.1 `nCount_RNA` UMI counts per cell
-
-We look at `nCount_RNA` for the sum of UMI counts per cell.
+We look at `nCount_RNA` for the sum of UMI counts per cell. The majority of cells have UMI counts above 500.
 
 ```{r}
 seuratObj@meta.data %>% 
@@ -90,9 +99,9 @@ seuratObj@meta.data %>%
   ggtitle("nCount_RNA")
 ```
 
-## 3.2 `nFeature_RNA` Gene counts per cell
+## 4.2 `nFeature_RNA` Gene counts per cell
 
-We look at `nFeature_RNA` for sum of gene counts per cell. The majority of cells have gene counts more than 300.
+We look at `nFeature_RNA` for sum of gene counts per cell. The majority of cells have gene counts above 300.
 
 ```{r}
 seuratObj@meta.data %>% 
@@ -116,7 +125,7 @@ seuratObj@meta.data %>%
   ggtitle("percent.mt")
 ```
 
-## 3.4 Combine metrics to come up the filtering threshold
+## 3.4 Combine metrics to come up with the filtering threshold
 
 We can combine the metrics to decide the filtering threshold.
 
@@ -143,11 +152,11 @@ Bottom right quadrant: Cells with low gene counts and UMI counts. We generally c
 
 Darker cells: Cells with high mitochondrial percentage. Many of these cells have low gene counts at the same time. This may indicate damaged/dying cells whose cytoplasmic mRNA leaks out through a broken membrane, so only mRNA located in the mitochondria is still conserved.
 
-# 4. Filter
+# 5. Filter
 
-## 4.1 Filter on cells
+## 5.1 Filter on cells
 
-Based on the quality metrics, we use the following thresholds to filter out low quality cells:
+Based on the quality metrics, we use the following thresholds to filter out low quality cells. The filtering thresholds should be decided based on the distribution of quality metrics.
 
 `nCount_RNA` \> 500
 
@@ -165,13 +174,9 @@ filtered <- subset(x = seuratObj,
                          (percent.mt < 25))
 ```
 
-::: callout-important
-The filtering thresholds should be decided based on assessing the quality metrics. They may change depending on the sample types, sequencing depth and other factors.
-:::
+# 6. Re-assess metrics
 
-# 5. Re-assess metrics
-
-After filtering, we look back to the metrics to ensure the filtered data matches expectations and is suitable for downstream analysis. We plot all QC metrics using the filtered data.
+After filtering, we look back the metrics to ensure the filtered data matches expectations. We plot all QC metrics again using the filtered data.
 
 ```{r}
 filtered@meta.data %>% 
@@ -215,7 +220,7 @@ filtered@meta.data %>%
   facet_wrap(~Sample_Name)
 ```
 
-Cells that are considered of low quality in the bottom right quadrant are removed. We can also compare the cell number before and after filtering. The majority of cells are kept after filtering.
+Low quality cells in the bottom right quadrant are removed. We can also compare the cell number before and after filtering. The majority of cells are kept after filtering.
 
 Before filtering:
 

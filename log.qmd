@@ -6,6 +6,49 @@ execute:
   eval: false
 ---
 
+# 20240423
+
+Extra plots
+```{r}
+seuratObj$test <- ifelse(seuratObj$nFeature_RNA < 300 | seuratObj$nCount_RNA < 500, "low", "high")
+
+
+seuratObj@meta.data %>%
+  ggplot(aes(x=nCount_RNA, y=nFeature_RNA, color=test)) +
+  geom_point() +
+  scale_colour_manual(values = c("black", "white")) +
+  # stat_smooth(method=lm) +
+  scale_x_log10() +
+  scale_y_log10() +
+  theme_classic() +
+  geom_vline(xintercept = 500, colour = "red") +
+  geom_hline(yintercept = 300, colour = "red") +
+  facet_wrap(~Sample_Name) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+
+Move "multiplet" and "undetermined" removal to Chapter 02 Quality Control
+
+Chapter 01 Update data import
+```{r}
+# update Seurat object
+seuratObj[["RNA"]] <- as(object = seuratObj[["RNA"]], Class = "Assay5") 
+
+# get bioproduct names for RNA and AbSeq
+ab_name <- grep("pAbO", rownames(seuratObj), value = T, ignore.case = T)
+rna_name <- rownames(seuratObj)[-which(rownames(seuratObj) %in% ab_name)]
+
+# get rna and AbSeq UMI counts, meta data
+ab <- GetAssayData(seuratObj[["RNA"]], features = ab_name)
+rna <- GetAssayData(seuratObj[["RNA"]], features = rna_name)
+
+# recreate seurat object
+seuratObj[["RNA"]] <- CreateAssay5Object(counts = rna)
+seuratObj[["ADT"]] <- CreateAssay5Object(counts = ab)
+```
+
+
 # 20240216
 
 1.  Updated to Seurat V5

@@ -1,5 +1,5 @@
 ---
-title: "Chapter 3 Normalization"
+title: "Chapter 3 Normalization, Scale data and Find highly variable features"
 execute:
   warning: false
   message: false
@@ -24,9 +24,9 @@ library(data.table)
 
 # 1. Normalization
 
-We will perform normalization on UMI counts using `LogNormalize`.
+After filtering out the low quality cells in the QC step, we need to normalize the data to be able to compare expression values. We will perform normalization on UMI counts using `LogNormalize`.
 
-`LogNormalize` divides the UMI counts of a gene in a cell into the total UMI counts in that cell. After division, we take the natural log.
+`LogNormalize` divides the UMI counts of a gene in a cell to the total UMI counts in that cell. After division, we take the natural log.
 
 ```{r}
 filtered <- NormalizeData(filtered, 
@@ -45,24 +45,59 @@ Where are the normalized counts stored?
 The normalized counts are stored in the `data` layer of assay `RNA`.
 
 ```{r}
-filtered[["RNA"]]@layers$data %>% 
-  .[1:10, 1:10]
+#| eval: false
+filtered@assays[["RNA"]]@layers[["data"]]
 ```
 :::
 
-After normalization, we scale the data and identify highly variable features. Data scaling is to remove the bias from high expressors which is required by PCA calculation.
+# 2. Scale data
+
+After normalization, we scale the data Data scaling is to remove the bias from highly expressed genes which is required by PCA calculation.
 
 ```{r}
 # Scale data
 filtered <- ScaleData(filtered, features = rownames(filtered))
-
-# Find variable features
-filtered <- FindVariableFeatures(filtered)
 ```
 
-# 2. PCA
+::: callout-important
+## Question
 
-The PCA is calculated with the highly variable features. Each PC can explain some variance of the data. The first PC can explain the most variance, and gradually decrease through the PCs. We can visualize the PCs by Elbow plot.
+Where are the scaled counts stored?
+:::
+
+::: {.callout-tip collapse="T"}
+## Answer
+
+The scaled counts are stored in the `scale.data` layer of assay `RNA`.
+
+```{r}
+#| eval: false
+filtered@assays[["RNA"]]@layers[["scale.data"]]
+```
+:::
+
+# 3. Find variable features
+
+One assumes the biological difference is captured by the genes that express variably across the cell population. To focus on these variable genes and speed up calculation, only the top variable features are included in the downstream analysis. By default, the function `FindVariableFeatures` returns the top 2000 variable genes.
+
+Note: You can run `FindVariableFeatures` first and then `ScaleData`. The sequence of two functions does not matter.
+
+```{r}
+# Find variable features
+filtered <- FindVariableFeatures(filtered)
+
+# Identify the 10 most highly variable genes
+top10 <- head(VariableFeatures(filtered), 10)
+
+# plot variable features with and without labels
+plot1 <- VariableFeaturePlot(filtered) + theme(legend.position = "none")
+plot2 <- LabelPoints(plot = plot1, points = top10, repel = TRUE)
+plot1 + plot2
+```
+
+# 4. PCA and UMAP
+
+The PCA is calculated with the highly variable features defined by the previous step. Each PC can explain certain degree of variance of the data. The first PC can explain the most variance. The amount of variance explained gradually decreases through the PCs. We can visualize the PCs and their associated variance by Elbow plot.
 
 ```{r}
 filtered <- RunPCA(filtered, npcs = 50, verbose = FALSE)
@@ -72,11 +107,9 @@ filtered <- RunPCA(filtered, npcs = 50, verbose = FALSE)
 ElbowPlot(filtered, ndims = 50)
 ```
 
-# 3. UMAP visualization
+The Elbow plot gets its name from the shape of the plot as it looks like an Elbow. The top PCs explains a high degree of variance in the data. These variance is usually biologically relevant. The further down the PCs, the lower the biological variance a PC has. More importantly, the higher chance the technical variance a PC has.
 
-Only the top PCs will be used for UMAP. Elbow plot can help to select the top PCs. We used the PCs until where the elbow is to calculate UMAP.
-
-For this dataset, we use the first top 20 PCs.
+What we want is to include as much biological variance as possible, while limits the amount of technical variance. An arbitrary way of choosing the number of PCs is to look at where the elbow is. In this example, we will use the first top 20 PCs for the downstream analysis to calculate UMAP.
 
 ```{r}
 filtered <- RunUMAP(filtered, 
@@ -104,7 +137,7 @@ Tips: You can change the PC numbers by `dims` argument in `RunUMAP`.
 1.  Search `Dimplot` in the "Help" tab and read the documentation.
 2.  Change `group.by` to `split.by`. What is the difference?
 
-```{r}
+```{r fig.width=10}
 p1 <- DimPlot(filtered, group.by = "Sample_Name") + NoLegend()
 p2 <- DimPlot(filtered, split.by = "Sample_Name")  + NoLegend()
 

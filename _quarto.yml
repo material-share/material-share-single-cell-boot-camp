@@ -43,11 +43,11 @@ format:
     css: styles.css
     toc: true
     embed-resources: true
-    # sidebar: false
-    # navbar: false
+    sidebar: true
+    navbar: true
 
 execute:
-  freeze: auto 
+  freeze: auto
   cache: false
   tidy: true
 

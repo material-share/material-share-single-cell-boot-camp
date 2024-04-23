@@ -9,51 +9,19 @@ format:
     embed-resources: true
 ---
 
+## TCR-BCR-seq-analysis
+https://github.com/crazyhottommy/TCR-BCR-seq-analysis
+
+## MPG Primer: Understand Single Cell ATAC-Seq Data Analysis (2024)
+https://www.youtube.com/watch?v=sUq4yTIJqvk&t=555s
+
+## scTopoGAN: Diagnosis of single-cell RNA-seq data using topological generative adversarial networks
+https://academic.oup.com/bioinformaticsadvances/article/3/1/vbad171/7450146
+
+## Review article: Single-cell immune repertoire analysis
+https://www.nature.com/articles/s41592-024-02243-4
+
 ## GPTCelltype
 Github repository: https://github.com/Winnie09/GPTCelltype
 
 GPTCelltype is a package that uses OpenAI's GPT-3 and GPT-4 models to annotate cell types based on marker genes. The package is designed to work with Seurat objects and can be used to annotate cell types in single-cell RNA-seq data.
-
-## Installation
-```{r}
-#| eval: FALSE
-install.packages("openai")
-remotes::install_github("Winnie09/GPTCelltype")
-```
-
-## Load libraries
-```{r}
-library(tidyverse)
-library(Seurat)
-library(GPTCelltype)
-```
-
-## Example
-
-1. Import example data
-```{r}
-load("data/chapter5.RData")
-```
-
-2. Existed annotation in the Seurat object
-```{r}
-DimPlot(obj, group.by = "predicted.celltype.l1", label = T)
-```
-
-3. Use GPTCelltype for annotation
-```{r}
-# IMPORTANT! Assign your OpenAI API key.
-Sys.setenv(OPENAI_API_KEY='your-api-key-here')
-
-# Assume you have already run the Seurat pipeline https://satijalab.org/seurat/
-# "obj" is the Seurat object; "markers" is the output from FindAllMarkers(obj)
-# Cell type annotation by GPT-4
-res <- gptcelltype(markers, model = 'gpt-4')
-
-# Assign cell type annotation back to Seurat object
-obj@meta.data$celltype <- as.factor(res[as.character(Idents(obj))])
-
-# Visualize cell type annotation on UMAP
-DimPlot(obj,group.by='celltype')
-```
-

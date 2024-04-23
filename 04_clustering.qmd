@@ -26,7 +26,7 @@ library(HGNChelper)
 
 # 1. Clustering
 
-Now that we have our high quality cells, we want to know the different cell types present within our population of cells.
+Now that we have our high quality cells, we want to know the population has how many cell clusters.
 
 Seurat uses a graph-based clustering approach, which embeds cells in a graph structure, using a K-nearest neighbor (KNN) graph (by default), with edges drawn between cells with similar gene expression patterns. Then, it attempts to partition this graph into highly interconnected 'quasi-cliques' or 'communities'.
 
@@ -56,16 +56,18 @@ filtered@meta.data %>%
   map_int(~ unique(.x) %>% length)
 ```
 
+We can use plot the clustree to see how cells change clusters in different resolutions.
+
 ```{r fig.height=10}
 clustree(filtered, prefix = "RNA_snn_res.")
 ```
 
 We can see that some clusters are very distinct and do not change with the value of resolution. On the right side of the tree, we see a single cluster that splits into the multiple clusters. The tree becomes messier as the resolution increases. There are nodes with multiple incoming edges. This is a good indication that we have over clustered the data.
 
-We start with the resolution of 0.4. We assign the identity of the clusters using the `Idents` function to specify that we want to look at the clusters calculating with resolution = 0.4.
+We start with the resolution of 0.2. We assign the identity of the clusters using the `Idents` function to specify that we want to look at the clusters calculating with resolution = 0.2.
 
 ```{r}
-Idents(object = filtered) <- "RNA_snn_res.0.4"
+Idents(object = filtered) <- "RNA_snn_res.0.2"
 
 # UMAP visualization
 DimPlot(filtered,
@@ -82,7 +84,7 @@ Change to other resolution values. How do the clusters change?
 
 # 2. Distribution of cells per cluster
 
-The number of clusters are sensitive to the resolution. The demo dataset has PBMC and we expect each cluster contains cells from both samples.
+The number of clusters are sensitive to the resolution. The two sampels in the demo dataset are both PBMC, so we expect each cluster contains cells from both samples.
 
 ```{r}
 FetchData(filtered, 
