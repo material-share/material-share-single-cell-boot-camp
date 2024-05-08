@@ -27,39 +27,37 @@ library(enrichplot)
 library(biomaRt)
 ```
 
-Oftentimes, enrichment analysis takes the DEGs and looks at which gene ontology (GO) terms are enriched.
+Enrichment analysis is a common method used in bioinformatics to identify overrepresented biological terms or functions within a set of genes or proteins. It helps us understand which functional categories are significantly associated with a group of genes, such as DEGs.
 
-GO terms defines concepts/classes used to describe gene function and relationships between these concepts. `clusterProfiler` is an R package implementing many methods to analyze and visualize functional profiles from a group of features. It classifies functions in three aspects.
+Gene Ontology (GO) terms provide a standardized vocabulary for describing gene function and relationships. They are organized into three main categories:
 
--   MF: **M**olecular **F**unction: molecular activities of gene products.
+-   **Molecular Function (MF):** Describes the specific molecular activities performed by gene products (proteins). Examples include enzyme activity, receptor binding, and transporter activity.
 
--   CC: **C**ellular **C**omponent: where gene products are active.
+-   **Cellular Component (CC):** Represents the location or compartment where gene products are active within a cell. Examples include nucleus, mitochondrion, and plasma membrane.
 
--   BP: **B**iological **P**rocess: pathways and larger processes made up of the activities of multiple gene products.
+-   **Biological Process (BP):** Describes pathways and larger processes made up of the activities of multiple gene products. Examples include cell cycle, immune response, and metabolic processes.
 
-This chapter uses the differentially expressed genes in CD4+ T cells from last chapter as an example.
+The **`clusterProfiler`** R package provides various methods for functional enrichment analysis. It allows to analyze and visualize functional profiles based on gene sets, such as DEGs. By using this package, we can explore which GO terms are enriched in the gene list and gain insights into the underlying biological processes.
+
+We’ll be working with DEGs from CD4+ T cells from the previous chapter as an example.
 
 ## 1. Get Entrez ID
 
-`clusterProfiler` prefers the input of Entrez ID. We use `biomaRt` package to convert the gene symbol into Entrez ID.
+`clusterProfiler` prefers the input of Entrez ID. We can use `biomaRt` package to convert the gene symbol into Entrez ID.
 
-::: callout-note
-`biomaRt` is handy to get information about features. You can use it to get gene symbols, genomic coordinates, transcript sequences, etc. You can explore what data is stored in `biomaRt` with `listAttributes`.
+The **`biomaRt`** package provides an interface to query and retrieve information from various biological databases, including Ensembl.
+
+First, we need to connect to the Ensembl database using the **`useMart()`** function. Specify that we want to retrieve information from the dataset of Homo sapiens (human).
+
+::: callout-tip
+You can use the **`listAttributes()`** function to explore what data is stored in the Ensembl database.
 :::
-
-The differentially expressed genes in CD4+ T cells between naïve and treated PBMCs are stored in the matrix `cd4t`. The gene symbol in this list can be converted into Entrez ID by `biomaRt`.
-
-Firstly, connect to the Ensembl database and specify we want to retrieve information from the dataset of Homo Sapien.
 
 ```{r}
 mart <- useMart(biomart = "ensembl", dataset = "hsapiens_gene_ensembl")
 ```
 
--   `biomart` BioMart database connect to. Here, we want to connect to `ensembl` database.
-
--   `dataset` Dataset to use. Here specify `hsapiens_gene_ensembl`.
-
-Next, we can give a list of gene symbols and retrieve the Entrez ID through `getBM`.
+Once we have the necessary information, we can use the **`getBM()`** function to retrieve Entrez IDs for a list of gene symbols, providing the gene symbols from your matrix `cd4t.deg` as input.
 
 ```{r}
 results <- getBM(attributes = c("entrezgene_id", "external_gene_name"),
@@ -68,15 +66,15 @@ results <- getBM(attributes = c("entrezgene_id", "external_gene_name"),
                  mart = mart)
 ```
 
--   `attributes` Attributes to retrieve. We want to have the gene symbols and Entrez ID in the results.
+`attributes` Attributes to retrieve. We want to have the gene symbols and Entrez ID in the results.
 
--   `filters` Which filter to use to filter the dataset.
+`filters` Which filter to use to filter the dataset.
 
--   `values` A list of features as a query.
+`values` A list of features as a query.
 
--   `mart` Object of class Mart, created with the `useMart` function.
+`mart` Object of class Mart, created with the `useMart` function.
 
-A table of two columns is created and stored in the matrix of `results`.
+The output of `getBM()` is a table with two columns: one for gene symbols and another for corresponding Entrez IDs.
 
 ```{r}
 results %>% head
@@ -113,23 +111,23 @@ ego <- enrichGO(gene = cd4t.deg.sig$entrezgene_id,
                 readable = TRUE)
 ```
 
--   `gene` A list of Entrez gene id.
+`gene` A list of Entrez gene id.
 
--   `keyType` The keytype of input gene.
+`keyType` The keytype of input gene.
 
--   `OrgDb` The database with detailed information about the species.
+`OrgDb` The database with detailed information about the species.
 
--   `org.Hs.eg.db` Specify the database of Homo Sapien.
+`org.Hs.eg.db` Specify the database of Homo Sapien.
 
--   `ont` One of "BP" (biological process), "MF" (molecular function), and "CC" (cellular component) subontologies, or "ALL" for all three.
+`ont` One of "BP" (biological process), "MF" (molecular function), and "CC" (cellular component) subontologies, or "ALL" for all three.
 
--   `pAdjustMethod` Multiple testing method for p-value.
+`pAdjustMethod` Multiple testing method for p-value.
 
--   `pvalueCutoff` Adjusted pvalue cutoff on enrichment tests to report.
+`pvalueCutoff` Adjusted pvalue cutoff on enrichment tests to report.
 
--   `qvalueCutoff` Tge qvalue cutoff on enrichment tests to report as significant.
+`qvalueCutoff` Tge qvalue cutoff on enrichment tests to report as significant.
 
--   `readable` Whether mapping gene ID to gene Name.
+`readable` Whether mapping gene ID to gene Name.
 
 Let's convert the `ego` object into a data frame and visualize the results in a bar plot.
 
@@ -137,9 +135,13 @@ Let's convert the `ego` object into a data frame and visualize the results in a 
 ego.table <- as.data.frame(ego)
 ```
 
--   `GeneRatio` The gene counts from the input list found in the gene set of a GO term / gene counts of input list.
+`ego.table` contains several columns. The two that are interesting are below:
 
--   `BgRatio` The gene counts of a geneset / size of all of the unique genes in the collection of genesets.
+`GeneRatio` The gene counts from the input list found in the gene set of a GO term / gene counts of input list.
+
+`BgRatio` The gene counts of a geneset / size of all of the unique genes in the collection of genesets.
+
+We can filter the GO terms related to T cells and plot them in a bar plot.
 
 ```{r fig.height=10}
 filter(ego, Description %in% grep("T cell", ego.table$Description, ignore.case = T, value = T)) %>% 
@@ -177,10 +179,10 @@ gse.table <- as.data.frame(gse) %>%
 We can look at the enrichment of some GO terms in GSEA plot.
 
 ```{r}
-gseaplot2(gse, geneSetID = c(161, 171))
+gseaplot2(gse, geneSetID = c(149, 173))
 ```
 
-We have significant enriched term in the unregulated genes. Along the x axis is the ranked genes. Each of the vertical line is one of those genes that are found in this gene set. Along the running line, you can see a lot of genes running together and it falls out when the gene becomes more sparse in the list.
+Along the x axis is the ranked genes. Each of the vertical line is one of those genes that are found in this gene set. Along the running line, you can see a lot of genes running together and it falls out when the gene becomes more sparse in the list.
 
 ```{r}
 #| echo: false
