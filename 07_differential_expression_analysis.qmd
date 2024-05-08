@@ -1,0 +1,129 @@
+---
+title: "7. Differential Expression Analysis"
+execute:
+  warning: false
+  message: false
+format:
+  html:
+    embed-resources: true
+---
+
+```{r}
+#| echo: false
+
+# Load RData
+load("chapter6.RData")
+```
+
+```{r}
+# libraries for this chapter
+library(tidyverse)
+library(Seurat)
+library(data.table)
+library(ggpubr)
+```
+
+Now that we’ve annotated the clusters, our next step is to identify differentially expressed genes (DEGs) between samples within each cell type. This involves performing differential expression analysis.
+
+## 1. FindMarkers
+
+### 1.1 DE analysis across conditions
+
+In the previous chapter, we used the **`FindMarkers`** function to identify marker genes between two clusters by specifying **`ident.1`** and **`ident.2`**.
+
+Now, let’s shift our focus to differential expression analysis between two groups. By adjusting the **`ident.1`** and **`ident.2`** arguments, we can compare gene expression levels between these groups.
+
+For example, if we want to find genes that are differentially expressed between naïve and treated PBMCs, we can select groups:
+
+`ident.1` (SampleTag02_hs): Treated PBMC
+
+`ident.2` (SampleTag01_hs): Naïve PBMC
+
+```{r}
+# change default assay to "RNA"
+DefaultAssay(filtered) <- "RNA"
+
+# change default identity to "Sample_Name"
+Idents(filtered) <- "Sample_Name"
+
+# Find genes differentially expressed
+# SampleTag02_hs: treated, SampleTag01_hs: naive
+treated_naive <- 
+  FindMarkers(filtered, ident.1 = "SampleTag02_hs", ident.2 = "SampleTag01_hs") %>% 
+  rownames_to_column("gene") %>% 
+  dplyr::filter(p_val_adj < 0.05)
+
+# look at the top DEGs
+head(treated_naive, n = 5)
+```
+
+After performing the DEA, we obtain a table listing the DEGs. Here’s what each column in the table represents:
+
+`gene` This column contains the symbols or names of the genes being analyzed.
+
+`p_val` (P-value **without** multiple testing) The p-value represents the statistical significance of differential expression between the two groups (**`ident.1`** and `ident.2`). A lower p-value indicates stronger evidence for differential expression.
+
+`avg_log2FC` (Log2 fold-change) The average log2 fold-change in gene expression between the two groups. A positive value indicates upregulation in `ident.1` compared to `ident.2`, while a negative value indicates downregulation.
+
+`pct.1` (Percentage of cells expressing the gene in `ident.1`) This percentage represents the proportion of cells within `ident.1` that express the gene.
+
+`pct.2` (Percentage of cells expressing the gene in `ident.2`) Conversely, this percentage represents the proportion of cells within `ident.2` that express the same gene.
+
+`p_val_adj` (**Adjusted** p-value) After correcting for multiple testing, this adjusted p-value accounts for the increased risk of false positives. It helps control the overall false discovery rate.
+
+### 1.2 Perform DE analysis within the same cell type across conditions
+
+We can also use `FindMarkers` to perform DEA within the same cell type across conditions. The below example shows how to find the DEGs between CD4 T cells in two conditions.
+
+```{r}
+filtered$predicted.celltype.l1.tag <- paste(filtered$predicted.celltype.l1, filtered$Sample_Name, sep = "_")
+
+# Find genes differentially expressed between activated vs. naive samples in CD4 T cells
+Idents(filtered) <- "predicted.celltype.l1.tag"
+
+cd4t.deg <- FindMarkers(filtered, 
+                       ident.1 = "CD4 T_SampleTag02_hs", 
+                       ident.2 = "CD4 T_SampleTag01_hs", 
+                       verbose = FALSE)
+
+head(cd4t.deg, n = 5)
+```
+
+Cited from Seurat: "However, the p-values obtained from this analysis should be interpreted with caution, because these tests treat each cell as an independent replicate and ignore inherent correlations between cells originating from the same sample. Such analyses have been shown to find a large number of false positive associations, as has been demonstrated by Squair et al., 2021, Zimmerman et al., 2021, Junttila et al., 2022, and others. Below, we show how pseudobulking can be used to account for such within-sample correlation."
+
+## 2. Pseudobulk analysis
+
+Assume we have three biological replicates for each condition (e.g., treated and control samples). These replicates represent independent measurements of the same condition.
+
+We’ll use the **`AggregateExpression()`** function to sum together gene counts for all cells within the same sample and cell type. This aggregation results in one gene expression profile per sample and cell type. Essentially, we’re creating a “pseudobulk” representation for each sample.
+
+Now that we have pseudobulk profiles, we can perform DEA. DESeq2 is a popular tool for this purpose. Instead of analyzing individual cells, we treat the samples (replicates) as independent observations.
+
+DESeq2 models the count data, accounts for biological variability, and identifies genes with significant expression differences between conditions.
+
+```{r}
+# make a fake group information
+filtered$donor <- sample(x = c('A', 'B', 'C'), size = ncol(filtered), replace = TRUE)
+
+pseudo <- AggregateExpression(filtered, assays = "RNA", return.seurat = T, 
+                              group.by = c("Sample_Name", "donor", "predicted.celltype.l1"))
+
+# perform pseudobulk
+pseudo$predicted.celltype.l1.tag <- paste(pseudo$predicted.celltype.l1, pseudo$Sample_Name, sep = "_")
+
+Idents(pseudo) <- "predicted.celltype.l1.tag"
+
+cd4t.bulk <- FindMarkers(object = pseudo, 
+                         ident.1 = "CD4 T_SampleTag02-hs", 
+                         ident.2 = "CD4 T_SampleTag01-hs",
+                         test.use = "DESeq2")
+
+head(cd4t.bulk, n = 20)
+```
+
+```{r}
+#| echo: false
+
+# save the seurat object
+save(filtered, cd4t.bulk, cd4t.deg, file = "chapter7.RData")
+```

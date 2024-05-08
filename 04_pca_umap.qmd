@@ -1,0 +1,107 @@
+---
+title: "4. PCA and UMAP"
+execute:
+  warning: false
+  message: false
+format:
+  html:
+    embed-resources: true
+---
+
+```{r}
+#| echo: false
+
+# Load RData
+load("chapter3.RData")
+```
+
+```{r}
+# libraries for this chapter
+library(tidyverse)
+library(Seurat)
+library(data.table)
+```
+
+## 1. Principal Component Analysis (PCA)
+
+PCA is a dimensionality reduction technique that transforms our data into a new set of orthogonal axes (principal components or PCs). Each PC captures a certain degree of variance in the original data. The first PC explains the most variance, followed by subsequent PCs.
+
+To understand how many PCs to retain for downstream analysis, we create an Elbow plot. The x-axis represents the number of PCs, and the y-axis shows the cumulative variance explained. As we add more PCs, the cumulative variance explained gradually increases. The “elbow point” on the plot indicates the optimal number of PCs to retain (where additional PCs contribute less to the overall variance).
+
+PCA helps to reduce dimensionality while retaining meaningful information, and the Elbow plot guides us in selecting the appropriate number of PCs for downstream analyses.
+
+We first use the function `RunPCA` to calculate principal components, then use `ElbowPlot` to create an elbow plot to select the number of PCs for downstream analyses.
+
+```{r}
+filtered <- RunPCA(filtered, npcs = 50, verbose = FALSE)
+```
+
+```{r}
+ElbowPlot(filtered, ndims = 50)
+```
+
+The Elbow plot gets its name from its distinctive shape, resembling an elbow.
+
+The top PCs (usually the first few) explain a significant degree of variance in the data. This variance is often biologically relevant, capturing essential information about cell heterogeneity or gene expression patterns.
+
+As we move down the list of PCs, the biological variance they explain gradually decreases. However, there’s an important consideration: technical variance. Technical variance includes noise, batch effects, and other technical artifacts. The further down the PCs, the higher the chance of technical variance (noise, batch effects, etc.) dominating the signal.
+
+While the top PCs are crucial for understanding biological differences, we must strike a balance to avoid overfitting to technical noise. A rule of thumb is to look for where the elbow is in the elbow plot.
+
+::: callout-tip
+If you’re interested in a step-by-step calculation of PCA, please take a look on this YouTube video created by Josh Starmer. In this video, Josh Starmer breaks down the concept and procedure of PCA using Singular Value Decomposition (SVD). He demonstrates how PCA reduces data dimensionality, identifies important variables for clustering, and interprets eigenvalues, eigenvectors, loading scores, and scree plots.
+
+{{< video https://www.youtube.com/watch?v=FgakZw6K1QQ&t=1s >}}
+:::
+
+## 2. **Uniform Manifold Approximation and Projection (UMAP)**
+
+UMAP is an algorithm specifically designed for dimensionality reduction. Its primary purpose is to transform a high-dimensional dataset (such as scRNA data) into a low-dimensional plot while preserving essential information. In scRNA-seq, each cell is characterized by thousands of gene expression counts. UMAP simplifies this complexity by creating a two-dimensional plot, which we refer to as a UMAP plot.
+
+UMAP requires the top principal components as input. These PCs are obtained from the earlier step of PCA.
+
+The choice of how many top PCs to include significantly impacts downstream analyses. An arbitrary yet effective approach is to examine the Elbow plot. Look for the point on the plot where the cumulative variance explained starts to level off (often resembling an “elbow”). This point indicates the optimal number of PCs to retain.
+
+::: callout-important
+Retaining too few PCs may lose important biological information, while including too many may introduce noise.
+:::
+
+In this specific example, we’ll use the first 20 PCs for downstream analysis (e.g., calculating UMAP).
+
+```{r}
+filtered <- RunUMAP(filtered, 
+                    reduction = "pca", 
+                    dims = 1:20)
+
+# Plot UMAP                             
+DimPlot(filtered, group.by = "Sample_Name")   
+```
+
+## Exercise 1
+
+Change the number of PCs and see how the UMAP changes.
+
+Tips: You can change the PC numbers by `dims` argument in `RunUMAP`.
+
+## Exercise 2
+
+`Dimplot` has many arguments to control the plots.
+
+1.  Search `Dimplot` in the "Help" tab and read the documentation.
+2.  Change `group.by` to `split.by`. What is the difference?
+
+```{r fig.width=15}
+#| echo: false
+#| eval: false
+p1 <- DimPlot(filtered, group.by = "Sample_Name")
+p2 <- DimPlot(filtered, split.by = "Sample_Name")  + NoLegend()
+
+p1|p2
+```
+
+```{r}
+#| echo: false
+
+# save the seurat object
+save(filtered, file = "chapter4.RData")
+```

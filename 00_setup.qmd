@@ -6,92 +6,87 @@ execute:
   eval: false
 ---
 
-# 1. R and RStudio
+## How to prepare the Single Cell Boot Camp?
 
-Please follow the instruction to set up the **most up to date** R and RStudio on desktop: <https://posit.co/download/rstudio-desktop/>
+To gain a better understanding of programming language R and the single cell analysis workflow, it is highly recommended to download the GitHub materials and practice them on your own desktop before the Single Cell Boot Camp. **We have found that individuals who go through the material tend to have a much more successful learning experience.**
 
-# 2. Install R packages
+## 1. Download materials from the Github page
 
-::: callout-note
-Install the packages in the order listed below. The package names are case sensitive.
-:::
+Visit GitHub repository: <https://github.com/material-share/material-share-single-cell-boot-camp>
 
-1.  **Only for windows machines**: Please download and install RTools from <https://cran.r-project.org/bin/windows/Rtools/>.
+Click on **Code**.
 
-2.  Install the packages listed below **one by one** from CRAN using the `install.packages()` function.
+Select **Download ZIP** in the drop down menu (Example below).
 
-`install.packages("tidyverse")`
+![](figures/setup_1.png)
 
-`install.packages("Matrix")`
+Unzip the downloaded file.
 
-`install.packages("RCurl")`
+If you do not have R and RStudio on your desktop, please follow the next section to set up R and RStudio.
 
-`install.packages("scales")`
+## 2. Set up R and RStudio
 
-`install.packages("data.table")`
+Here are the steps to set up the most up-to-date R and RStudio on your desktop:
 
-`install.packages("readxl")`
+1.  Go to the RStudio website at <https://posit.co/download/rstudio-desktop/.>
+2.  Download and install R.
+3.  Download the RStudio Desktop for your operating system (Windows, Mac, or Linux) by clicking on the appropriate link.
+4.  Once the download is complete, double-click the downloaded file to start the installation process.
+5.  Follow the installation instructions provided by the RStudio installer.
+6.  After RStudio is installed, open the RStudio application.
+7.  RStudio should automatically detect an existing installation of R on your system. If not, you may be prompted to select the path to the R executable file.
+8.  Once R is detected or selected, RStudio will launch and you will see the RStudio IDE (Integrated Development Environment) with the R console.
+9.  You are now ready to start using R and RStudio on your desktop.
 
-`install.packages("BiocManager")`
+Now that you have R and RStudio set up, you can follow the next section to install the R packages.
 
-`install.packages("ggpubr")`
+## 3. Install R packages
 
-`install.packages("Seurat")`
+**ONLY for windows machines**: If you are working on Windows, please first download and install RTools from <https://cran.r-project.org/bin/windows/Rtools/>.
 
-2.  Install the packages listed below **one by one** from bioconductor using the `BiocManager::install()` function.
+Mac users can proceed directly.
 
-`BiocManager::install("ensembldb")`
+1.  Open RStudio.
 
-`BiocManager::install("org.Hs.eg.db")`
+Execute the following commands **one by one** in the **Console**. Wait for each installation to finish before moving on to the next command.
 
-`BiocManager::install("clusterProfiler")`
-
-`BiocManager::install("AnnotationDbi")`
-
-`BiocManager::install("biomaRt")`
-
-`BiocManager::install("enrichplot")`
-
-`BiocManager::install("HGNChelper")`
-
-**Optional**: The materials are updated to Seurat V5. If you want to use `Seurat` V4, you can follow the below instruction to install `Seurat` V4. Please note that you may need to adapt the code to fit `Seurat` V4 structure.
-
-First check the version of installed `SeuratObject` and `Seurat`.
+![](figures/00_console.png)
 
 ```{r}
-packageVersion("SeuratObject")
-packageVersion("Seurat")
+install.packages("tidyverse")
+
+install.packages("Matrix")
+
+install.packages("RCurl")
+
+install.packages("scales")
+
+install.packages("data.table")
+
+install.packages("readxl")
+
+install.packages("BiocManager")
+
+install.packages("ggpubr")
+
+install.packages("Seurat")
+
+BiocManager::install("ensembldb")
+
+BiocManager::install("org.Hs.eg.db")
+
+BiocManager::install("clusterProfiler")
+
+BiocManager::install("AnnotationDbi")
+
+BiocManager::install("biomaRt")
+
+BiocManager::install("enrichplot")
+
+BiocManager::install("HGNChelper")
 ```
 
-If the version is 5.0.x, please follow the below instructions to remove the existing `Seurat` package and install `Seurat` V4.
-
-```{r}
-#| eval: false
-remove.packages("SeuratObject")
-remove.packages("Seurat")
-```
-
-```{r}
-#| eval: false
-packageurl <- "https://cran.r-project.org/src/contrib/Archive/SeuratObject/SeuratObject_4.1.4.tar.gz" 
-install.packages(packageurl, repos=NULL, type="source")
-```
-
-```{r}
-#| eval: false
-packageurl <- "https://cran.r-project.org/src/contrib/Archive/Seurat/Seurat_4.4.0.tar.gz" 
-install.packages(packageurl, repos=NULL, type="source")
-```
-
-Validate the installation is successful by running `packageVersion.`
-
-```{r}
-#| eval: false
-packageVersion("SeuratObject")
-packageVersion("Seurat")
-```
-
-4.  Check that all the packages were installed successfully by loading them **one by one** at a time using the `library()` function.
+3.  Check that all the packages were installed successfully by loading them **one by one** at a time in the **Console** using the `library()` function.
 
 ```{r}
 library(tidyverse)
@@ -112,20 +107,10 @@ library(biomaRt)
 library(enrichplot)
 ```
 
-# 3. Download dataset and code
+Now that you have R, RStudio and R packages set up, you can follow the next chapter to practice on the materials.
 
-Please follow the below steps if you would like to run the materials locally.
+To start practicing, go to the download folder, and double click **single-cell-boot-camp.Rproj**.
 
-1.  **Dataset**: Please download the data here: [Data](https://bd-rhapsody-public.s3.amazonaws.com/Rhapsody-Demo-Data/WTA/BD-Demo-WTA-AbSeq-SMK.zip).
-2.  **Github folder**: You will also need to download the entire repository as a .zip from <https://github.com/material-share/material-share-single-cell-boot-camp/tree/master>.
+## 4. Reporting bugs
 
-![](pics/1-5-github.png)
-
-After download, unzip the repository and **put the Data folder in the repository**.
-
-3.  To run the analysis, double click on **single-cell-boot-camp.Rproj**. One should be able to bring out the RStudio console on desktop.
-
-# 4. Contribution
-
-If you would like to contribute, report bugs, or suggest any tools or workflow, please open on issue at: <https://github.com/material-share/material-share-single-cell-boot-camp/issues>.
-
+To report any bugs, please create an issue in the following GitHub repository: <https://github.com/material-share/material-share-single-cell-boot-camp/issues>.

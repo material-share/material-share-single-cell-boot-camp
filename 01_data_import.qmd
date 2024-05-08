@@ -1,5 +1,5 @@
 ---
-title: "Chapter 1 Data Import"
+title: "1. Data Import"
 execute:
   warning: false
   message: false
@@ -15,51 +15,77 @@ library(Seurat)
 library(data.table)
 ```
 
-# Demo data
+## Demo data description
 
 The demo data is generated from freshly isolated human PBMCs. The PBMCs were grown for 24 hours in the presence of CD3/CD28 stimulation ("treated") and compared to PBMCs grown for 24 hours in regular media ("naive"). Cells were then labeled with a 20 plex AbSeq panel consisting of lineage markers and T-cell activation markers, as well as unique Sample Tags from the BD Rhapsody^™^ Human Single Cell Multiplexing Kit (resting PBMC: ST1; treated PBMC: ST2). The cells were mixed at a 1:1 ratio and processed using the BD Rhapsody^™^ Single-Cell Analysis System. Sequencing libraries for RNA and AbSeq antibodies were generated using the BD Rhapsody WTA Amplification kit.
 
-::: callout-note
-Please review the **setup** chapter to install the R packages and download the demo dataset.
-:::
+## 1. Import expression matrix into RStudio
 
-# 1. Data import
+Rhapsody single cell primary pipeline outputs a rds file containing the expression matrix as a Seurat object. The Seurat object stores the unique molecular identifier (UMI) counts of a feature (gene or AbSeq).
 
-Rhapsody single cell platform outputs a rds file containing the expression matrix as a `Seurat` object. The expression matrix stores the UMI counts of a feature (gene or AbSeq).
-
-Let's import the rds file in RStudio.
+To import the rds file containing the expression matrix as a Seurat object, we can use the `readRDS()` function and store it in a variable called `seuratObj`.
 
 ```{r}
 seuratObj <- readRDS("processed_BD-Demo-WTA-AbSeq-SMK_Seurat.rds")
 ```
 
-Click on the `seuratObj` on the right. A window will pop up and you should be able to see the structure of `seuratObj`.
+To view the structure of a Seurat object (`seuratObj`) in RStudio, you can use the `View()` function.
 
-`seuratObj` contains two assays: **RNA** and **ADT**. **RNA** stores **Gene Expression**; **ADT** stores **AbSeq**.
+```{r}
+#| eval: false
+View(seuratObj)
+```
 
-`meta.data` stores information related to each cell. We will add more information into the `meta.data` later. For now, it has the below columns:
+It will open a new tab with a spreadsheet-like view of the `seuratObj`\`s structure, allowing you to explore its components and their values. Example below:
 
--   `orig.ident` Sample identity or sample name. By default, it is "SeuratProject".
+![](figures/01_data_import_1.png)
 
--   `nCount_RNA` UMI counts per gene per cell.
+-   assays
 
--   `nFeature_RNA` Genes counts per cell.
+`seuratObj` contains two assays: **RNA** and **ADT**. **RNA** stores **Gene Expression**; **ADT** stores **AbSeq**. Seurat v5 assays store data in layers. These layers can store raw, un-normalized counts (layer='counts'), normalized data (layer='data'), or z-scored/variance-stabilized data (layer='scale.data').
 
--   `Cell_Type_Experiment` Cell annotation based on 100 marker genes of immune cell types.
+-   meta.data
 
--   `Sample_Tag` The cell is from which sample tag.
+*meta.data* stores information of each cell. It contains below information:
 
--   `Sample_Name` The cell is from which sample.
+*orig.ident* Sample identity or sample name. By default, it is "SeuratProject".
 
--   `Putative_Cell_Algorithm` Which algorithm is used to call the cell. Default is "Basic".
+*nCount_RNA* UMI counts per gene per cell.
 
--   `nCount_ADT` UMI counts per AB per cell.
+*nFeature_RNA* Genes counts per cell.
 
--   `nFeature_ADT` AB counts per cell.
+*Cell_Type_Experiment* Cell annotation based on 100 marker genes of immune cell types.
+
+*Sample_Tag* The cell is from which sample tag.
+
+*Sample_Name* The cell is from which sample.
+
+*Putative_Cell_Algorithm* Which algorithm is used to call the cell. Default is "Basic".
+
+*nCount_ADT* UMI counts per AbSeq per cell.
+
+*nFeature_ADT* AbSeq counts per cell.
+
+-   active.assay
+
+The *active.assay* in a Seurat object indicates which assay is currently active. When performing functions on a Seurat object, the functions will use the counts of the active assay. By default, the active assay is set to "RNA". However, if you want to apply functions on the "ADT" assay, you need to switch active assay to "ADT" or specify within the function that it should use the counts from "ADT".
+
+## 2. Update Seurat object
+
+Seurat was updated from version 4 (v4) to version 5 (v5) in October 2023. If you have a Seurat object that was created with v4, it is important to update it v5. This is because there are slight differences in the functions between the two versions. To update your Seurat object to version , you can follow the below steps.
+
+```{r}
+seuratObj[["RNA"]] <- as(object = seuratObj[["RNA"]], Class = "Assay5")
+seuratObj[["ADT"]] <- as(object = seuratObj[["ADT"]], Class = "Assay5")
+```
+
+To determine the version of a Seurat object, refer to the `seuratObj`. By clicking on `seuratObj` in the Environment, a popup window will display the data structure of the Seurat object. The version of the Seurat object can be identified by checking if it mentions "Assay5" for v5 or "Assay4" for other versions. Example below:
+
+![](figures/01_data_import_2.png)
 
 ```{r}
 #| echo: false
 
 # save the seurat object
-save(seuratObj, file = "data/chapter1.RData")
+save(seuratObj, file = "chapter1.RData")
 ```

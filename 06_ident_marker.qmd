@@ -1,0 +1,188 @@
+---
+title: "6. Marker Identification"
+execute:
+  warning: false
+  message: false
+format:
+  html:
+    embed-resources: true
+---
+
+```{r}
+#| echo: false
+
+# Load RData
+load("chapter5.RData")
+```
+
+```{r}
+# libraries for this chapter
+library(tidyverse)
+library(Seurat)
+library(data.table)
+library(HGNChelper)
+```
+
+After performing clustering, we identify distinct clusters of cells. To label these clusters, we often examine known marker genes on a UMAP plot. These marker genes are highly expressed in specific clusters, allowing us to differentiate them from others.
+
+Additionally, we can perform gene expression comparisons to identify genes that exhibit significant expression differences between clusters. By analyzing gene expression levels, we can pinpoint which genes are uniquely associated with a particular cluster.
+
+## 1. Find marker genes
+
+### 1.1 `FindAllMarkers`
+
+The **`FindAllMarkers`** function is typically used for evaluating a single sample group or condition. With this function, we compare each cluster to **all other clusters** to identify potential marker genes. The cells within each cluster are treated as replicates, and a differential expression analysis is performed using some statistical test. By default, the test used is the Wilcoxon Rank Sum test.
+
+The function has three important arguments for determining whether a gene is a marker gene:
+
+**`logfc.threshold`**: This argument limits testing to genes that show, on average, at least an X-fold difference (log-scale) between the two groups of cells. The default value is 0.25. Increasing this threshold can speed up the function but may miss weaker signals.
+
+**`min.pct`**: Only genes detected in a minimum fraction of cells in either of the two populations are tested. This argument helps speed up the function by excluding infrequently expressed genes. The default value is 0.1.
+
+**`only.pos`**: By default, the function returns both positive and negative markers. However, if you set this argument to **`TRUE`**, it will only return positive markers.
+
+Depending on your specific requirements, you can adjust these arguments to be more or less stringent.
+
+In the below example, we look at the marker genes in the clusters in one sample "treated" (PBMC with CD3/CD28 stimulation).
+
+```{r}
+treated.markers <- FindAllMarkers(subset(filtered, subset = Sample_Name == "SampleTag02_hs"), 
+                                  assay = "RNA",
+                                  only.pos = TRUE, 
+                                  min.pct = 0.25, 
+                                  logfc.threshold = 0.25)
+```
+
+Let's look at the top 2 significant marker genes in each cluster.
+
+```{r}
+treated.markers %>%
+    group_by(cluster) %>%
+    slice_max(n = 2, order_by = avg_log2FC)
+```
+
+We get a table of marker genes of each cluster.
+
+**`p_val`** (P-value before multiple testing): This value represents the statistical significance of differential expression between one cluster and the rest of the clusters combined. A lower p-value indicates stronger evidence for differential expression.
+
+**`avg_log2FC`** (Log2 fold change): The average log2 fold change in gene expression between the specified cluster and the rest of the clusters. A **positive** value indicates **upregulation in the specified cluster**, while a negative value indicates downregulation.
+
+`pct.1` (Percentage of cells expressing the gene in one group): This percentage represents the proportion of cells within the specified cluster that express the gene of interest.
+
+`pct.2` (Percentage of cells expressing the gene in another group): Conversely, this percentage represents the proportion of cells in the rest of the clusters combined that express the same gene.
+
+`p_val_adj` (Adjusted p-value): After correcting for multiple testing, this adjusted p-value accounts for the increased risk of false positives. It helps control the overall false discovery rate.
+
+`gene` (Gene name): This column provides the names of the genes being analyzed.
+
+### 1.2 `FindMarkers`
+
+To identify differentially expressed genes **between two clusters**, you can utilize the **`FindMarkers`** function. This function allows you to compare gene expression levels in one cluster against those in **another cluster**.
+
+The below example finds the differentially expressed genes between cluster 1 and cluster 2.
+
+```{r}
+example_findmarkers <- FindMarkers(filtered,
+                          assay = "RNA",
+                          ident.1 = 1,
+                          ident.2 = 2) %>% 
+  rownames_to_column("gene")
+```
+
+## 2. Automatic annotation
+
+While manual annotation can be time-consuming and iterative, automatic methods offer a more efficient way to assign labels to clusters based on their gene expression profiles. Remember that both manual and automatic annotation have their place in cluster analysis. Combining these approaches can lead to more robust and informative results.
+
+### 2.1 Reference-based
+
+The reference-based automatic annotation starts with a publicly available dataset that has already been annotated. This dataset serves as your reference. The reference dataset contains clusters of cells, each labeled with specific cell types or conditions.
+
+*Building a Reference Set:* From the reference dataset, we first create a reference set of marker genes associated with each cluster. These marker genes are crucial for identifying cell types or conditions.
+
+*Query Dataset:* Now, you have a new dataset (the query dataset) that you want to annotate. The query dataset contains similar cell types or conditions but lacks explicit annotations.
+
+*Transferring Annotation:* You can transfer the annotation from the reference to the query dataset. This involves comparing gene expression profiles between the query cells and the reference clusters.
+
+Azimuth is a tool from Seurat that facilitates the transfer of annotations. It provides an interface for **connecting the reference information (marker genes) to the query dataset**. By analyzing gene expression patterns, it assigns the most likely cell type or condition label to each query cell.
+
+::: callout-tip
+Because the annotation is based on the reference set, ideally the reference dataset is similar to the query. You can check the available reference sets on Azimuth website: <https://azimuth.hubmapconsortium.org/>
+:::
+
+We are working on PBMCs, so we use the reference `pbmcref`.
+
+```{r}
+filtered <- Azimuth::RunAzimuth(filtered, reference = "pbmcref", verbose = F)
+```
+
+We can look at the result on a UMAP plot.
+
+```{r}
+p1 <- DimPlot(filtered, reduction = "umap", 
+              group.by = "predicted.celltype.l1", 
+              label = TRUE, label.size = 3 ,repel = TRUE) + 
+  NoLegend()
+
+p2 <- DimPlot(filtered, reduction = "umap", 
+              group.by = "RNA_snn_res.0.2", 
+              label = TRUE, label.size = 3 ,repel = TRUE) + 
+  NoLegend()
+
+p1|p2
+```
+
+### 2.1 Marker-based
+
+The other type of automatic annotation is to leverage the knowledge of known cell type markers.
+
+ScType is a computational platform designed for this purpose. It operates solely based on given scRNAseq data, combined with a comprehensive cell marker database as background information. It prioritizes highly specific markers for accurate annotation, even for rare cell types with distinct molecular features.
+
+It collects the known cell type markers of common tissue types. We already download the known cell type markers from ScType and store it in a file "ScTyepDB_short.xlsx". You should be able to find this file in the downloaded folder.
+
+```{r}
+# load ScType R functions
+source("https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/R/gene_sets_prepare.R"); source("https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/R/sctype_score_.R")
+
+# get cell-type-specific gene sets from our in-built database (DB)
+# list downloaded from https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/ScTypeDB_short.xlsx
+# e.g. Immune system, Liver, Pancreas, Kidney, Eye, Brain
+gs_list <-  gene_sets_prepare("ScTypeDB_short.xlsx", "Immune system")
+
+# assign cell types
+# NOTE: scRNAseqData parameter should correspond to your input scRNA-seq matrix.
+# In case Seurat is used, it is either GetAssayData(seuratObj[["RNA"]], layer = "scale.data"), in case sctransform is used for normalization,
+# or GetAssayData(seuratObj[["integrated"]], layer = "scale.data"), in case a joint analysis of multiple single-cell datasets is performed.
+es.max <-  sctype_score(scRNAseqData = GetAssayData(filtered[["RNA"]], layer = "scale.data"),
+                        scaled = TRUE,
+                        gs = gs_list$gs_positive,
+                        gs2 = gs_list$gs_negative)
+
+# merge by cluster
+cL_resutls = do.call("rbind", lapply(unique(filtered@meta.data$RNA_snn_res.0.4), function(cl){
+    es.max.cl = sort(rowSums(es.max[ ,rownames(filtered@meta.data[filtered@meta.data$RNA_snn_res.0.4==cl, ])]), decreasing = !0)
+    head(data.frame(cluster = cl, type = names(es.max.cl), scores = es.max.cl, ncells = sum(filtered@meta.data$filtered==cl)), 10)
+}))
+
+sctype_scores = cL_resutls %>% group_by(cluster) %>% top_n(n = 1, wt = scores)
+
+# set low-confident (low ScType score) clusters to "unknown"
+sctype_scores$type[as.numeric(as.character(sctype_scores$scores)) < sctype_scores$ncells/4] = "Unknown"
+```
+
+```{r}
+filtered@meta.data$customclassif = ""
+
+for(j in unique(sctype_scores$cluster)){
+  cl_type = sctype_scores[sctype_scores$cluster==j,];
+  filtered@meta.data$customclassif[filtered@meta.data$RNA_snn_res.0.4 == j] = as.character(cl_type$type[1])
+}
+
+DimPlot(filtered, reduction = "umap", label = TRUE, repel = TRUE, group.by = 'customclassif')
+```
+
+```{r}
+#| echo: false
+
+# save the seurat object
+save(filtered, file = "chapter6.RData")
+```

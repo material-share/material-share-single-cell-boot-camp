@@ -6,9 +6,39 @@ execute:
   eval: false
 ---
 
-# 20240423
+## 20240507
+
+Seurat V4 Optional: The materials are updated to Seurat V5. If you want to use Seurat V4, you can follow the below instruction to install Seurat V4. Please note that you may need to adapt the code to fit Seurat V4 structure.
+
+First check the version of installed SeuratObject and Seurat.
+
+```{r}
+packageVersion("SeuratObject")
+packageVersion("Seurat")
+```
+
+If the version is 5.0.x, please follow the below instructions to remove the existing Seurat package and install Seurat V4.
+
+```{r}
+remove.packages("SeuratObject")
+remove.packages("Seurat")
+
+packageurl <- "https://cran.r-project.org/src/contrib/Archive/SeuratObject/SeuratObject_4.1.4.tar.gz" 
+install.packages(packageurl, repos=NULL, type="source")
+
+packageurl <- "https://cran.r-project.org/src/contrib/Archive/Seurat/Seurat_4.4.0.tar.gz" 
+install.packages(packageurl, repos=NULL, type="source")
+
+# Validate the installation is successful by running packageVersion.
+
+packageVersion("SeuratObject")
+packageVersion("Seurat")
+```
+
+## 20240423
 
 Extra plots
+
 ```{r}
 seuratObj$test <- ifelse(seuratObj$nFeature_RNA < 300 | seuratObj$nCount_RNA < 500, "low", "high")
 
@@ -27,10 +57,10 @@ seuratObj@meta.data %>%
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
 
-
 Move "multiplet" and "undetermined" removal to Chapter 02 Quality Control
 
 Chapter 01 Update data import
+
 ```{r}
 # update Seurat object
 seuratObj[["RNA"]] <- as(object = seuratObj[["RNA"]], Class = "Assay5") 
@@ -44,18 +74,17 @@ ab <- GetAssayData(seuratObj[["RNA"]], features = ab_name)
 rna <- GetAssayData(seuratObj[["RNA"]], features = rna_name)
 
 # recreate seurat object
-seuratObj[["RNA"]] <- CreateAssay5Object(counts = rna)
-seuratObj[["ADT"]] <- CreateAssay5Object(counts = ab)
+tmp[["RNA"]] <- CreateAssay5Object(counts = rna, min.cells = 0, min.features = 0)
+tmp[["ADT"]] <- CreateAssay5Object(counts = ab, min.cells = 0, min.features = 0)
 ```
 
-
-# 20240216
+## 20240216
 
 1.  Updated to Seurat V5
 2.  Archive precourse_preparation_theory.qmd for future development
 3.  <https://github.com/satijalab/seurat/issues/8202>
 
-# 20231129
+## 20231129
 
 The following chapters have the below changes:
 
@@ -63,7 +92,7 @@ The following chapters have the below changes:
 
 1.  Remove log2FC correlation plot.
 
-# 20231128
+## 20231128
 
 The following chapters have the below changes:
 
@@ -101,7 +130,7 @@ The following chapters have the below changes:
 
 1.  When you run `RunUMAP`...
 
-![](pics/irlba_error.png)
+![](figures/irlba_error.png)
 
 Solution: Downgrading `Matrix`
 
@@ -124,7 +153,7 @@ Source: <https://cran.r-project.org/bin/macosx/tools/>
 
 2.  When you run `getBM`...
 
-![](pics/getBM_error.png)
+![](figures/getBM_error.png)
 
 Solution: Downgrading `dbplyr`
 
@@ -137,6 +166,6 @@ Source: <https://stackoverflow.com/questions/77370659/error-failed-to-collect-la
 
 3.  When you run `useMart`...
 
-![](pics/useMart_error.png)
+![](figures/useMart_error.png)
 
 Solution: Go to <http://status.ensembl.org> to check the status of Ensembl. If it says service is down, wait a few hours and try again.

@@ -9,52 +9,84 @@ editor:
     wrap: 72
 ---
 
-This repository contains the teaching materials for the Single Cell Boot
-Camp - Analyzing scRNA-seq with R. The boot camp is to provide an
-overview of analyzing single-cell sequencing data with R. It starts with
-a fast-paced training session on the common workflow, then continues
-with hands-on practice using the bioinformatics packages like Seurat.
+This repository contains the teaching materials of **Single Cell Boot
+Camp - Analyzing scRNA-seq with R**. The boot camp aims to provide an
+overview of scRNAseq analysis workflow. It begins with a fast-paced
+session on the analysis workflow and proceeds with hands-on practice
+using bioinformatics packages such as Seurat.
 
-## Prerequisites
+## Prerequisites to attend the Single Cell Boot Camp
 
 Each participant are expected to have:
 
-1\. An introductory background in statistics, specifically in the below
-concepts: Median, log2 fold change, p-value, adjusted p-value, variance,
-PCA.
+The following statistical concepts:
 
-2\. Basic familiarity with R and tidyr package, specifically in the
-below functions: %\>% (pipe), filter, mutate, pivot_longer, pivot_wider,
-map, pmap, select, left_join.
+-   median: A measure of central tendency that represents the middle
+    value in a dataset when arranged in ascending order.
 
-*If you would like to learn on your own with publicly available
-resources:*\
-[Chapter 1 - 4](https://moderndive.com/index.html) from MordernDive.
+-   log2 fold change: A measure used in gene expression analysis to
+    quantify the difference in expression levels between two conditions.
+
+-   p-value: A statistical measure that helps determine the significance
+    of a result in the context of a hypothesis test.
+
+-   adjusted p-value: A corrected p-value that accounts for multiple
+    comparisons to control for false positive.
+
+-   variance: A measure of how much the values in a dataset deviate from
+    the mean.
+
+-   principal component analysis (PCA): A technique used to reduce the
+    dimensionality of high-dimensional data while capturing most of its
+    variance.
+
+Additionally, participants should have a basic understanding of R and
+the tidyverse package. Familiarity with the following functions will be
+useful:
+
+-   `%>%` (pipe): Allows for chaining multiple operations together.
+
+-   `filter`: Selects specific rows from a dataset on given conditions.
+
+-   `mutate`: Adds new variables or modifies existing ones in a dataset.
+
+-   `select`: Selects specific columns from a dataset.
+
+-   `left_join`: Merges two datasets based on a common key, keeping only
+    the matching records from the left dataset.
+
+For self-learning of R programming and the tidyverse package, it is
+recommended study [Chapter 1 - 4](https://moderndive.com/index.html)
+from MordernDive.
 
 ## Expected outcome
 
-By the end of the workshop, participants will be familiar with the
-following topics: the common workflow of single cell analysis
-(pre-processing, quality control, filtering, normalization, Clustering,
-Cell type annotation).
+By the end of the workshop, participants will have a solid understanding
+of the analysis workflow involved in single cell analysis. This includes
+data pre-processing, quality control, normalization, dimentionality
+reduction, clustering, and cell type annotation.
 
 ## Reference
 
-The building of materials for the course references and relies on many
-excellent and well written public avaialbe materials.
+The building of materials references and relies on many excellent and
+well-written public available materials. Some of the main references for
+the course include:
 
--   Seurat <https://satijalab.org/seurat/>
-
--   Single Cell Best Practices:
+1.  Seurat <https://satijalab.org/seurat/>
+2.  Single Cell Best Practices:
     <https://www.sc-best-practices.org/preamble.html>
-
--   Orchestrating Single-Cell Analysis with Bioconductor:
+3.  Orchestrating Single-Cell Analysis with Bioconductor:
     <https://bioconductor.org/books/release/OSCA/>
-
--   Mary Piper, Meeta Mistry, Jihe Liu, William Gammerdinger, & Radhika
+4.  Mary Piper, Meeta Mistry, Jihe Liu, William Gammerdinger, & Radhika
     Khetani. (2022, January 6). hbctraining/scRNA-seq_online: scRNA-seq
     Lessons from HCBC (first release). Zenodo.
     <https://doi.org/10.5281/zenodo.5826256>
+
+## Reporting bugs
+
+To report any bugs, please create an issue in the following GitHub
+repository:
+<https://github.com/material-share/material-share-single-cell-boot-camp/issues>.
 
 ## Disclaimer
 

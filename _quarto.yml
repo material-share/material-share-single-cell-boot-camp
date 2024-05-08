@@ -8,10 +8,11 @@ project:
       - 01_data_import.qmd
       - 02_quality_control.qmd
       - 03_normalization.qmd
-      - 04_clustering.qmd
-      - 05_marker_identification.qmd
-      - 06_differential_expression_analysis.qmd
-      - 07_enrichment_analysis.qmd
+      - 04_pca_umap.qmd
+      - 05_clustering.qmd
+      - 06_ident_marker.qmd
+      - 07_differential_expression_analysis.qmd
+      - 08_enrichment_analysis.qmd
       - bioinformatics_update.qmd
       - sessioninfo.qmd
       - log.qmd
@@ -19,7 +20,7 @@ project:
 website:
   sidebar:
     style: "docked"
-    title: "Single Cell Analysis of BD Rhapsody with R"
+    title: "Single Cell Analysis with R on BD Rhapsody"
     search: true
     page-navigation: true
     contents:
@@ -28,10 +29,11 @@ website:
       - 01_data_import.qmd
       - 02_quality_control.qmd
       - 03_normalization.qmd
-      - 04_clustering.qmd
-      - 05_marker_identification.qmd
-      - 06_differential_expression_analysis.qmd
-      - 07_enrichment_analysis.qmd
+      - 04_pca_umap.qmd
+      - 05_clustering.qmd
+      - 06_ident_marker.qmd
+      - 07_differential_expression_analysis.qmd
+      - 08_enrichment_analysis.qmd
       - bioinformatics_update.qmd
       - sessioninfo.qmd
       - log.qmd
@@ -47,7 +49,7 @@ format:
     navbar: true
 
 execute:
-  freeze: auto
+  freeze: false
   cache: false
   tidy: true
 

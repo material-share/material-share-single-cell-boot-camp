@@ -4468,7 +4468,7 @@ vertical-align: -.125em;
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">Single Cell Analysis of BD Rhapsody with R</a> 
+      <a href="./">Single Cell Analysis with R on BD Rhapsody</a> 
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -4493,43 +4493,49 @@ vertical-align: -.125em;
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./01_data_import.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Chapter 1 Data Import</span></a>
+ <span class="menu-text">1. Data Import</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./02_quality_control.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Chapter 2 Quality Control</span></a>
+ <span class="menu-text">2. Quality Control</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./03_normalization.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Chapter 3 Normalization, Scale data and Find highly variable features</span></a>
+ <span class="menu-text">3. Normalization, Scale Data and Find Highly Variable Features</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./04_clustering.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Chapter 4 Clustering</span></a>
+  <a href="./04_pca_umap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4. PCA and UMAP</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05_marker_identification.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Chapter 5 Marker Identification</span></a>
+  <a href="./05_clustering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5. Clustering</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./06_differential_expression_analysis.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Chapter 6 Differential Expression Analysis</span></a>
+  <a href="./06_ident_marker.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6. Marker Identification</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./07_enrichment_analysis.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Chapter 7 Enrichment Analysis</span></a>
+  <a href="./07_differential_expression_analysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7. Differential Expression Analysis</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_enrichment_analysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8. Enrichment Analysis</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -4560,7 +4566,8 @@ vertical-align: -.125em;
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#tcr-bcr-seq-analysis" id="toc-tcr-bcr-seq-analysis" class="nav-link active" data-scroll-target="#tcr-bcr-seq-analysis">TCR-BCR-seq-analysis</a></li>
+  <li><a href="#the-impact-of-package-selection-and-versioning-on-single-cell-rna-seq-analysis" id="toc-the-impact-of-package-selection-and-versioning-on-single-cell-rna-seq-analysis" class="nav-link active" data-scroll-target="#the-impact-of-package-selection-and-versioning-on-single-cell-rna-seq-analysis">The impact of package selection and versioning on single-cell RNA-seq analysis</a></li>
+  <li><a href="#tcr-bcr-seq-analysis" id="toc-tcr-bcr-seq-analysis" class="nav-link" data-scroll-target="#tcr-bcr-seq-analysis">TCR-BCR-seq-analysis</a></li>
   <li><a href="#mpg-primer-understand-single-cell-atac-seq-data-analysis-2024" id="toc-mpg-primer-understand-single-cell-atac-seq-data-analysis-2024" class="nav-link" data-scroll-target="#mpg-primer-understand-single-cell-atac-seq-data-analysis-2024">MPG Primer: Understand Single Cell ATAC-Seq Data Analysis (2024)</a></li>
   <li><a href="#sctopogan-diagnosis-of-single-cell-rna-seq-data-using-topological-generative-adversarial-networks" id="toc-sctopogan-diagnosis-of-single-cell-rna-seq-data-using-topological-generative-adversarial-networks" class="nav-link" data-scroll-target="#sctopogan-diagnosis-of-single-cell-rna-seq-data-using-topological-generative-adversarial-networks">scTopoGAN: Diagnosis of single-cell RNA-seq data using topological generative adversarial networks</a></li>
   <li><a href="#review-article-single-cell-immune-repertoire-analysis" id="toc-review-article-single-cell-immune-repertoire-analysis" class="nav-link" data-scroll-target="#review-article-single-cell-immune-repertoire-analysis">Review article: Single-cell immune repertoire analysis</a></li>
@@ -4588,6 +4595,10 @@ vertical-align: -.125em;
 
 </header>
 
+<section id="the-impact-of-package-selection-and-versioning-on-single-cell-rna-seq-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="the-impact-of-package-selection-and-versioning-on-single-cell-rna-seq-analysis">The impact of package selection and versioning on single-cell RNA-seq analysis</h2>
+<p>https://www.biorxiv.org/content/10.1101/2024.04.04.588111v2</p>
+</section>
 <section id="tcr-bcr-seq-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="tcr-bcr-seq-analysis">TCR-BCR-seq-analysis</h2>
 <p>https://github.com/crazyhottommy/TCR-BCR-seq-analysis</p>

@@ -1,0 +1,216 @@
+---
+title: "5. Clustering"
+execute:
+  warning: false
+  message: false
+format:
+  html:
+    embed-resources: true
+---
+
+```{r}
+#| echo: false
+
+# Load RData
+load("chapter4.RData")
+```
+
+```{r}
+# libraries for this chapter
+library(tidyverse)
+library(Seurat)
+library(data.table)
+library(clustree)
+library(HGNChelper)
+```
+
+## 1. Clustering
+
+Clustering is togenerate cell type-specific clusters and we can use known cell type marker genes to determine the identities of the clusters.Seurat constructs a K-nearest neighbor (KNN) graph using the Euclidean distance in PCA space `FindNeighbors`. Each cell is embedded in this graph, and edges connect cells with similar gene expression patterns. The goal is to partition this graph into highly interconnected groups, which we refer to as clusters.
+
+The resolution is a crucial argument in the `FindClusters` function. It determines the granularity of the downstream clustering. Higher resolution values lead to more clusters, while lower values merge clusters.
+
+Optimizing resolution is essential for each experiment. The `FindClusters` function allows us to test different resolutions without running the function repeatedly. By providing a series of resolutions, we can assess which one works best for our analysis.
+
+We first use the `FindNeighbors` function to determine the KNN graph, then use the `FindClusters` to determine the clusters for various resolutions.
+
+```{r}
+# Determine the K-nearest neighbor graph
+filtered <- FindNeighbors(object = filtered, dims = 1:20)
+                                
+# Determine the clusters for various resolutions                                
+filtered <- FindClusters(object = filtered,
+                         resolution = c(0.2, 0.4, 0.6,  0.8, 1, 1.2, 1.4),
+                         verbose = F)
+```
+
+*meta.data* contains a separate field for each of the different resolutions calculated during clustering. By examining these resolution-specific fields, we can determine the number of clusters associated with each resolution. This allows us to explore the granularity of clustering and choose an appropriate resolution for downstream analysis. Below is a table showing how many clusters of each resolution.
+
+```{r}
+filtered@meta.data %>% 
+  dplyr::select(contains("RNA_snn")) %>% 
+  map_int(~ unique(.x) %>% length)
+```
+
+To visualize how cells change clusters across different resolutions, we can use a tool called `clustree`. This tool constructs a clustering tree that shows the relationships between clusters at various resolutions.
+
+```{r fig.height=10}
+clustree(filtered, prefix = "RNA_snn_res.")
+```
+
+Some clusters remain very distinct and do not change significantly with varying resolution. These stable clusters likely represent well-defined cell populations.
+
+We observe a single cluster that splits into multiple subclusters. This suggests that within this original cluster, there are subpopulations with distinct gene expression profiles.
+
+As the resolution increases, the tree becomes more complex and messy. Nodes with multiple incoming edges indicate that cells are being assigned to multiple clusters. This complexity may be a sign of overclustering—dividing the data into too many fine-grained clusters.
+
+We begin by examining the clusters calculated with a resolution of 0.2.
+
+Using the `Idents`function, we assign cluster identities based on this resolution.
+
+```{r}
+Idents(object = filtered) <- "RNA_snn_res.0.2"
+
+# UMAP visualization
+DimPlot(filtered,
+        reduction = "umap",
+        label = TRUE,
+        label.size = 6)
+```
+
+::: callout-note
+## Exercise
+
+You can change to other resolution values by specifying the argument `group.by`. How do the clusters change?
+
+```{r}
+#| eval: false
+# UMAP visualization
+DimPlot(filtered, 
+        group.by = "RNA_snn_res.0.4",
+        reduction = "umap",
+        label = TRUE,
+        label.size = 6)
+```
+:::
+
+## 2. Cell numbers in each cluster
+
+The number of clusters obtained during graph-based clustering is highly dependent on the resolution chosen. Higher resolutions tend to create more fine-grained clusters, while lower resolutions merge clusters.
+
+To visualize the cell numbers in each clusters in each sample, we can create a table.
+
+```{r}
+FetchData(filtered, 
+          vars = c("ident", "Sample_Name")) %>%
+  dplyr::count(ident, Sample_Name) %>%
+  tidyr::spread(ident, n)
+```
+
+To visualize the cell clusters in each sample, we can create a UMAP plot.
+
+```{r}
+# UMAP of cells in each cluster by sample
+DimPlot(filtered, 
+        label = TRUE, 
+        split.by = "Sample_Name")  + NoLegend()
+```
+
+## 3. Exploring known cell type markers
+
+We can explore some known cell type markers to gain insights into the identities of the clusters. Here are typical cell type markers associated with specific cell populations:
+
+CD14+ Monocytes: CD14, LYZ
+
+Conventional Dendritic Cells: FCER1A, CST3
+
+B Cells: CD79A, MS4A1
+
+T Cells: CD3D
+
+CD4+ T Cells: CD3D, IL7R, CCR7
+
+CD8+ T Cells: CD3D, CD8A
+
+NK Cells: GNLY, NKG7
+
+Macrophages: MARCO, ITGAM, ADGRE1
+
+To visualize the expression of these known gene markers on top of our UMAP plot, we can use the `FeaturePlot` function. This function allows us to explore the normalized expression levels of all genes stored in the RNA assay slot of the Seurat object.
+
+```{r}
+DefaultAssay(filtered) <- "RNA"
+```
+
+CD14+ monocytes: CD14, LYZ
+
+```{r}
+FeaturePlot(filtered, 
+            reduction = "umap", 
+            features = c("CD14", "LYZ"), 
+            order = TRUE,
+            min.cutoff = 'q10', 
+            label = TRUE)
+```
+
+B cells: CD79A, MS4A1
+
+```{r}
+FeaturePlot(filtered, 
+            reduction = "umap", 
+            features = c("CD79A", "MS4A1"), 
+            order = TRUE,
+            min.cutoff = 'q10', 
+            label = TRUE)
+```
+
+NK cells: GNLY, NKG7
+
+```{r}
+FeaturePlot(filtered, 
+            reduction = "umap", 
+            features = c("GNLY", "NKG7"), 
+            order = TRUE,
+            min.cutoff = 'q10', 
+            label = TRUE)
+```
+
+T cells: CD3D
+
+```{r}
+FeaturePlot(filtered, 
+            reduction = "umap", 
+            features = c("CD3D"), 
+            order = TRUE,
+            min.cutoff = 'q10', 
+            label = TRUE)
+```
+
+CD4+ T cells: CD3D, IL7R, CCR7
+
+```{r}
+FeaturePlot(filtered, 
+            reduction = "umap", 
+            features = c("CD3D", "IL7R", "CCR7"), 
+            order = TRUE,
+            min.cutoff = 'q10', 
+            label = TRUE)
+```
+
+CD8+ T cells: CD3D, CD8A
+
+```{r}
+FeaturePlot(filtered, 
+            reduction = "umap", 
+            features = c("CD3D", "CD8A"), 
+            order = TRUE,
+            min.cutoff = 'q10', 
+            label = TRUE)
+```
+
+```{r}
+#| echo: false
+
+# save the seurat object
+save(filtered, file = "chapter5.RData")
+```

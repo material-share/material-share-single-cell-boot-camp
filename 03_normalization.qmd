@@ -1,5 +1,5 @@
 ---
-title: "Chapter 3 Normalization, Scale data and Find highly variable features"
+title: "3. Normalization, Scale Data and Find Highly Variable Features"
 execute:
   warning: false
   message: false
@@ -12,7 +12,7 @@ format:
 #| echo: false
 
 # Load RData
-load("data/chapter2.RData")
+load("chapter2.RData")
 ```
 
 ```{r}
@@ -22,11 +22,13 @@ library(Seurat)
 library(data.table)
 ```
 
-# 1. Normalization
+## 1. Normalization
 
-After filtering out the low quality cells in the QC step, we need to normalize the data to be able to compare expression values. We will perform normalization on UMI counts using `LogNormalize`.
+After removing the low-quality cells during the quality control (QC) step, the next crucial step is data normalization. Normalization ensures that we can compare gene expression values across cells. A common function to normalize mRNA UMI counts is `LogNormalize`.
 
-`LogNormalize` divides the UMI counts of a gene in a cell to the total UMI counts in that cell. After division, we take the natural log.
+For each gene in a cell, we divide its UMI counts by the total UMI counts in that same cell. After this division, we take the natural logarithm of the resulting value.
+
+By applying `LogNormalize`, we create a normalized expression matrix that allows us to perform meaningful analyses and comparisons.
 
 ```{r}
 filtered <- NormalizeData(filtered, 
@@ -42,17 +44,25 @@ Where are the normalized counts stored?
 ::: {.callout-tip collapse="T"}
 ## Answer
 
-The normalized counts are stored in the `data` layer of assay `RNA`.
+The below example code outputs a list of two objects.
 
 ```{r}
 #| eval: false
-filtered@assays[["RNA"]]@layers[["data"]]
+filtered@assays[["RNA"]]@layers
 ```
+
+-   *counts* (Unnormalized Data)
+
+This object contains the raw UMI counts for each gene in each cell. The counts are represented as integers (whole numbers). These unnormalized counts reflect the original data without any adjustments.
+
+-   *data* (Normalized Data)
+
+The “data” object contains the normalized expression values for each gene in each cell. Unlike the raw counts, these normalized values are represented as decimals (floating-point numbers).
 :::
 
-# 2. Scale data
+## 2. Scale data
 
-After normalization, we scale the data Data scaling is to remove the bias from highly expressed genes which is required by PCA calculation.
+Normalizing the data ensures that expression values are comparable across cells. Data scaling is the next step. Its purpose is to remove bias introduced by highly expressed genes. This step is necessary for principal component analysis (PCA) calculations.
 
 ```{r}
 # Scale data
@@ -76,11 +86,11 @@ filtered@assays[["RNA"]]@layers[["scale.data"]]
 ```
 :::
 
-# 3. Find variable features
+## 3. Find variable features
 
-One assumes the biological difference is captured by the genes that express variably across the cell population. To focus on these variable genes and speed up calculation, only the top variable features are included in the downstream analysis. By default, the function `FindVariableFeatures` returns the top 2000 variable genes.
+We assume that the biological differences between cells are reflected in the genes that exhibit variability across the entire cell population. To focus on these variable genes, we select only the top variable features (genes) for further analysis. By default, the function `FindVariableFeatures` identifies and returns the top 2000 variable genes.
 
-Note: You can run `FindVariableFeatures` first and then `ScaleData`. The sequence of two functions does not matter.
+You can choose to run `FindVariableFeatures` first and then proceed with `ScaleData`. The sequence of these two functions does not impact the overall analysis.
 
 ```{r}
 # Find variable features
@@ -95,58 +105,9 @@ plot2 <- LabelPoints(plot = plot1, points = top10, repel = TRUE)
 plot1 + plot2
 ```
 
-# 4. PCA and UMAP
-
-The PCA is calculated with the highly variable features defined by the previous step. Each PC can explain certain degree of variance of the data. The first PC can explain the most variance. The amount of variance explained gradually decreases through the PCs. We can visualize the PCs and their associated variance by Elbow plot.
-
-```{r}
-filtered <- RunPCA(filtered, npcs = 50, verbose = FALSE)
-```
-
-```{r}
-ElbowPlot(filtered, ndims = 50)
-```
-
-The Elbow plot gets its name from the shape of the plot as it looks like an Elbow. The top PCs explains a high degree of variance in the data. These variance is usually biologically relevant. The further down the PCs, the lower the biological variance a PC has. More importantly, the higher chance the technical variance a PC has.
-
-What we want is to include as much biological variance as possible, while limits the amount of technical variance. An arbitrary way of choosing the number of PCs is to look at where the elbow is. In this example, we will use the first top 20 PCs for the downstream analysis to calculate UMAP.
-
-```{r}
-filtered <- RunUMAP(filtered, 
-                    reduction = "pca", 
-                    dims = 1:20)
-
-filtered <- FindNeighbors(filtered, 
-                          reduction = "pca", 
-                          dims = 1:20)
-
-# Plot UMAP                             
-DimPlot(filtered, group.by = "Sample_Name")   
-```
-
-## Exercise 1
-
-Change the number of PCs and see how the UMAP changes.
-
-Tips: You can change the PC numbers by `dims` argument in `RunUMAP`.
-
-## Exercise 2
-
-`Dimplot` has many arguments to control the plots.
-
-1.  Search `Dimplot` in the "Help" tab and read the documentation.
-2.  Change `group.by` to `split.by`. What is the difference?
-
-```{r fig.width=10}
-p1 <- DimPlot(filtered, group.by = "Sample_Name") + NoLegend()
-p2 <- DimPlot(filtered, split.by = "Sample_Name")  + NoLegend()
-
-p1|p2
-```
-
 ```{r}
 #| echo: false
 
 # save the seurat object
-save(filtered, file = "data/chapter3.RData")
+save(filtered, file = "chapter3.RData")
 ```

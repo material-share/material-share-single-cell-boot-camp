@@ -4468,7 +4468,7 @@ vertical-align: -.125em;
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">Single Cell Analysis of BD Rhapsody with R</a> 
+      <a href="./">Single Cell Analysis with R on BD Rhapsody</a> 
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -4493,43 +4493,49 @@ vertical-align: -.125em;
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./01_data_import.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Chapter 1 Data Import</span></a>
+ <span class="menu-text">1. Data Import</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./02_quality_control.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Chapter 2 Quality Control</span></a>
+ <span class="menu-text">2. Quality Control</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./03_normalization.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Chapter 3 Normalization, Scale data and Find highly variable features</span></a>
+ <span class="menu-text">3. Normalization, Scale Data and Find Highly Variable Features</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./04_clustering.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Chapter 4 Clustering</span></a>
+  <a href="./04_pca_umap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4. PCA and UMAP</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05_marker_identification.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Chapter 5 Marker Identification</span></a>
+  <a href="./05_clustering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5. Clustering</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./06_differential_expression_analysis.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Chapter 6 Differential Expression Analysis</span></a>
+  <a href="./06_ident_marker.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6. Marker Identification</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./07_enrichment_analysis.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Chapter 7 Enrichment Analysis</span></a>
+  <a href="./07_differential_expression_analysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7. Differential Expression Analysis</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_enrichment_analysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8. Enrichment Analysis</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -4560,9 +4566,10 @@ vertical-align: -.125em;
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link active" data-scroll-target="#prerequisites">Prerequisites</a></li>
+  <li><a href="#prerequisites-to-attend-the-single-cell-boot-camp" id="toc-prerequisites-to-attend-the-single-cell-boot-camp" class="nav-link active" data-scroll-target="#prerequisites-to-attend-the-single-cell-boot-camp">Prerequisites to attend the Single Cell Boot Camp</a></li>
   <li><a href="#expected-outcome" id="toc-expected-outcome" class="nav-link" data-scroll-target="#expected-outcome">Expected outcome</a></li>
   <li><a href="#reference" id="toc-reference" class="nav-link" data-scroll-target="#reference">Reference</a></li>
+  <li><a href="#reporting-bugs" id="toc-reporting-bugs" class="nav-link" data-scroll-target="#reporting-bugs">Reporting bugs</a></li>
   <li><a href="#disclaimer" id="toc-disclaimer" class="nav-link" data-scroll-target="#disclaimer">Disclaimer</a></li>
   <li><a href="#license" id="toc-license" class="nav-link" data-scroll-target="#license">License</a></li>
   </ul>
@@ -4588,28 +4595,46 @@ vertical-align: -.125em;
 
 </header>
 
-<p>This repository contains the teaching materials for the Single Cell Boot Camp - Analyzing scRNA-seq with R. The boot camp is to provide an overview of analyzing single-cell sequencing data with R. It starts with a fast-paced training session on the common workflow, then continues with hands-on practice using the bioinformatics packages like Seurat.</p>
-<section id="prerequisites" class="level2">
-<h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
+<p>This repository contains the teaching materials of <strong>Single Cell Boot Camp - Analyzing scRNA-seq with R</strong>. The boot camp aims to provide an overview of scRNAseq analysis workflow. It begins with a fast-paced session on the analysis workflow and proceeds with hands-on practice using bioinformatics packages such as Seurat.</p>
+<section id="prerequisites-to-attend-the-single-cell-boot-camp" class="level2">
+<h2 class="anchored" data-anchor-id="prerequisites-to-attend-the-single-cell-boot-camp">Prerequisites to attend the Single Cell Boot Camp</h2>
 <p>Each participant are expected to have:</p>
-<p>1. An introductory background in statistics, specifically in the below concepts: Median, log2 fold change, p-value, adjusted p-value, variance, PCA.</p>
-<p>2. Basic familiarity with R and tidyr package, specifically in the below functions: %&gt;% (pipe), filter, mutate, pivot_longer, pivot_wider, map, pmap, select, left_join.</p>
-<p><em>If you would like to learn on your own with publicly available resources:</em><br>
-<a href="https://moderndive.com/index.html">Chapter 1 - 4</a> from MordernDive.</p>
+<p>The following statistical concepts:</p>
+<ul>
+<li><p>median: A measure of central tendency that represents the middle value in a dataset when arranged in ascending order.</p></li>
+<li><p>log2 fold change: A measure used in gene expression analysis to quantify the difference in expression levels between two conditions.</p></li>
+<li><p>p-value: A statistical measure that helps determine the significance of a result in the context of a hypothesis test.</p></li>
+<li><p>adjusted p-value: A corrected p-value that accounts for multiple comparisons to control for false positive.</p></li>
+<li><p>variance: A measure of how much the values in a dataset deviate from the mean.</p></li>
+<li><p>principal component analysis (PCA): A technique used to reduce the dimensionality of high-dimensional data while capturing most of its variance.</p></li>
+</ul>
+<p>Additionally, participants should have a basic understanding of R and the tidyverse package. Familiarity with the following functions will be useful:</p>
+<ul>
+<li><p><code>%&gt;%</code> (pipe): Allows for chaining multiple operations together.</p></li>
+<li><p><code>filter</code>: Selects specific rows from a dataset on given conditions.</p></li>
+<li><p><code>mutate</code>: Adds new variables or modifies existing ones in a dataset.</p></li>
+<li><p><code>select</code>: Selects specific columns from a dataset.</p></li>
+<li><p><code>left_join</code>: Merges two datasets based on a common key, keeping only the matching records from the left dataset.</p></li>
+</ul>
+<p>For self-learning of R programming and the tidyverse package, it is recommended study <a href="https://moderndive.com/index.html">Chapter 1 - 4</a> from MordernDive.</p>
 </section>
 <section id="expected-outcome" class="level2">
 <h2 class="anchored" data-anchor-id="expected-outcome">Expected outcome</h2>
-<p>By the end of the workshop, participants will be familiar with the following topics: the common workflow of single cell analysis (pre-processing, quality control, filtering, normalization, Clustering, Cell type annotation).</p>
+<p>By the end of the workshop, participants will have a solid understanding of the analysis workflow involved in single cell analysis. This includes data pre-processing, quality control, normalization, dimentionality reduction, clustering, and cell type annotation.</p>
 </section>
 <section id="reference" class="level2">
 <h2 class="anchored" data-anchor-id="reference">Reference</h2>
-<p>The building of materials for the course references and relies on many excellent and well written public avaialbe materials.</p>
-<ul>
-<li><p>Seurat <a href="https://satijalab.org/seurat/" class="uri">https://satijalab.org/seurat/</a></p></li>
-<li><p>Single Cell Best Practices: <a href="https://www.sc-best-practices.org/preamble.html" class="uri">https://www.sc-best-practices.org/preamble.html</a></p></li>
-<li><p>Orchestrating Single-Cell Analysis with Bioconductor: <a href="https://bioconductor.org/books/release/OSCA/" class="uri">https://bioconductor.org/books/release/OSCA/</a></p></li>
-<li><p>Mary Piper, Meeta Mistry, Jihe Liu, William Gammerdinger, &amp; Radhika Khetani. (2022, January 6). hbctraining/scRNA-seq_online: scRNA-seq Lessons from HCBC (first release). Zenodo. <a href="https://doi.org/10.5281/zenodo.5826256" class="uri">https://doi.org/10.5281/zenodo.5826256</a></p></li>
-</ul>
+<p>The building of materials references and relies on many excellent and well-written public available materials. Some of the main references for the course include:</p>
+<ol type="1">
+<li>Seurat <a href="https://satijalab.org/seurat/" class="uri">https://satijalab.org/seurat/</a></li>
+<li>Single Cell Best Practices: <a href="https://www.sc-best-practices.org/preamble.html" class="uri">https://www.sc-best-practices.org/preamble.html</a></li>
+<li>Orchestrating Single-Cell Analysis with Bioconductor: <a href="https://bioconductor.org/books/release/OSCA/" class="uri">https://bioconductor.org/books/release/OSCA/</a></li>
+<li>Mary Piper, Meeta Mistry, Jihe Liu, William Gammerdinger, &amp; Radhika Khetani. (2022, January 6). hbctraining/scRNA-seq_online: scRNA-seq Lessons from HCBC (first release). Zenodo. <a href="https://doi.org/10.5281/zenodo.5826256" class="uri">https://doi.org/10.5281/zenodo.5826256</a></li>
+</ol>
+</section>
+<section id="reporting-bugs" class="level2">
+<h2 class="anchored" data-anchor-id="reporting-bugs">Reporting bugs</h2>
+<p>To report any bugs, please create an issue in the following GitHub repository: <a href="https://github.com/material-share/material-share-single-cell-boot-camp/issues" class="uri">https://github.com/material-share/material-share-single-cell-boot-camp/issues</a>.</p>
 </section>
 <section id="disclaimer" class="level2">
 <h2 class="anchored" data-anchor-id="disclaimer">Disclaimer</h2>
