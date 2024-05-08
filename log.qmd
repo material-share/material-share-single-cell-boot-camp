@@ -74,8 +74,8 @@ ab <- GetAssayData(seuratObj[["RNA"]], features = ab_name)
 rna <- GetAssayData(seuratObj[["RNA"]], features = rna_name)
 
 # recreate seurat object
-tmp[["RNA"]] <- CreateAssay5Object(counts = rna, min.cells = 0, min.features = 0)
-tmp[["ADT"]] <- CreateAssay5Object(counts = ab, min.cells = 0, min.features = 0)
+seuratObj[["RNA"]] <- CreateAssay5Object(counts = rna, min.cells = 0, min.features = 0)
+seuratObj[["ADT"]] <- CreateAssay5Object(counts = ab, min.cells = 0, min.features = 0)
 ```
 
 ## 20240216
