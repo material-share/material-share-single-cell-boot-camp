@@ -131,6 +131,8 @@ p2 <- DimPlot(filtered, reduction = "umap",
 p1|p2
 ```
 
+For simplicity, we will use the annotation stored in the field `predicted.celltype.l1` for the rest of analysis.
+
 ### 2.1 Marker-based
 
 The other type of automatic annotation is to leverage the knowledge of known cell type markers.

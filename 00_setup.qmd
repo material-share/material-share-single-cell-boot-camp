@@ -111,6 +111,8 @@ Now that you have R, RStudio and R packages set up, you can follow the next chap
 
 To start practicing, go to the download folder, and double click **single-cell-boot-camp.Rproj**.
 
+![](figures/00_rproj.png)
+
 ## 4. Reporting bugs
 
 To report any bugs, please create an issue in the following GitHub repository: <https://github.com/material-share/material-share-single-cell-boot-camp/issues>.
