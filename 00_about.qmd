@@ -11,9 +11,9 @@ editor:
 
 This repository contains the teaching materials of **Single Cell Boot
 Camp - Analyzing scRNA-seq with R**. The boot camp aims to provide an
-overview of scRNAseq analysis workflow. It begins with a fast-paced
+overview of the scRNAseq analysis workflow. It begins with a fast-paced
 session on the analysis workflow and proceeds with hands-on practice
-using bioinformatics packages such as Seurat.
+using bioinformatics framework, Seurat.
 
 ## Prerequisites to attend the Single Cell Boot Camp
 

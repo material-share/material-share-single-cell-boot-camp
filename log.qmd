@@ -6,6 +6,13 @@ execute:
   eval: false
 ---
 
+## 20240603
+Installing Azimuth with the latest version
+```{r}
+remotes::install_github('satijalab/azimuth', ref = 'master')
+```
+
+
 ## 20240507
 
 Seurat V4 Optional: The materials are updated to Seurat V5. If you want to use Seurat V4, you can follow the below instruction to install Seurat V4. Please note that you may need to adapt the code to fit Seurat V4 structure.
